@@ -164,7 +164,7 @@ export default function Experience() {
   return (
     <section
       id="experience"
-      className="relative w-full overflow-hidden py-20 md:py-28 bg-[var(--background)]"
+      className="relative w-full overflow-hidden py-20 md:py-28 bg-(--background)"
     >
       {/* BACKGROUND DECORATION */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -203,10 +203,10 @@ export default function Experience() {
           {experienceData.map((item, index) => (
             <article
               key={item.id}
-              className="group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-gray-800 bg-white/[0.02] p-6 backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 hover:border-amber-500/40 hover:bg-white/[0.04] hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)] sm:p-8"
+              className="group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-gray-800 bg-white/2 p-6 backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 hover:border-amber-500/40 hover:bg-white/4 hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)] sm:p-8"
             >
               {/* Animated top border */}
-              <div className="absolute left-0 right-0 top-0 h-px origin-left scale-x-0 bg-gradient-to-r from-transparent via-amber-400 to-transparent transition-transform duration-700 group-hover:scale-x-100" />
+              <div className="absolute left-0 right-0 top-0 h-px origin-left scale-x-0 bg-linear-to-r from-transparent via-amber-400 to-transparent transition-transform duration-700 group-hover:scale-x-100" />
               
               <div>
                 <div className="mb-5 flex flex-wrap items-center gap-2">
@@ -263,7 +263,7 @@ export default function Experience() {
                 {/* PROJECT / TEAM INFO */}
                 <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {item.project && (
-                    <div className="rounded-xl border border-gray-800 bg-white/[0.02] p-4">
+                    <div className="rounded-xl border border-gray-800 bg-white/ p-4">
                       <div className="mb-1 text-xs font-medium uppercase tracking-wider text-gray-400">
                         Context / Focus
                       </div>
@@ -274,7 +274,7 @@ export default function Experience() {
                   )}
 
                   {item.team && (
-                    <div className="rounded-xl border border-gray-800 bg-white/[0.02] p-4">
+                    <div className="rounded-xl border border-gray-800 bg-white/2 p-4">
                       <div className="mb-1 flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-gray-400">
                         <Users className="h-4 w-4" />
                         Role Context
@@ -314,7 +314,7 @@ export default function Experience() {
                   {item.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="rounded-lg border border-gray-800 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-amber-200 transition-all duration-300 hover:border-amber-500/40 hover:bg-amber-500/10"
+                      className="rounded-lg border border-gray-800 bg-white/3 px-3 py-1.5 text-xs font-medium text-amber-200 transition-all duration-300 hover:border-amber-500/40 hover:bg-amber-500/10"
                     >
                       {skill}
                     </span>

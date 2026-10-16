@@ -1,3 +1,4 @@
+// src/components/hero/HeroContent.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -23,6 +24,32 @@ const phrases = [
   "Open Source Contributor",
 ];
 
+/* "Scroll" label + mouse pill. Used on desktop (end of the divider line)
+   and on mobile (pinned to the bottom center). */
+function ScrollIndicator({
+  onClick,
+  className = "",
+}: {
+  onClick: () => void;
+  className?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label="Scroll to about section"
+      className={`group flex flex-col items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent) ${className}`}
+    >
+      <span className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-(--accent-light)/70 transition-colors duration-300 group-hover:text-(--accent-light)">
+        Scroll
+      </span>
+      <div className="flex h-11 w-6 justify-center rounded-full border border-(--accent)/30 bg-(--dark)/50 pt-2 backdrop-blur-md transition-all duration-300 group-hover:border-(--accent) group-hover:bg-(--accent)/10 group-hover:shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+        <span className="h-2.5 w-1 animate-bounce rounded-full bg-(--accent) motion-reduce:animate-none" />
+      </div>
+    </button>
+  );
+}
+
 export default function HeroContent() {
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
@@ -44,7 +71,6 @@ export default function HeroContent() {
 
   // Typing effect
   useEffect(() => {
-    // With reduced motion, show a static phrase instead of typing.
     if (reduceMotion) {
       setDisplayText(phrases[0]);
       return;
@@ -94,17 +120,22 @@ export default function HeroContent() {
   };
 
   return (
-    <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col gap-12 pt-24 md:flex-row md:items-center md:gap-16">
-      {/* LEFT COLUMN: Typing text & CTA */}
-      <div className="flex flex-1 flex-col justify-center gap-7 self-stretch pb-12 md:pb-0">
+    // self-stretch: this block is as tall as the hero.
+    // No bottom padding here on purpose: the divider below runs all the way
+    // down and the scroll button sits flush with the bottom edge (margin 0).
+    <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col gap-14 self-stretch pt-28 md:flex-row md:items-center md:gap-10 lg:gap-14">
+      {/* LEFT COLUMN: typing text & CTA.
+          The gap below is the space between the typing line and the button.
+          It matches the right column (name -> steps) so the two sides feel balanced. */}
+      <div className="flex flex-1 flex-col justify-center gap-20 md:gap-36 md:pb-24 lg:gap-44">
         <div className="flex min-h-12 items-center gap-3">
-          <p className="font-mono text-[0.95rem] uppercase tracking-[0.18em] text-(--purple) drop-shadow-[0_0_10px_rgba(192,132,252,0.35)] sm:text-base">
+          <p className="font-mono text-[0.95rem] uppercase tracking-[0.18em] text-(--accent-light) drop-shadow-[0_0_10px_rgba(6,182,212,0.35)] sm:text-base">
             {/* Screen readers get the full list once; the typing is visual only. */}
             <span className="sr-only">{phrases.join(", ")}</span>
             <span aria-hidden="true" className="inline-block min-w-[26ch]">
               {displayText}
               <span
-                className={`ml-1 inline-block h-[1em] w-0.5 bg-(--purple) align-middle ${
+                className={`ml-1 inline-block h-[1em] w-0.5 bg-(--accent) align-middle ${
                   reduceMotion ? "" : "animate-pulse"
                 }`}
               />
@@ -116,7 +147,7 @@ export default function HeroContent() {
           <button
             type="button"
             onClick={() => scrollToSection("projects")}
-            className="group inline-flex items-center gap-2 rounded-[80px] border border-emerald-500/40 bg-emerald-600/20 px-6 py-3.5 text-sm font-bold text-(--yellow) transition-all duration-300 hover:-translate-y-1 hover:bg-emerald-600/30 hover:shadow-[0_0_35px_rgba(16,185,129,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 active:scale-[0.98] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+            className="group inline-flex items-center gap-2 rounded-[80px] border border-(--accent)/40 bg-(--accent)/10 px-6 py-3.5 text-sm font-bold text-(--accent-light) transition-all duration-300 hover:-translate-y-1 hover:bg-(--accent) hover:text-black hover:shadow-[0_0_35px_rgba(6,182,212,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent) active:scale-[0.98] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
           >
             View My Work
             <ArrowUpRight
@@ -127,70 +158,75 @@ export default function HeroContent() {
         </div>
       </div>
 
-      {/* VERTICAL DIVIDER & SCROLL BUTTON */}
-      <div className="relative mx-auto flex w-10 flex-col items-center self-stretch">
-        <span className="min-h-[80px] w-px flex-1 bg-linear-to-b from-transparent via-emerald-500/50 to-emerald-500" />
-        <span className="relative z-10 my-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)] backdrop-blur-md">
+      {/* VERTICAL DIVIDER (desktop): one straight line from the top, through
+          the icon, down to the scroll button at the very bottom of the hero. */}
+      <div className="relative mx-auto hidden w-12 flex-col items-center self-stretch md:flex">
+        <span
+          aria-hidden="true"
+          className="min-h-16 w-px flex-1 bg-linear-to-b from-transparent via-(--accent)/50 to-(--accent)"
+        />
+        <span
+          aria-hidden="true"
+          className="relative z-10 my-3 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-(--accent)/30 bg-(--accent)/10 text-(--accent-light) shadow-[0_0_15px_rgba(6,182,212,0.2)] backdrop-blur-md"
+        >
           <Code2 size={20} />
         </span>
-        <span className="min-h-[80px] w-px flex-1 bg-linear-to-b from-emerald-500 via-emerald-500/50 to-transparent" />
+        <span
+          aria-hidden="true"
+          className="min-h-16 w-px flex-1 bg-linear-to-b from-(--accent) to-(--accent)/40"
+        />
 
-        <button
-          type="button"
-          onClick={() => scrollToSection("about")}
-          aria-label="Scroll to about section"
-          className="group mt-4 flex flex-col items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
-        >
-          <span className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-emerald-400/60 transition-colors duration-300 group-hover:text-emerald-400">
-            Scroll
-          </span>
-          <div className="flex h-11 w-6 justify-center rounded-full border border-emerald-500/30 bg-(--dark)/50 pt-2 backdrop-blur-md transition-all duration-300 group-hover:border-emerald-400 group-hover:bg-emerald-500/5 group-hover:shadow-[0_0_15px_rgba(16,185,129,0.3)]">
-            <span className="h-2.5 w-1 animate-bounce rounded-full bg-emerald-400 motion-reduce:animate-none" />
-          </div>
-        </button>
+        {/* mb-0: the pill touches the bottom edge of the hero.
+            If you want a little air later, change mb-0 to mb-3. */}
+        <ScrollIndicator onClick={() => scrollToSection("about")} className="mb-0 mt-3" />
       </div>
 
-      {/* RIGHT COLUMN: Name & development process */}
-      <div className="flex flex-[1.5] flex-col justify-center gap-15 self-stretch pb-20 md:pb-0">
-        <h1 className="text-[clamp(3rem,7vw,4rem)] font-bold leading-[0.95] tracking-[-0.055em] text-(--text) drop-shadow-[0_0_25px_rgba(0,0,0,0.35)]">
+      {/* RIGHT COLUMN: name, then development process.
+          gap-20 (mobile) -> md:gap-36 -> lg:gap-44 sets the space between them. */}
+      <div className="flex flex-[1.5] flex-col justify-center gap-20 pb-28 md:gap-36 md:pb-24 lg:gap-44">
+        <h1 className="text-[clamp(3rem,7vw,4.5rem)] font-bold leading-[0.95] tracking-[-0.055em] text-white drop-shadow-[0_0_25px_rgba(0,0,0,0.35)]">
           Hello, I&apos;m
           <br />
-          <span className="text-(--purple)">Bewket Mengie.</span>
+          <span className="text-(--accent-light)">Bewket Mengie.</span>
         </h1>
 
-        <div className="mt-6 md:mt-12">
-          <ol
-            aria-label="Development process"
-            className="flex flex-wrap items-center gap-x-3 gap-y-5"
-          >
-            {processSteps.map((step, index) => (
-              <li key={step} className="flex items-center gap-x-3">
+        <ol
+          aria-label="Development process"
+          className="flex flex-wrap items-center gap-x-3 gap-y-5"
+        >
+          {processSteps.map((step, index) => (
+            <li key={step} className="flex items-center gap-x-3">
+              <span
+                className={`text-[0.99rem] uppercase tracking-widest transition-all duration-500 motion-reduce:transition-none ${
+                  index === currentStep
+                    ? "scale-110 font-bold text-(--accent-light) drop-shadow-[0_0_10px_rgba(6,182,212,0.4)]"
+                    : "text-(--text-muted) opacity-80"
+                }`}
+              >
+                {step}
+              </span>
+              {index < processSteps.length - 1 && (
                 <span
-                  className={`text-[0.99rem] uppercase tracking-widest transition-all duration-500 motion-reduce:transition-none ${
-                    index === currentStep
-                      ? "scale-110 font-bold text-(--green) drop-shadow-[0_0_10px_rgba(16,185,129,0.4)]"
-                      : "text-(--text-muted) opacity-80"
+                  aria-hidden="true"
+                  className={`text-base transition-colors duration-500 ${
+                    index < currentStep
+                      ? "text-(--accent)"
+                      : "text-(--text-muted) opacity-30"
                   }`}
                 >
-                  {step}
+                  →
                 </span>
-                {index < processSteps.length - 1 && (
-                  <span
-                    aria-hidden="true"
-                    className={`text-base transition-colors duration-500 ${
-                      index < currentStep
-                        ? "text-emerald-400"
-                        : "text-(--text-muted) opacity-30"
-                    }`}
-                  >
-                    →
-                  </span>
-                )}
-              </li>
-            ))}
-          </ol>
-        </div>
+              )}
+            </li>
+          ))}
+        </ol>
       </div>
+
+      {/* MOBILE scroll button: the divider is hidden on phones, so pin it to the bottom center */}
+      <ScrollIndicator
+        onClick={() => scrollToSection("about")}
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 md:hidden"
+      />
     </div>
   );
 }

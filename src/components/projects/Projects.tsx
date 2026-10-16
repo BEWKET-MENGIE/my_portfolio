@@ -1,26 +1,23 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { projects } from "@/data/projects";
 import ProjectCard from "./ProjectCard";
-import ProjectFilter from "./ProjectFilter";
 
-const ALL = "All";
 const ALL_PROJECTS_HREF = "/projects";
 
-const categories = [
-  ALL,
-  ...Array.from(new Set(projects.map((p) => p.category))),
-];
+// The home page only shows the first four. The rest live on /projects.
+const MAX_PROJECTS = 4;
+const shownProjects = projects.slice(0, MAX_PROJECTS);
 
 export default function Projects() {
-  const [filter, setFilter] = useState(ALL);
   const [visible, setVisible] = useState(false);
   const [activeProject, setActiveProject] = useState<number | null>(null);
 
   const sectionRef = useRef<HTMLElement>(null);
 
+  /* Scroll reveal (instant when the user prefers reduced motion) */
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -47,19 +44,6 @@ export default function Projects() {
     return () => observer.disconnect();
   }, []);
 
-  const filteredProjects = useMemo(
-    () =>
-      filter === ALL
-        ? projects
-        : projects.filter((project) => project.category === filter),
-    [filter],
-  );
-
-  const handleSelectCategory = (category: string) => {
-    setFilter(category);
-    setActiveProject(null);
-  };
-
   const reveal = (delay = "0ms") => ({
     className: `transition-all duration-1000 motion-reduce:transition-none ${
       visible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
@@ -84,18 +68,11 @@ export default function Projects() {
       />
 
       <div className="relative z-10 mx-auto max-w-6xl">
-        {/* Header */}
+        {/* Header: centered */}
         <div
-          className={`max-w-2xl ${reveal().className}`}
+          className={`mx-auto max-w-2xl text-center ${reveal().className}`}
           style={reveal().style}
         >
-          <p
-            className="mb-3 text-xs font-semibold uppercase tracking-[0.24em]
-              text-emerald-600 dark:text-emerald-400"
-          >
-            My Work
-          </p>
-
           <h2
             id="projects-heading"
             className="text-3xl font-extrabold leading-tight tracking-tight
@@ -103,51 +80,29 @@ export default function Projects() {
           >
             Things I&apos;ve built.
           </h2>
-
-          <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-600 sm:text-base dark:text-neutral-400">
-            A selection of projects where design, performance and clean code
-            come together.
-          </p>
         </div>
 
-        {/* Filter + grid */}
-        <div className="mt-10">
-          {categories.length > 2 && (
-            <ProjectFilter
-              categories={categories}
-              selectedCategory={filter}
-              onSelectCategory={handleSelectCategory}
+        {/* Project grid */}
+        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
+          {shownProjects.map((project, index) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              index={index}
+              visible={visible}
+              active={activeProject === project.id}
+              setActive={() =>
+                setActiveProject(
+                  activeProject === project.id ? null : project.id,
+                )
+              }
             />
-          )}
-
-          {filteredProjects.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              {/* Limit to 4 projects maximum on the section */}
-              {filteredProjects.slice(0, 4).map((project, index) => (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  index={index}
-                  visible={visible}
-                  active={activeProject === project.id}
-                  setActive={() =>
-                    setActiveProject(
-                      activeProject === project.id ? null : project.id,
-                    )
-                  }
-                />
-              ))}
-            </div>
-          ) : (
-            <p className="py-12 text-center text-neutral-500">
-              No projects in this category yet.
-            </p>
-          )}
+          ))}
         </div>
 
         {/* View all projects */}
         <div
-          className={`mt-10 flex justify-center ${reveal("400ms").className}`}
+          className={`mt-12 flex justify-center ${reveal("400ms").className}`}
           style={reveal("400ms").style}
         >
           <Link

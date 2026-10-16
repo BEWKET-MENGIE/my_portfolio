@@ -3,12 +3,12 @@
 @import "tailwindcss";
 
 /* =========================================================
-   DESIGN SYSTEM
+   DESIGN SYSTEM & THEME VARIABLES
 ========================================================= */
 
 @layer base {
   :root {
-    /* BRAND ACCENT (Cyan / Teal) */
+    /* BRAND ACCENT (Cyan / Teal - Modern Tech Vibe) */
     --accent: #06b6d4;
     --accent-light: #22d3ee;
     --accent-dark: #0891b2;
@@ -32,9 +32,14 @@
     --border: rgba(255, 255, 255, 0.08);
     --border-bright: rgba(255, 255, 255, 0.16);
 
-    /* LAYOUT & FLUID SPACING */
-    --section-padding: clamp(5rem, 7vw, 8rem) 0;
-    --container-padding: clamp(1rem, 2.5vw, 2rem);
+    /* TYPOGRAPHY FAMILIES */
+    --font-body: 'Inter', sans-serif;
+    --font-display: 'Manrope', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* RESPONSIVE FLUID SPACING (Optimized to avoid large gaps) */
+    --section-padding: clamp(2.5rem, 4vw, 4rem) 0;
+    --container-padding: clamp(1rem, 2vw, 1.5rem);
 
     --transition-smooth: 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -63,7 +68,7 @@
     overflow-x: hidden;
     background-color: var(--background);
     
-    /* Background image fallback */
+    /* Elegant Dark Gradient & Background Pattern */
     background-image: linear-gradient(
         rgba(2, 6, 23, 0.3),
         rgba(2, 6, 23, 0.3)
@@ -75,11 +80,11 @@
     background-attachment: fixed;
 
     color: var(--text);
-    font-family: var(--font-body, 'Inter', sans-serif);
+    font-family: var(--font-body);
     line-height: 1.6;
   }
 
-  /* ELEMENTS */
+  /* ELEMENTS & INTERACTION */
   button,
   a {
     -webkit-tap-highlight-color: transparent;
@@ -100,13 +105,13 @@
     display: block;
   }
 
-  /* Fixed selection highlight */
+  /* SELECTION HIGHLIGHT */
   ::selection {
     background-color: var(--accent);
     color: #020617;
   }
 
-  /* SCROLLBAR */
+  /* CUSTOM SCROLLBAR */
   ::-webkit-scrollbar {
     width: 6px;
     background: var(--dark);
@@ -130,7 +135,7 @@
     scrollbar-color: var(--accent) var(--dark);
   }
 
-  /* FONTS */
+  /* FONT UTILITY CLASSES */
   .font-body {
     font-family: var(--font-body);
   }
@@ -195,7 +200,7 @@
     padding: var(--section-padding);
   }
 
-  /* UTILITIES */
+  /* UTILITIES & GLOWS */
   .hover-accent {
     transition: color var(--transition-smooth),
                 border-color var(--transition-smooth),
@@ -215,13 +220,13 @@
     box-shadow: 0 0 50px rgba(var(--accent-rgb), 0.25);
   }
 
-  /* FOCUS STATES */
+  /* ACCESSIBILITY FOCUS STATES */
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 4px;
   }
 
-  /* RESPONSIVE DESIGN */
+  /* RESPONSIVE DESIGN ADJUSTMENTS */
   @media (max-width: 768px) {
     body {
       background-attachment: scroll;
@@ -229,7 +234,7 @@
     }
   }
 
-  /* REDUCED MOTION */
+  /* REDUCED MOTION PREFERENCE */
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto !important;
@@ -244,7 +249,7 @@
     }
   }
 
-  /* PRINT */
+  /* PRINT MEDIA */
   @media print {
     .no-print {
       display: none !important;
@@ -253,7 +258,7 @@
 }
 
 /* =========================================================
-   LIGHT THEME
+   LIGHT THEME OVERRIDES
 ========================================================= */
 
 .light {

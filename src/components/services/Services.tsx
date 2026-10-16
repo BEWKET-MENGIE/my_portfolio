@@ -21,11 +21,11 @@ export default function Services() {
     experience: null,
   });
 
+  /* Scroll reveal (instant when the user prefers reduced motion) */
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
 
-    // Respect reduced-motion settings and unsupported browsers.
     if (
       window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
       !("IntersectionObserver" in window)
@@ -87,10 +87,10 @@ export default function Services() {
       />
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        {/* Header */}
+        {/* Header: title centered, tabs centered below it */}
         <div
-          className={`mb-12 flex flex-col gap-8 md:mb-14 md:flex-row
-            md:items-end md:justify-between transition-all duration-700
+          className={`mb-12 flex flex-col items-center gap-8 text-center
+            md:mb-14 transition-all duration-700
             motion-reduce:transform-none motion-reduce:transition-none
             ${
               isVisible
@@ -98,14 +98,7 @@ export default function Services() {
                 : "translate-y-6 opacity-0"
             }`}
         >
-          <div className="max-w-3xl">
-            <p
-              className="mb-4 text-xs font-semibold uppercase
-                tracking-[0.24em] text-emerald-600 dark:text-emerald-400"
-            >
-              What I Do
-            </p>
-
+          <div className="max-w-4xl">
             <h2
               id="services-heading"
               className="text-4xl font-extrabold leading-tight
@@ -119,7 +112,7 @@ export default function Services() {
             {/* Only render the subtitle when it has text, so there's no empty gap */}
             {activeTab === "experience" && (
               <p
-                className="mt-5 max-w-2xl text-sm leading-7
+                className="mx-auto mt-5 max-w-2xl text-sm leading-7
                   text-neutral-600 sm:text-base dark:text-neutral-400"
               >
                 Explore my professional experience, responsibilities, and
