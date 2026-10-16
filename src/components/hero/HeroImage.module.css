@@ -1,0 +1,353 @@
+.scene {
+  --orbit-amber: rgba(195, 157, 78, 0.72);
+  --orbit-teal: rgba(58, 157, 160, 0.62);
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse at 48% 43%, rgba(89, 65, 32, 0.2), transparent 38%),
+    radial-gradient(ellipse at center, #17120d 0%, #100c09 64%, #0d0a08 100%);
+}
+
+.ambientGlow {
+  position: absolute;
+  left: 47%;
+  top: 43%;
+  width: min(46vw, 620px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgba(165, 111, 35, 0.13);
+  filter: blur(75px);
+}
+
+.floorGrid {
+  position: absolute;
+  left: -30%;
+  right: -30%;
+  bottom: -40%;
+  height: 90%;
+  opacity: 0.48;
+  transform: perspective(520px) rotateX(62deg);
+  transform-origin: center top;
+  background-image:
+    linear-gradient(rgba(180, 140, 71, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(180, 140, 71, 0.22) 1px, transparent 1px);
+  background-size: 44px 30px;
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%);
+}
+
+.verticalAxis {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 47.1%;
+  width: 1px;
+  opacity: 0.48;
+  background: linear-gradient(to bottom, transparent, rgba(180, 140, 71, 0.25) 20%, rgba(180, 140, 71, 0.45) 52%, transparent);
+}
+
+.coreStage {
+  position: absolute;
+  z-index: 3;
+  left: 47.1%;
+  top: 48%;
+  width: clamp(135px, 17vw, 230px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+}
+
+.coreShadow {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background: rgba(177, 128, 46, 0.16);
+  filter: blur(27px);
+}
+
+.core {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 14px rgba(195, 157, 78, 0.13));
+}
+
+.coreFace {
+  fill: rgba(149, 111, 46, 0.23);
+  stroke: rgba(205, 169, 94, 0.78);
+  stroke-width: 0.85;
+}
+
+.coreFaceLight { fill: rgba(187, 143, 62, 0.3); }
+.coreFaceDark { fill: rgba(88, 67, 33, 0.34); }
+.coreFaceMid { fill: rgba(161, 121, 51, 0.2); }
+
+.coreEdges {
+  stroke: rgba(221, 183, 103, 0.75);
+  stroke-width: 0.8;
+}
+
+.meshOrbit {
+  position: absolute;
+  z-index: 4;
+  left: 47.1%;
+  top: 48%;
+  width: clamp(190px, 25vw, 330px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  animation: mesh-turn 32s linear infinite;
+  will-change: transform;
+}
+
+.mesh {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  stroke: rgba(199, 164, 88, 0.68);
+  stroke-width: 0.7;
+}
+
+.mesh line {
+  vector-effect: non-scaling-stroke;
+}
+
+.mesh polygon {
+  stroke: rgba(219, 181, 100, 0.78);
+  stroke-width: 0.95;
+  vector-effect: non-scaling-stroke;
+}
+
+/* ---------- Orbit planes ---------- */
+
+.orbitPlane {
+  position: absolute;
+  z-index: 2;
+  left: 47.1%;
+  top: 48%;
+  width: clamp(430px, 55vw, 760px);
+  height: clamp(190px, 27vw, 360px);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.orbitPlaneOne {
+  animation: orbit-turn-one 29s linear infinite;
+}
+
+.orbitPlaneTwo {
+  width: clamp(540px, 72vw, 980px);
+  height: clamp(240px, 36vw, 470px);
+  animation: orbit-turn-two 43s linear infinite reverse;
+}
+
+.orbitPlaneThree {
+  width: clamp(650px, 88vw, 1180px);
+  height: clamp(300px, 43vw, 560px);
+  animation: orbit-turn-three 57s linear infinite;
+}
+
+.orbitTrack {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(187, 147, 70, 0.36);
+  border-radius: 50%;
+  box-shadow: inset 0 0 20px rgba(187, 147, 70, 0.04);
+}
+
+.orbitPlaneTwo .orbitTrack {
+  border-color: rgba(63, 151, 153, 0.34);
+}
+
+.orbitPlaneThree .orbitTrack {
+  border-color: rgba(193, 159, 87, 0.26);
+}
+
+.orbitSatellite {
+  position: absolute;
+  left: 50%;
+  top: -6px;
+  width: 12px;
+  height: 12px;
+  display: block;
+  transform: translateX(-50%) rotate(45deg);
+  box-shadow: 0 0 18px currentColor;
+}
+
+.satelliteAmber {
+  color: #d5a64f;
+  background: #b58a3b;
+}
+
+.satelliteTeal {
+  top: auto;
+  bottom: -7px;
+  left: 23%;
+  width: 15px;
+  height: 15px;
+  color: #4ba6a5;
+  background: #236b6b;
+}
+
+.satelliteGold {
+  top: 47%;
+  left: auto;
+  right: -6px;
+  width: 11px;
+  height: 11px;
+  color: #c9a15a;
+  background: #8e7037;
+}
+
+/* ---------- Small particles ---------- */
+
+.satelliteField {
+  position: absolute;
+  z-index: 2;
+  left: 47.1%;
+  top: 48%;
+  width: clamp(430px, 55vw, 760px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+/* --start is set inline per particle so each one begins at its own angle. */
+.satellitePath {
+  position: absolute;
+  inset: 0;
+  display: block;
+  border-radius: 50%;
+  transform: rotate(var(--start, 0deg));
+  animation: satellite-orbit 24s linear infinite;
+  will-change: transform;
+}
+
+.particle {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  display: block;
+  background: #bda05e;
+  transform: translateX(-50%) rotate(45deg);
+  opacity: 0.86;
+  box-shadow: 0 0 11px rgba(189, 160, 94, 0.25);
+}
+
+.satellitePath:nth-child(even) .particle {
+  background: #478d8d;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background:
+    linear-gradient(to bottom, rgba(10, 8, 6, 0.12), transparent 28%, transparent 72%, rgba(10, 8, 6, 0.2)),
+    radial-gradient(ellipse at center, transparent 42%, rgba(8, 6, 5, 0.48) 100%);
+}
+
+/* ---------- Keyframes ---------- */
+
+@keyframes mesh-turn {
+  from { transform: translate(-50%, -50%) rotate(0deg) rotateX(8deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg) rotateX(8deg); }
+}
+
+@keyframes orbit-turn-one {
+  from { transform: translate(-50%, -50%) rotate(-20deg) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(-20deg) rotate(360deg); }
+}
+
+@keyframes orbit-turn-two {
+  from { transform: translate(-50%, -50%) rotate(28deg) rotate(0deg) scaleY(0.92); }
+  to   { transform: translate(-50%, -50%) rotate(28deg) rotate(360deg) scaleY(0.92); }
+}
+
+@keyframes orbit-turn-three {
+  from { transform: translate(-50%, -50%) rotate(-8deg) rotate(0deg) scaleY(0.82); }
+  to   { transform: translate(-50%, -50%) rotate(-8deg) rotate(360deg) scaleY(0.82); }
+}
+
+@keyframes satellite-orbit {
+  from { transform: rotate(var(--start, 0deg)); }
+  to   { transform: rotate(calc(var(--start, 0deg) + 360deg)); }
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 768px) {
+  .coreStage,
+  .meshOrbit,
+  .satelliteField,
+  .orbitPlane,
+  .verticalAxis {
+    left: 50%;
+  }
+
+  .coreStage {
+    top: 45%;
+    width: clamp(130px, 38vw, 190px);
+  }
+
+  .meshOrbit {
+    top: 45%;
+    width: clamp(190px, 52vw, 270px);
+  }
+
+  .orbitPlaneOne {
+    top: 45%;
+    width: 125vw;
+    height: 48vw;
+  }
+
+  .orbitPlaneTwo {
+    top: 45%;
+    width: 150vw;
+    height: 62vw;
+  }
+
+  .orbitPlaneThree {
+    top: 45%;
+    width: 175vw;
+    height: 76vw;
+  }
+
+  .satelliteField {
+    top: 45%;
+    width: 115vw;
+  }
+
+  .floorGrid {
+    left: -80%;
+    right: -80%;
+    bottom: -24%;
+    height: 68%;
+  }
+
+  .ambientGlow {
+    left: 50%;
+    top: 44%;
+    width: 85vw;
+  }
+}
+
+/* ---------- Reduced motion ----------
+   If your OS has "reduce motion" / "show animations" turned off, the browser
+   matches this query. The motion is slowed down, not removed. */
+
+@media (prefers-reduced-motion: reduce) {
+  .meshOrbit,
+  .orbitPlaneOne,
+  .orbitPlaneTwo,
+  .orbitPlaneThree,
+  .satellitePath {
+    animation-duration: 90s;
+  }
+}
