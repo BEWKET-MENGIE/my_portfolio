@@ -1,29 +1,45 @@
 "use client";
 
-import React from "react";
-
 interface ProjectFilterProps {
   categories: string[];
   selectedCategory: string;
   onSelectCategory: (category: string) => void;
 }
 
-export default function ProjectFilter({ categories, selectedCategory, onSelectCategory }: ProjectFilterProps) {
+export default function ProjectFilter({
+  categories,
+  selectedCategory,
+  onSelectCategory,
+}: ProjectFilterProps) {
   return (
-    <div className="flex flex-wrap gap-2 mb-8 justify-center">
-      {categories.map((cat) => (
-        <button
-          key={cat}
-          onClick={() => onSelectCategory(cat)}
-          className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-            selectedCategory === cat
-              ? "bg-blue-600 text-white"
-              : "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-700"
-          }`}
-        >
-          {cat}
-        </button>
-      ))}
+    <div
+      role="group"
+      aria-label="Filter projects by category"
+      className="mb-10 flex flex-wrap justify-center gap-2"
+    >
+      {categories.map((category) => {
+        const selected = selectedCategory === category;
+
+        return (
+          <button
+            key={category}
+            type="button"
+            aria-pressed={selected}
+            onClick={() => onSelectCategory(category)}
+            className={`rounded-full border px-4 py-2 text-sm font-medium
+              transition-colors duration-300
+              focus-visible:outline-none focus-visible:ring-2
+              focus-visible:ring-emerald-400
+              ${
+                selected
+                  ? "border-emerald-500 bg-emerald-500 text-black"
+                  : "border-neutral-200 bg-neutral-100 text-neutral-600 hover:border-emerald-500/50 hover:text-neutral-900 dark:border-white/10 dark:bg-white/[0.04] dark:text-neutral-400 dark:hover:text-white"
+              }`}
+          >
+            {category}
+          </button>
+        );
+      })}
     </div>
   );
 }

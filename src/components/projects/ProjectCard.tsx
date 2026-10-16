@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { Project } from "@/types";
+import { useEffect, useRef } from "react";
+import type { Project } from "@/types";
 
 interface ProjectCardProps {
   project: Project;
@@ -18,194 +18,282 @@ export default function ProjectCard({
   active,
   setActive,
 }: ProjectCardProps) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLElement>(null);
 
-  /* 3D Mouse Tilt Effect */
+  const hasDemo = Boolean(project.demo) && project.demo !== "#";
+  const detailsId = `project-${project.id}-details`;
+  const number = String(project.id).padStart(2, "0");
+
   useEffect(() => {
     const card = cardRef.current;
-    const glow = glowRef.current;
+    if (!card) return;
 
-    if (!card || !glow) return;
+    const canTilt = window.matchMedia(
+      "(hover: hover) and (pointer: fine) and (min-width: 768px) and (prefers-reduced-motion: no-preference)",
+    );
+    if (!canTilt.matches) return;
 
-    const handleMouseMove = (event: MouseEvent) => {
-      if (window.innerWidth < 768) return;
+    let frame = 0;
 
-      const rect = card.getBoundingClientRect();
-      const x = (event.clientX - rect.left) / rect.width - 0.5;
-      const y = (event.clientY - rect.top) / rect.height - 0.5;
+    const handleMove = (event: PointerEvent) => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const rect = card.getBoundingClientRect();
+        const px = (event.clientX - rect.left) / rect.width;
+        const py = (event.clientY - rect.top) / rect.height;
 
-      const rotateX = y * -5;
-      const rotateY = x * 5;
-
-      card.style.transform = `
-        perspective(1200px)
-        rotateX(${rotateX}deg)
-        rotateY(${rotateY}deg)
-        translateY(-4px)
-      `;
-
-      const glowX = ((event.clientX - rect.left) / rect.width) * 100;
-      const glowY = ((event.clientY - rect.top) / rect.height) * 100;
-
-      glow.style.background = `
-        radial-gradient(
-          circle at ${glowX}% ${glowY}%,
-          rgba(201,168,76,0.13),
-          transparent 55%
-        )
-      `;
+        card.style.transform = `perspective(1200px) rotateX(${(py - 0.5) * -4}deg) rotateY(${(px - 0.5) * 4}deg) translateY(-3px)`;
+        card.style.setProperty("--mx", `${px * 100}%`);
+        card.style.setProperty("--my", `${py * 100}%`);
+      });
     };
 
-    const handleMouseLeave = () => {
-      card.style.transform = `
-        perspective(1200px)
-        rotateX(0deg)
-        rotateY(0deg)
-        translateY(0)
-      `;
-      glow.style.background = "transparent";
+    const handleLeave = () => {
+      cancelAnimationFrame(frame);
+      card.style.transform = "";
     };
 
-    card.addEventListener("mousemove", handleMouseMove);
-    card.addEventListener("mouseleave", handleMouseLeave);
+    card.addEventListener("pointermove", handleMove);
+    card.addEventListener("pointerleave", handleLeave);
 
     return () => {
-      card.removeEventListener("mousemove", handleMouseMove);
-      card.removeEventListener("mouseleave", handleMouseLeave);
+      cancelAnimationFrame(frame);
+      card.removeEventListener("pointermove", handleMove);
+      card.removeEventListener("pointerleave", handleLeave);
     };
   }, []);
 
   return (
-    <article
-      ref={cardRef}
-      className={`
-        group
-        relative
-        overflow-hidden
-        rounded-2xl
-        border
-        bg-white/[1.5
-        transition-all
-        duration-700
-        ${project.featured ? "border-(--border-bright,rgba(255,255,255,0.2)) shadow-xl shadow-black/30" : "border-(--border,rgba(255,255,255,0.1))"}
-        ${visible ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"}
-      `}
-      style={{
-        transitionDelay: `${index * 120}ms`,
-      }}
+    <div
+      className={`h-full transition-[opacity,translate] duration-700 ease-out
+        motion-reduce:transition-none
+        ${visible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}
+      style={{ transitionDelay: visible ? `${index * 100}ms` : "0ms" }}
     >
-      {/* Mouse Glow Overlay */}
-      <div
-        ref={glowRef}
-        className="pointer-events-none absolute inset-0 z-20 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-      />
+      <article
+        ref={cardRef}
+        className={`group relative flex h-full flex-col overflow-hidden rounded-xl border
+          bg-white shadow-sm
+          transition-[transform,border-color,box-shadow] duration-200 ease-out
+          will-change-transform hover:border-emerald-500/50 hover:shadow-lg
+          motion-reduce:transition-none
+          dark:bg-white/[0.02] dark:shadow-none dark:hover:shadow-none
+          ${
+            project.featured
+              ? "border-emerald-500/40 dark:border-emerald-500/30"
+              : "border-neutral-200 dark:border-white/10"
+          }`}
+      >
+        {/* Cursor glow */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-20 opacity-0
+            transition-opacity duration-300 group-hover:opacity-100"
+          style={{
+            background:
+              "radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(16,185,129,0.1), transparent 60%)",
+          }}
+        />
 
-      {/* Project Visual Header Banner */}
-      <div className={`relative h-56 overflow-hidden bg-linear-to-br ${project.gradient} md:h-64`}>
-        {project.featured && (
-          <span className="absolute left-5 top-5 rounded-full border border-(--gold,rgba(201,168,76,0.4))] bg-black/30 px-3 py-1 font-['DM_Mono'] text-[0.5rem] uppercase tracking-[0.12em] text-(--gold)] backdrop-blur-sm">
-            Featured
-          </span>
-        )}
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 to-transparent" />
-      </div>
-
-      {/* Content */}
-      <div className="relative z-30 p-6 md:p-7">
-        <div className="flex items-center justify-between">
-          <span className="font-['DM_Mono'] text-[0.58rem] uppercase tracking-[0.16em] text-[var(--gold)]">
-            {project.category}
-          </span>
-          <span className="font-['DM_Mono'] text-[0.55rem] text-neutral-500">
-            PROJECT / {String(project.id).padStart(2, "0")}
-          </span>
-        </div>
-
-        <h3 className="mt-3 font-['Syne'] text-2xl font-bold tracking-tight text-(--text) transition-colors duration-300 group-hover:text-(--accent)">
-          {project.title}
-        </h3>
-
-        <p className="mt-3 text-sm leading-7 text-neutral-400">
-          {project.description}
-        </p>
-
-        {/* Tags */}
-        <div className="mt-6 flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
+        {/* Visual banner - Decreased height */}
+        <div
+          className={`relative h-40 overflow-hidden bg-gradient-to-br sm:h-44 ${project.gradient}`}
+        >
+          {project.featured && (
             <span
-              key={tag}
-              className="rounded-full border border-(--border,rgba(255,255,255,0.1)) px-2.5 py-1 font-['DM_Mono'] text-[0.5rem] uppercase tracking-[0.08em] text-neutral-400 transition-all duration-300 group-hover:border-(--border-bright,rgba(255,255,255,0.2))] group-hover:text-(--text)"
+              className="absolute left-4 top-4 z-10 rounded-full border
+                border-emerald-400/40 bg-black/30 px-2.5 py-0.5 font-mono
+                text-[0.6rem] uppercase tracking-[0.12em] text-emerald-300
+                backdrop-blur-sm"
             >
-              {tag}
+              Featured
             </span>
-          ))}
+          )}
+
+          <span
+            aria-hidden="true"
+            className="absolute -bottom-3 right-4 select-none text-7xl
+              font-bold leading-none tracking-tighter text-white/10"
+          >
+            {number}
+          </span>
+
+          <div
+            aria-hidden="true"
+            className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t
+              from-black/40 to-transparent"
+          />
         </div>
 
-        {/* Actions Bar */}
-        <div className="mt-7 flex items-center justify-between border-t border-[var(--border,rgba(255,255,255,0.1))] pt-5">
-          <div className="flex gap-2">
-            <a
-              href={project.demo}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(event) => {
-                if (project.demo === "#") {
-                  event.preventDefault();
-                }
-              }}
-              className="group/link inline-flex items-center gap-2 rounded-full border border-(--border,rgba(255,255,255,0.1)) px-3.5 py-2 text-[0.52rem] uppercase tracking-widest text-neutral-400 no-underline transition-all duration-300 hover:border-(--accent)] hover:text-(--accent)"
+        {/* Content - Decreased padding and spacing */}
+        <div className="relative z-30 flex flex-1 flex-col p-5">
+          <div className="flex items-center justify-between gap-4">
+            <span
+              className="font-mono text-[0.65rem] uppercase tracking-[0.16em]
+                text-emerald-600 dark:text-emerald-400"
             >
-              Live
+              {project.category}
+            </span>
+            <span className="font-mono text-[0.65rem] text-neutral-500">
+              PROJECT / {number}
+            </span>
+          </div>
+
+          <h3
+            className="mt-2 text-xl font-bold tracking-tight text-neutral-900
+              transition-colors duration-300 group-hover:text-emerald-600
+              dark:text-white dark:group-hover:text-emerald-300"
+          >
+            {project.title}
+          </h3>
+
+          <p className="mt-2 text-xs leading-relaxed text-neutral-600 sm:text-sm dark:text-neutral-400">
+            {project.description}
+          </p>
+
+          {/* Tags */}
+          <ul
+            aria-label={`Technologies used in ${project.title}`}
+            className="mt-4 flex flex-wrap gap-1.5"
+          >
+            {project.tags.map((tag) => (
+              <li
+                key={tag}
+                className="rounded-full border border-neutral-200 bg-neutral-50
+                  px-2 py-0.5 font-mono text-[0.6rem] uppercase
+                  tracking-[0.08em] text-neutral-600 transition-colors
+                  duration-300 group-hover:border-emerald-500/40
+                  dark:border-white/10 dark:bg-transparent
+                  dark:text-neutral-400 dark:group-hover:text-neutral-200"
+              >
+                {tag}
+              </li>
+            ))}
+          </ul>
+
+          {/* Actions */}
+          <div
+            className="mt-auto pt-5 flex items-center justify-between border-t
+              border-neutral-200 dark:border-white/10"
+          >
+            {hasDemo ? (
+              <a
+                href={project.demo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group/link inline-flex items-center gap-1.5 rounded-full
+                  border border-neutral-300 px-3.5 py-1.5 text-[0.7rem] font-semibold
+                  uppercase tracking-widest text-neutral-700 no-underline
+                  transition-colors duration-300
+                  hover:border-emerald-500 hover:text-emerald-600
+                  focus-visible:outline-none focus-visible:ring-2
+                  focus-visible:ring-emerald-400
+                  dark:border-white/10 dark:text-neutral-400
+                  dark:hover:text-emerald-400"
+              >
+                Live
+                <svg
+                  aria-hidden="true"
+                  className="h-3 w-3 transition-transform duration-300
+                    group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.7"
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                  />
+                </svg>
+                <span className="sr-only">demo of {project.title}</span>
+              </a>
+            ) : (
+              <span
+                aria-disabled="true"
+                className="inline-flex cursor-not-allowed items-center rounded-full
+                  border border-dashed border-neutral-300 px-3.5 py-1.5 text-[0.7rem]
+                  font-semibold uppercase tracking-widest text-neutral-400
+                  dark:border-white/10 dark:text-neutral-500"
+              >
+                Coming soon
+              </span>
+            )}
+
+            <button
+              type="button"
+              onClick={setActive}
+              aria-expanded={active}
+              aria-controls={detailsId}
+              aria-label={`${active ? "Hide" : "Show"} details for ${project.title}`}
+              className="flex h-8 w-8 items-center justify-center rounded-full
+                border border-neutral-300 text-neutral-600
+                transition-colors duration-300
+                hover:border-emerald-500 hover:text-emerald-600
+                focus-visible:outline-none focus-visible:ring-2
+                focus-visible:ring-emerald-400
+                dark:border-white/10 dark:text-neutral-400
+                dark:hover:text-emerald-400"
+            >
               <svg
-                className="h-3 w-3 transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
+                aria-hidden="true"
+                className={`h-3.5 w-3.5 transition-transform duration-300 ${
+                  active ? "rotate-90" : "group-hover:translate-x-0.5"
+                }`}
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.7"
+                  d="M9 18l6-6-6-6"
+                />
               </svg>
-            </a>
+            </button>
           </div>
 
-          <button
-            type="button"
-            onClick={setActive}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border,rgba(255,255,255,0.1))] text-neutral-400 transition-all duration-300 hover:border-[var(--gold)] hover:text-[var(--gold)]"
-            aria-label={`Explore ${project.title}`}
+          {/* Expandable details */}
+          <div
+            id={detailsId}
+            inert={!active}
+            className={`grid transition-[grid-template-rows,opacity,margin]
+              duration-500 motion-reduce:transition-none ${
+                active
+                  ? "mt-4 grid-rows-[1fr] opacity-100"
+                  : "mt-0 grid-rows-[0fr] opacity-0"
+              }`}
           >
-            <svg
-              className={`h-4 w-4 transition-transform duration-300 ${active ? "rotate-90" : "group-hover:translate-x-0.5"}`}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
-        </div>
-
-        {/* Expanded Project Info Accordion */}
-        <div
-          className={`grid transition-all duration-500 ${
-            active ? "mt-5 grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-          }`}
-        >
-          <div className="overflow-hidden">
-            <div className="border border-(--border,rgba(255,255,255,0.1))] bg-white/2 p-4 rounded-xl">
-              <p className="text-[0.55rem] uppercase tracking-[0.12em] text-(--gold)">
-                Project Focus
-              </p>
-              <p className="mt-2 text-xs leading-6 text-neutral-400">
-                Architecture, user experience, performance and maintainable code were key considerations throughout this project.
-              </p>
+            <div className="overflow-hidden">
+              <div
+                className="rounded-lg border border-neutral-200 bg-neutral-50 p-3.5
+                  dark:border-white/10 dark:bg-white/[0.02]"
+              >
+                <p
+                  className="text-[0.65rem] font-semibold uppercase tracking-[0.12em]
+                    text-emerald-600 dark:text-emerald-400"
+                >
+                  Project focus
+                </p>
+                <p className="mt-1 text-xs leading-5 text-neutral-600 dark:text-neutral-400">
+                  Architecture, user experience, performance and maintainable
+                  code were key considerations throughout this project.
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Bottom Accent Line */}
-      <div className="absolute bottom-0 left-0 h-0.5 w-full origin-left scale-x-0 bg-(--accent) transition-transform duration-500 group-hover:scale-x-100" />
-    </article>
+        {/* Bottom accent line */}
+        <div
+          aria-hidden="true"
+          className="absolute bottom-0 left-0 h-0.5 w-full origin-left scale-x-0
+            bg-emerald-500 transition-transform duration-500
+            group-hover:scale-x-100"
+        />
+      </article>
+    </div>
   );
 }

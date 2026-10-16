@@ -24,19 +24,16 @@ export const services: Service[] = [
   },
   {
     title: "Full-Stack Applications",
-    // category: "Application Development",
     image: "/images/services/fullstack-development.jpg",
     technologies: ["Next.js", "TypeScript", "REST APIs", "PostgreSQL"],
   },
   {
     title: "Performance & SEO",
-    // category: "Web Optimization",
     image: "/images/services/web-optimization.jpg",
     technologies: ["Next.js", "SEO", "Accessibility", "Lighthouse"],
   },
   {
     title: "Maintenance & Support",
-    // category: "Continuous Improvement",
     image: "/images/services/maintenance-support.jpg",
     technologies: ["Git", "Testing", "Debugging", "Deployment"],
   },

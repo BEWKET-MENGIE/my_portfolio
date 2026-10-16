@@ -1,12 +1,21 @@
-// lib/nodemailer.ts
-import nodemailer from 'nodemailer';
+
+
+
+// src/lib/nodemailer.ts
+import nodemailer from "nodemailer";
+
+const emailUser = process.env.EMAIL_SERVER_USER;
+const emailPass = process.env.EMAIL_SERVER_PASSWORD;
 
 export const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_SERVER_HOST,
-  port: Number(process.env.EMAIL_SERVER_PORT),
-  secure: true, // true for port 465, false for other ports
+  service: "gmail",
   auth: {
-    user: process.env.EMAIL_SERVER_USER,
-    pass: process.env.EMAIL_SERVER_PASSWORD,
+    user: emailUser,
+    pass: emailPass,
   },
 });
+
+export const mailOptions = {
+  from: process.env.EMAIL_FROM,
+  to: process.env.EMAIL_SERVER_USER, // Sends the message straight to your email
+};
