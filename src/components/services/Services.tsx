@@ -73,9 +73,9 @@ export default function Services() {
       ref={sectionRef}
       id="services"
       aria-labelledby="services-heading"
-      className="relative overflow-hidden bg-neutral-50 px-5 py-24
+      className="relative overflow-hidden bg-neutral-50 px-5 py-12
         text-neutral-900 transition-colors duration-300
-        sm:px-8 md:py-32 lg:px-16
+        sm:px-8 md:py-16 lg:px-16
         dark:bg-[#030719] dark:text-white"
     >
       {/* Background decoration */}

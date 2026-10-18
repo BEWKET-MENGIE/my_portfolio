@@ -6,7 +6,7 @@ export interface Project {
   description: string;
   longDescription: string;
   tags: string[];
-  gradient: string;
+  linear: string;
   demo: string;
   source: string;
   features: string[];

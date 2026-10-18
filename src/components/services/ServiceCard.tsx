@@ -23,7 +23,7 @@ export default function ServiceCard({
         ${
           service.featured
             ? "border-emerald-500/40 bg-white shadow-sm dark:border-emerald-500/30 dark:bg-white/[0.035] dark:shadow-none"
-            : "border-neutral-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/[0.015] dark:shadow-none"
+            : "border-neutral-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/1.5 dark:shadow-none"
         }
         ${
           isVisible
@@ -98,7 +98,7 @@ export default function ServiceCard({
               key={tech}
               className="rounded-md border border-neutral-200 bg-neutral-100
                 px-2.5 py-1 text-xs text-neutral-700
-                dark:border-white/10 dark:bg-white/[0.04] dark:text-neutral-300"
+                dark:border-white/10 dark:bg-white/4 dark:text-neutral-300"
             >
               {tech}
             </li>

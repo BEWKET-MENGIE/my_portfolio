@@ -1,15 +1,13 @@
+// src/components/skills/Skills.tsx
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import SkillCategory from "./SkillCategory";
+import { Code2 } from "lucide-react";
+import SkillCategory, { type SkillCategoryData } from "./SkillCategory";
 
-const categories = [
+const categories: SkillCategoryData[] = [
   {
-    id: "frontend",
-    number: "01",
     title: "Frontend Development",
-    description:
-      "Crafting intuitive, responsive, and performant user interfaces with modern web standards.",
     items: [
       { name: "React" },
       { name: "Next.js" },
@@ -23,11 +21,7 @@ const categories = [
     ],
   },
   {
-    id: "backend",
-    number: "02",
     title: "Backend & APIs",
-    description:
-      "Designing scalable server-side architectures, secure databases, and fast endpoints.",
     items: [
       { name: "Node.js" },
       { name: "Express" },
@@ -40,11 +34,7 @@ const categories = [
     ],
   },
   {
-    id: "devops",
-    number: "03",
     title: "DevOps & Tools",
-    description:
-      "Automating workflows, containerizing applications, and deploying robust cloud infrastructure.",
     items: [
       { name: "Docker" },
       { name: "AWS" },
@@ -99,39 +89,59 @@ export default function Skills() {
       ref={sectionRef}
       id="skills"
       aria-labelledby="skills-heading"
-      className="relative min-h-screen overflow-hidden bg-(--dark) px-4 py-24 text-(--text) md:px-8 md:py-32"
+      className="relative overflow-hidden bg-neutral-100 px-5 py-12
+        text-neutral-900 transition-colors duration-300
+        md:px-10 md:py-16 dark:bg-[#04091a] dark:text-white"
     >
       {/* Ambient background glows */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-500/[0.03] blur-[180px]"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-200 w-200
+          -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--accent)/6
+          blur-[180px] dark:bg-(--accent)/4"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -left-40 top-1/4 h-80 w-80 rounded-full bg-red-500/[0.02] blur-[150px]"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-40 bottom-1/4 h-80 w-80 rounded-full bg-emerald-500/[0.02] blur-[150px]"
+        className="pointer-events-none absolute -right-40 bottom-1/4 h-80 w-80
+          rounded-full bg-emerald-500/5 blur-[150px] dark:bg-emerald-500/3"
       />
 
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         {/* Section header: centered */}
-        <div className={`mb-16 text-center md:mb-20 ${reveal("delay-0")}`}>
+        <div className={`mb-10 text-center md:mb-12 ${reveal("delay-0")}`}>
+          <div
+            className="mb-4 inline-flex items-center gap-2 rounded-full border
+              border-(--accent)/30 bg-(--accent)/5 px-4 py-2 backdrop-blur-md"
+          >
+            <Code2
+              className="h-4 w-4 text-cyan-700 dark:text-(--accent-light)"
+              aria-hidden="true"
+            />
+            <span
+              className="text-xs font-bold uppercase tracking-[0.18em]
+                text-cyan-700 dark:text-(--accent-light)"
+            >
+              Expertise &amp; Toolkit
+            </span>
+          </div>
+
           <h2
             id="skills-heading"
-            className="text-3xl font-extrabold tracking-tight text-(--text) sm:text-4xl"
+            className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl"
           >
-            Tech Stack / Skills
+            Tech Stack{" "}
+            <span className="text-cyan-700 dark:text-(--accent-light)">
+              &amp; Skills
+            </span>
           </h2>
         </div>
 
         {/* Category cards */}
         <div
-          className={`grid grid-cols-1 gap-10 lg:grid-cols-3 ${reveal("delay-200")}`}
+          className={`grid grid-cols-1 gap-8 lg:grid-cols-3 ${reveal("delay-200")}`}
         >
           {categories.map((category) => (
-            <SkillCategory key={category.id} category={category} />
+            <SkillCategory key={category.title} category={category} />
           ))}
         </div>
       </div>

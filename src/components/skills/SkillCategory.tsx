@@ -1,54 +1,75 @@
+// src/components/skills/SkillCategory.tsx
 "use client";
 
-import React from "react";
-import TechDiamond from "./TechDiamond";
+import TechDiamond, { type TechItem } from "./TechDiamond";
 
-type TechItem = {
-  name: string;
+export type SkillCategoryData = {
+  id: string;
+  number: string;
+  title: string;
+  description: string;
+  items: TechItem[];
 };
 
-type CategoryProps = {
-  category: {
-    id: string;
-    number: string;
-    title: string;
-    description: string;
-    items: TechItem[];
-  };
-};
+export default function SkillCategory({
+  category,
+}: {
+  category: SkillCategoryData;
+}) {
+  const titleId = `skill-${category.id}-title`;
 
-export default function SkillCategory({ category }: CategoryProps) {
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-[var(--border,rgba(255,255,255,0.1))] bg-[var(--dark)] p-6 md:p-8 shadow-xl backdrop-blur-md">
+    <article
+      aria-labelledby={titleId}
+      className="relative overflow-hidden rounded-3xl border border-neutral-200
+        bg-white p-6 shadow-sm backdrop-blur-md transition-all duration-300
+        hover:border-(--accent)/40 hover:shadow-md md:p-8
+        dark:border-neutral-800 dark:bg-white/2 dark:shadow-2xl
+        dark:hover:bg-white/4"
+    >
       {/* Top accent line */}
-      <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-[var(--border,rgba(255,255,255,0.2))] to-transparent" />
+      <div
+        aria-hidden="true"
+        className="absolute left-0 top-0 h-px w-full bg-linear-to-r
+          from-transparent via-(--accent)/50 to-transparent"
+      />
 
       {/* Category number */}
-      <span className="absolute right-6 top-6 font-mono text-sm tracking-widest text-neutral-500">
+      <span
+        aria-hidden="true"
+        className="absolute right-6 top-6 font-mono text-sm tracking-widest
+          text-neutral-400 dark:text-neutral-500"
+      >
         {category.number}
       </span>
 
-      {/* Category heading & description */}
-      <div className="mb-12">
-        <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-neutral-400">
-          {category.id}
-        </p>
-
-        <h3 className="text-3xl font-bold tracking-tight text-[var(--accent,var(--purple))]">
+      {/* Heading & description */}
+      <div className="mb-8">
+      
+        <h3
+          id={titleId}
+          className="text-2xl font-bold tracking-tight text-neutral-900
+            sm:text-3xl dark:text-white"
+        >
           {category.title}
         </h3>
 
-        <p className="mt-3 text-sm leading-6 text-neutral-400">
+        <p className="mt-3 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
           {category.description}
         </p>
       </div>
 
-      {/* Technology Diamond Grid */}
-      <div className="grid grid-cols-2 justify-items-center gap-x-6 gap-y-10 sm:grid-cols-3">
+      {/* Technologies */}
+      <ul
+        aria-label={`${category.title} technologies`}
+        className="grid grid-cols-2 justify-items-center gap-x-4 gap-y-8 sm:grid-cols-3"
+      >
         {category.items.map((tech, index) => (
-          <TechDiamond key={tech.name} tech={tech} index={index} />
+          <li key={tech.name}>
+            <TechDiamond tech={tech} index={index} />
+          </li>
         ))}
-      </div>
-    </div>
+      </ul>
+    </article>
   );
 }

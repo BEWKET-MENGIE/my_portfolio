@@ -1,20 +1,32 @@
+// src/app/projects/page.tsx
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import AllProjects from "@/components/projects/AllProjects";
+import { projects } from "@/data/projects";
 
 export const metadata: Metadata = {
   title: "All Projects | Bewket Mengie",
   description: "A full list of projects built by Bewket Mengie.",
 };
 
+const count = projects.length;
+
 export default function ProjectsPage() {
   return (
     <main
-      className="min-h-screen bg-white px-5 pb-24 pt-32 text-neutral-900
-        sm:px-8 md:pt-36 lg:px-16 dark:bg-[#050816] dark:text-white"
+      className="relative min-h-screen overflow-hidden bg-white px-5 pb-20 pt-28
+        text-neutral-900 transition-colors duration-300 sm:px-8 md:pt-32 lg:px-16
+        dark:bg-[#050816] dark:text-white"
     >
-      <div className="mx-auto max-w-7xl">
+      {/* Background glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-40 top-24 h-96 w-96
+          rounded-full bg-emerald-500/10 blur-3xl dark:bg-emerald-500/[0.07]"
+      />
+
+      <div className="relative z-10 mx-auto max-w-6xl">
         <Link
           href="/#projects"
           className="inline-flex items-center gap-2 text-sm font-medium
@@ -27,22 +39,47 @@ export default function ProjectsPage() {
           Back to home
         </Link>
 
-        <header className="mt-8 max-w-3xl">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-600 dark:text-emerald-400">
-            Portfolio
-          </p>
+        {/* Header: centered */}
+        <header className="mx-auto mt-8 max-w-2xl text-center">
           <h1 className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
             All projects.
           </h1>
-          <p className="mt-5 text-sm leading-7 text-neutral-600 sm:text-base dark:text-neutral-400">
-            Everything I&apos;ve built, from web apps to open-source tools.
-            Filter by category to find what you&apos;re looking for.
+
+         
+
+          <p
+            className="mt-6 inline-flex items-center gap-2 rounded-full border
+              border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-xs
+              font-semibold text-emerald-700 dark:text-emerald-300"
+          >
+            <span
+              aria-hidden="true"
+              className="h-1.5 w-1.5 rounded-full bg-emerald-500"
+            />
+            {count} {count === 1 ? "project" : "projects"}
           </p>
         </header>
 
+        {/* Filter + grid */}
         <div className="mt-12">
           <AllProjects />
         </div>
+
+        {/* Closing call to action */}
+     
+
+          <Link
+            href="/#contact"
+            className="mt-6 inline-flex items-center gap-2 rounded-full
+              bg-emerald-500 px-6 py-3 text-sm font-bold text-black
+              transition-colors hover:bg-emerald-400
+              focus-visible:outline-none focus-visible:ring-2
+              focus-visible:ring-emerald-400"
+          >
+            Get in touch
+            <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+     
       </div>
     </main>
   );

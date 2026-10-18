@@ -47,8 +47,8 @@ export default function Contact() {
       ref={sectionRef}
       id="contact"
       aria-labelledby="contact-heading"
-      className="relative overflow-hidden bg-neutral-50 px-5 py-16 text-neutral-900
-        transition-colors duration-300 sm:px-8 md:py-24 lg:px-16
+      className="relative overflow-hidden bg-neutral-50 px-5 py-12 text-neutral-900
+        transition-colors duration-300 sm:px-8 md:py-16 lg:px-16
         dark:bg-[#030719] dark:text-white"
     >
       {/* Background glow */}

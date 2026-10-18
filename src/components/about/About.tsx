@@ -1,3 +1,4 @@
+// src/components/about/About.tsx
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -44,26 +45,35 @@ export default function About() {
       ref={sectionRef}
       id="about"
       aria-labelledby="about-label"
-      className="relative min-h-screen overflow-hidden bg-(--dark) px-6 py-24 text-(--text) md:px-16 md:py-32"
+      className="relative overflow-hidden bg-white px-5 py-12 text-neutral-900
+        transition-colors duration-300 sm:px-8 md:py-16 lg:px-16
+        dark:bg-[#050816] dark:text-white"
     >
       {/* Ambient background glows */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -left-60 top-1/4 h-80 w-96 rounded-full bg-(--accent) opacity-[0.05] blur-[140px]"
+        className="pointer-events-none absolute -left-60 top-1/4 h-80 w-96
+          rounded-full bg-emerald-500/10 blur-[140px] dark:bg-emerald-500/[0.05]"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-(--accent) opacity-[0.04] blur-[140px]"
+        className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96
+          rounded-full bg-emerald-500/10 blur-[140px] dark:bg-emerald-500/[0.04]"
       />
 
       <div className="relative z-10 mx-auto w-full max-w-7xl">
-        {/* Section label: centered at the top */}
-        <div className={`mb-10 flex justify-center md:mb-14 ${reveal("delay-0")}`}>
+        {/* Section label: centered */}
+        <div className={`mb-10 flex justify-center md:mb-12 ${reveal("delay-0")}`}>
           <p
             id="about-label"
-            className="flex items-center gap-3 text-[0.99rem] font-bold uppercase tracking-[0.2em] text-(--accent) md:text-[1.3rem]"
+            className="flex items-center gap-3 text-base font-bold uppercase
+              tracking-[0.2em] text-emerald-700 md:text-xl dark:text-emerald-400"
           >
             About Me
+            <span
+              aria-hidden="true"
+              className="h-2 w-2 rounded-full bg-emerald-500"
+            />
           </p>
         </div>
 

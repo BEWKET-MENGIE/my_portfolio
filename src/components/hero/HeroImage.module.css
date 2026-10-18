@@ -8,8 +8,8 @@
   pointer-events: none;
   isolation: isolate;
   background:
-    radial-gradient(ellipse at 48% 43%, rgba(89, 65, 32, 0.2), transparent 38%),
-    radial-gradient(ellipse at center, #17120d 0%, #100c09 64%, #0d0a08 100%);
+    radial-linear(ellipse at 48% 43%, rgba(89, 65, 32, 0.2), transparent 38%),
+    radial-linear(ellipse at center, #17120d 0%, #100c09 64%, #0d0a08 100%);
 }
 
 .ambientGlow {
@@ -34,10 +34,16 @@
   transform: perspective(520px) rotateX(62deg);
   transform-origin: center top;
   background-image:
-    linear-gradient(rgba(180, 140, 71, 0.22) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(180, 140, 71, 0.22) 1px, transparent 1px);
+    linear-linear(rgba(180, 140, 71, 0.22) 1px, transparent 1px),
+    linear-linear(90deg, rgba(180, 140, 71, 0.22) 1px, transparent 1px);
   background-size: 44px 30px;
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 76%, transparent 100%);
+  mask-image: linear-linear(
+    to bottom,
+    transparent 0%,
+    #000 24%,
+    #000 76%,
+    transparent 100%
+  );
 }
 
 .verticalAxis {
@@ -47,7 +53,13 @@
   left: 47.1%;
   width: 1px;
   opacity: 0.48;
-  background: linear-gradient(to bottom, transparent, rgba(180, 140, 71, 0.25) 20%, rgba(180, 140, 71, 0.45) 52%, transparent);
+  background: linear-linear(
+    to bottom,
+    transparent,
+    rgba(180, 140, 71, 0.25) 20%,
+    rgba(180, 140, 71, 0.45) 52%,
+    transparent
+  );
 }
 
 .coreStage {
@@ -84,9 +96,15 @@
   stroke-width: 0.85;
 }
 
-.coreFaceLight { fill: rgba(187, 143, 62, 0.3); }
-.coreFaceDark { fill: rgba(88, 67, 33, 0.34); }
-.coreFaceMid { fill: rgba(161, 121, 51, 0.2); }
+.coreFaceLight {
+  fill: rgba(187, 143, 62, 0.3);
+}
+.coreFaceDark {
+  fill: rgba(88, 67, 33, 0.34);
+}
+.coreFaceMid {
+  fill: rgba(161, 121, 51, 0.2);
+}
 
 .coreEdges {
   stroke: rgba(221, 183, 103, 0.75);
@@ -249,35 +267,61 @@
   inset: 0;
   z-index: 5;
   background:
-    linear-gradient(to bottom, rgba(10, 8, 6, 0.12), transparent 28%, transparent 72%, rgba(10, 8, 6, 0.2)),
-    radial-gradient(ellipse at center, transparent 42%, rgba(8, 6, 5, 0.48) 100%);
+    linear-linear(
+      to bottom,
+      rgba(10, 8, 6, 0.12),
+      transparent 28%,
+      transparent 72%,
+      rgba(10, 8, 6, 0.2)
+    ),
+    radial-linear(ellipse at center, transparent 42%, rgba(8, 6, 5, 0.48) 100%);
 }
 
 /* ---------- Keyframes ---------- */
 
 @keyframes mesh-turn {
-  from { transform: translate(-50%, -50%) rotate(0deg) rotateX(8deg); }
-  to   { transform: translate(-50%, -50%) rotate(360deg) rotateX(8deg); }
+  from {
+    transform: translate(-50%, -50%) rotate(0deg) rotateX(8deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg) rotateX(8deg);
+  }
 }
 
 @keyframes orbit-turn-one {
-  from { transform: translate(-50%, -50%) rotate(-20deg) rotate(0deg); }
-  to   { transform: translate(-50%, -50%) rotate(-20deg) rotate(360deg); }
+  from {
+    transform: translate(-50%, -50%) rotate(-20deg) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(-20deg) rotate(360deg);
+  }
 }
 
 @keyframes orbit-turn-two {
-  from { transform: translate(-50%, -50%) rotate(28deg) rotate(0deg) scaleY(0.92); }
-  to   { transform: translate(-50%, -50%) rotate(28deg) rotate(360deg) scaleY(0.92); }
+  from {
+    transform: translate(-50%, -50%) rotate(28deg) rotate(0deg) scaleY(0.92);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(28deg) rotate(360deg) scaleY(0.92);
+  }
 }
 
 @keyframes orbit-turn-three {
-  from { transform: translate(-50%, -50%) rotate(-8deg) rotate(0deg) scaleY(0.82); }
-  to   { transform: translate(-50%, -50%) rotate(-8deg) rotate(360deg) scaleY(0.82); }
+  from {
+    transform: translate(-50%, -50%) rotate(-8deg) rotate(0deg) scaleY(0.82);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(-8deg) rotate(360deg) scaleY(0.82);
+  }
 }
 
 @keyframes satellite-orbit {
-  from { transform: rotate(var(--start, 0deg)); }
-  to   { transform: rotate(calc(var(--start, 0deg) + 360deg)); }
+  from {
+    transform: rotate(var(--start, 0deg));
+  }
+  to {
+    transform: rotate(calc(var(--start, 0deg) + 360deg));
+  }
 }
 
 /* ---------- Mobile ---------- */

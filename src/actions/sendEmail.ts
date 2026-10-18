@@ -1,4 +1,3 @@
-// src/actions/sendEmail.ts
 "use server";
 
 import { transporter, mailOptions } from "@/lib/nodemailer";

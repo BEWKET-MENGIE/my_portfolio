@@ -1,10 +1,10 @@
 export const SITE_CONFIG = {
-  name: "Your Name",
+  name: "Bewket Mengie",
   title: "Full Stack Developer",
-  description: "Building modern, scalable web applications with clean code.",
+description: "Fourth-year Software Engineering student and Full Stack Developer building robust web applications.",
   url: "https://yourportfolio.com",
-  email: "hello@example.com",
-  location: "Your Location",
+  email: "mengiebewket@gmail.com",
+  location: "Injibara University, Injibara, Ethiopia",
 };
 
 export const NAV_LINKS = [

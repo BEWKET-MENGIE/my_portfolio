@@ -56,8 +56,8 @@ export default function Projects() {
       ref={sectionRef}
       id="projects"
       aria-labelledby="projects-heading"
-      className="relative overflow-hidden bg-white px-5 py-16 text-neutral-900
-        transition-colors duration-300 md:px-10 md:py-24 lg:px-16
+      className="relative overflow-hidden bg-white px-5 py-12 text-neutral-900
+        transition-colors duration-300 md:px-10 md:py-16 lg:px-16
         dark:bg-[#050816] dark:text-white"
     >
       {/* Background glow */}
