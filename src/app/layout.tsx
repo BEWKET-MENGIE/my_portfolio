@@ -1,6 +1,7 @@
 // src/app/layout.tsx
 import "./globals.css";
 import ThemeProvider from "@/components/theme/ThemeProvider";
+import Preloader from "@/components/ui/Preloader";
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/footer/Footer";
 
@@ -12,14 +13,19 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
-      <body 
+      <body
         className="bg-(--dark,#09090b) text-(--text,#f3f4f6) antialiased transition-colors duration-300"
         suppressHydrationWarning
       >
         <ThemeProvider>
+          <Preloader />
           <Navbar />
           <div className="relative flex min-h-screen flex-col">{children}</div>
           <Footer />
