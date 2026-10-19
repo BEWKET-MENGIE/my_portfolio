@@ -22,4 +22,7 @@ export interface Service {
   image: string;
   technologies: string[];
   featured?: boolean;
+  longDescription?: string;
+  features?: string[];
+  process?: { title: string; text: string }[];
 }

@@ -1,9 +1,12 @@
+// src/components/services/Services.tsx
 "use client";
 
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import ServiceCard from "./ServiceCard";
+import ServiceModal from "./ServiceModal";
 import { services } from "@/data/services";
 import Experience from "@/components/experience/Experience";
+import type { Service } from "@/types";
 
 type ActiveTab = "services" | "experience";
 
@@ -15,6 +18,9 @@ const tabs: { id: ActiveTab; label: string }[] = [
 export default function Services() {
   const [isVisible, setIsVisible] = useState(false);
   const [activeTab, setActiveTab] = useState<ActiveTab>("services");
+  // The service whose details pop-up is open (null = closed).
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+
   const sectionRef = useRef<HTMLElement>(null);
   const tabRefs = useRef<Record<ActiveTab, HTMLButtonElement | null>>({
     services: null,
@@ -177,6 +183,7 @@ export default function Services() {
                 service={service}
                 index={index}
                 isVisible={isVisible && activeTab === "services"}
+                onOpen={() => setSelectedService(service)}
               />
             ))}
           </div>
@@ -192,6 +199,15 @@ export default function Services() {
           <Experience />
         </div>
       </div>
+
+      {/* Details pop-up (mounted only while a service is selected) */}
+      {selectedService && (
+        <ServiceModal
+          key={selectedService.title}
+          service={selectedService}
+          onClose={() => setSelectedService(null)}
+        />
+      )}
     </section>
   );
 }

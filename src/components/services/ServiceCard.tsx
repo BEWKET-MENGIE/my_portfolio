@@ -1,3 +1,4 @@
+// src/components/services/ServiceCard.tsx
 "use client";
 
 import Image from "next/image";
@@ -7,12 +8,15 @@ interface ServiceCardProps {
   service: Service;
   index: number;
   isVisible: boolean;
+  /** Called when the visitor opens this service's details pop-up. */
+  onOpen: () => void;
 }
 
 export default function ServiceCard({
   service,
   index,
   isVisible,
+  onOpen,
 }: ServiceCardProps) {
   return (
     <article
@@ -20,10 +24,11 @@ export default function ServiceCard({
         transition-[transform,opacity,border-color,background-color,box-shadow]
         duration-700 ease-out motion-reduce:transition-none
         hover:border-emerald-500/50 hover:shadow-lg dark:hover:shadow-none
+        has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-emerald-400
         ${
           service.featured
             ? "border-emerald-500/40 bg-white shadow-sm dark:border-emerald-500/30 dark:bg-white/[0.035] dark:shadow-none"
-            : "border-neutral-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/1.5 dark:shadow-none"
+            : "border-neutral-200 bg-white shadow-sm dark:border-white/10 dark:bg-white/[0.015] dark:shadow-none"
         }
         ${
           isVisible
@@ -67,8 +72,8 @@ export default function ServiceCard({
         />
       </div>
 
-      {/* Content */}
-      <div className="relative p-6 md:p-7">
+      {/* Content (not positioned, so the button's overlay can cover the whole card) */}
+      <div className="p-6 md:p-7">
         <p
           className="mb-2 text-xs font-semibold uppercase tracking-[0.18em]
             text-emerald-600 dark:text-emerald-400"
@@ -88,46 +93,56 @@ export default function ServiceCard({
           {service.desc}
         </p>
 
-        {/* Technologies */}
-        <ul
-          aria-label={`Technologies for ${service.title}`}
-          className="mt-5 flex flex-wrap gap-2"
-        >
-          {service.technologies.map((tech) => (
-            <li
-              key={tech}
-              className="rounded-md border border-neutral-200 bg-neutral-100
-                px-2.5 py-1 text-xs text-neutral-700
-                dark:border-white/10 dark:bg-white/4 dark:text-neutral-300"
-            >
-              {tech}
-            </li>
-          ))}
-        </ul>
-
-        {/* Decorative arrow */}
-        <div
-          aria-hidden="true"
-          className="absolute bottom-6 right-5 flex h-8 w-8
-            items-center justify-center rounded-full border
-            border-neutral-300 text-emerald-600 opacity-0
-            transition-all duration-300 group-hover:translate-x-1
-            group-hover:border-emerald-500/60 group-hover:opacity-100
-            dark:border-white/15 dark:text-emerald-400"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            className="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.7"
+        {/* Technologies + open button on the same row */}
+        <div className="mt-5 flex items-end justify-between gap-4">
+          <ul
+            aria-label={`Technologies for ${service.title}`}
+            className="flex flex-wrap gap-2"
           >
-            <path
-              d="M5 12h14m-6-6 6 6-6 6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+            {service.technologies.map((tech) => (
+              <li
+                key={tech}
+                className="rounded-md border border-neutral-200 bg-neutral-100
+                  px-2.5 py-1 text-xs text-neutral-700
+                  dark:border-white/10 dark:bg-white/[0.04] dark:text-neutral-300"
+              >
+                {tech}
+              </li>
+            ))}
+          </ul>
+
+          
+          <button
+            type="button"
+            onClick={onOpen}
+            aria-haspopup="dialog"
+            aria-label={`Learn more about ${service.title}`}
+            className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center
+              rounded-full border border-neutral-300 text-emerald-600
+              transition-colors duration-300
+              after:absolute after:inset-0 after:z-20
+              group-hover:border-emerald-500 group-hover:bg-emerald-500
+              group-hover:text-black
+              focus-visible:outline-none
+              dark:border-white/15 dark:text-emerald-400
+              dark:group-hover:text-black"
+          >
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              className="h-4 w-4 transition-transform duration-300
+                group-hover:translate-x-0.5 motion-reduce:transition-none"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.7"
+            >
+              <path
+                d="M5 12h14m-6-6 6 6-6 6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
         </div>
       </div>
     </article>
