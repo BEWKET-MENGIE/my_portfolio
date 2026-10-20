@@ -7,7 +7,11 @@ import Image from "next/image";
 /* ---------------------------------------------------------------
    SETTINGS
 ---------------------------------------------------------------- */
-const LOGO_SRC = "/log2.jpg"; // file in the public folder: your logo photo
+// Use the SAME image as your navbar avatar. To get the exact path: open
+// src/components/navbar/Navbar.tsx, find the <Image ... src="..." /> next to
+// "Bewket Mengie", and copy that src here. (Files live in the public folder,
+// so "/images/me.jpg" means public/images/me.jpg.)
+const LOGO_SRC = "/log.jpg";
 const NAME = "Bewket Mengie";
 const INITIALS = "BM"; // shown only if the logo image fails to load
 

@@ -3,6 +3,7 @@
 
 import React, { useEffect, useState } from "react";
 import { ArrowUpRight, Code2 } from "lucide-react";
+import SocialLinks from "./SocialLinks";
 
 const processSteps = [
   "Understand",
@@ -121,41 +122,50 @@ export default function HeroContent() {
 
   return (
     // self-stretch: this block is as tall as the hero.
-    // No bottom padding here on purpose: the divider below runs all the way
-    // down and the scroll button sits flush with the bottom edge (margin 0).
+    // No bottom padding here on purpose: the divider and the social links
+    // run all the way down and sit flush with the bottom edge of the hero.
     <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col gap-14 self-stretch pt-28 md:flex-row md:items-center md:gap-10 lg:gap-14">
-      {/* LEFT COLUMN: typing text & CTA.
-          The gap below is the space between the typing line and the button.
-          It matches the right column (name -> steps) so the two sides feel balanced. */}
-      <div className="flex flex-1 flex-col justify-center gap-20 md:gap-36 md:pb-24 lg:gap-44">
-        <div className="flex min-h-12 items-center gap-3">
-          <p className="font-mono text-[0.95rem] uppercase tracking-[0.18em] text-(--accent-light) drop-shadow-[0_0_10px_rgba(6,182,212,0.35)] sm:text-base">
-            {/* Screen readers get the full list once; the typing is visual only. */}
-            <span className="sr-only">{phrases.join(", ")}</span>
-            <span aria-hidden="true" className="inline-block min-w-[26ch]">
-              {displayText}
-              <span
-                className={`ml-1 inline-block h-[1em] w-0.5 bg-(--accent) align-middle ${
-                  reduceMotion ? "" : "animate-pulse"
-                }`}
+      {/* LEFT COLUMN (left of the divider).
+          Typing text + button are centered; the social links sit at the bottom. */}
+      <div className="relative flex flex-1 flex-col justify-center self-stretch">
+        {/* The gap is the space between the typing line and the button.
+            It matches the right column (name -> steps). */}
+        <div className="flex flex-col gap-20 md:gap-36 md:pb-24 lg:gap-44">
+          <div className="flex min-h-12 items-center gap-3">
+            <p className="font-mono text-[0.95rem] uppercase tracking-[0.18em] text-(--accent-light) drop-shadow-[0_0_10px_rgba(6,182,212,0.35)] sm:text-base">
+              {/* Screen readers get the full list once; the typing is visual only. */}
+              <span className="sr-only">{phrases.join(", ")}</span>
+              <span aria-hidden="true" className="inline-block min-w-[26ch]">
+                {displayText}
+                <span
+                  className={`ml-1 inline-block h-[1em] w-0.5 bg-(--accent) align-middle ${
+                    reduceMotion ? "" : "animate-pulse"
+                  }`}
+                />
+              </span>
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-4">
+            <button
+              type="button"
+              onClick={() => scrollToSection("projects")}
+              className="group inline-flex items-center gap-2 rounded-[80px] border border-(--accent)/40 bg-(--accent)/10 px-6 py-3.5 text-sm font-bold text-(--accent-light) transition-all duration-300 hover:-translate-y-1 hover:bg-(--accent) hover:text-black hover:shadow-[0_0_35px_rgba(6,182,212,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent) active:scale-[0.98] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+            >
+              View My Work
+              <ArrowUpRight
+                size={18}
+                className="transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 motion-reduce:transition-none"
               />
-            </span>
-          </p>
+            </button>
+          </div>
         </div>
 
-        <div className="flex flex-wrap gap-4">
-          <button
-            type="button"
-            onClick={() => scrollToSection("projects")}
-            className="group inline-flex items-center gap-2 rounded-[80px] border border-(--accent)/40 bg-(--accent)/10 px-6 py-3.5 text-sm font-bold text-(--accent-light) transition-all duration-300 hover:-translate-y-1 hover:bg-(--accent) hover:text-black hover:shadow-[0_0_35px_rgba(6,182,212,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent) active:scale-[0.98] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-          >
-            View My Work
-            <ArrowUpRight
-              size={18}
-              className="transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 motion-reduce:transition-none"
-            />
-          </button>
-        </div>
+        {/* Social links, horizontal.
+            Desktop: pinned to the bottom-left of the hero, on the same line as
+            the scroll button at the bottom of the divider.
+            Phone: shown under the button instead. */}
+        <SocialLinks className="mt-12 md:absolute md:bottom-0 md:left-0 md:mt-0" />
       </div>
 
       {/* VERTICAL DIVIDER (desktop): one straight line from the top, through

@@ -1,6 +1,6 @@
+// src/components/hero/SocialLinks.tsx
 "use client";
 
-import React from "react";
 import { Mail } from "lucide-react";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
@@ -26,23 +26,21 @@ const links = [
   },
 ];
 
-export default function SocialLinks() {
+/* A horizontal row of social icons. Where it sits is decided by the parent
+   (HeroContent) through `className`, so this file only describes the row. */
+export default function SocialLinks({ className = "" }: { className?: string }) {
   return (
-    // `absolute` keeps the icons inside the hero (the <section> is `relative`).
-    // Change to `fixed` if you want them to follow the user down the page.
     <nav
       aria-label="Social links"
-      className="absolute bottom-7 right-6 z-30 hidden flex-col items-center gap-4 md:flex lg:right-10"
+      className={`flex flex-row items-center gap-3 ${className}`}
     >
       {links.map(({ label, href, Icon, external }) => (
         <a
           key={label}
           href={href}
           aria-label={label}
-          {...(external
-            ? { target: "_blank", rel: "noopener noreferrer" }
-            : {})}
-          className="group flex h-11 w-11 items-center justify-center rounded-full border border-neutral-700/50 bg-neutral-900/40 text-neutral-300 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500 hover:text-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+          {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          className="group flex h-11 w-11 items-center justify-center rounded-full border border-neutral-700/50 bg-neutral-900/40 text-neutral-300 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-(--accent) hover:text-(--accent-light) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent) motion-reduce:transition-none motion-reduce:hover:translate-y-0"
         >
           <Icon
             size={18}
