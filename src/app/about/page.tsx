@@ -115,7 +115,7 @@ const principles = [
   },
 ];
 
-// Same order and wording as your file. The first item is highlighted.
+// The first item is highlighted (orange, pulsing).
 const timeline = [
   {
     year: "2024 — Expected 2027",
@@ -162,6 +162,17 @@ const gradientText =
 const cardClass =
   "rounded-3xl border border-(--border) bg-white/[0.025]";
 
+/* Principle cards: zoom in when the mouse is over them and zoom back out when it
+   leaves. The easing curve overshoots slightly, so it feels like a soft "pop".
+   `relative` + `hover:z-10` keep the zoomed card above its neighbours.
+   Visitors with reduced motion get the color change only, with no zoom. */
+const principleCardClass =
+  `${cardClass} group relative h-full p-7 ` +
+  "transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] will-change-transform " +
+  "hover:z-10 hover:scale-105 hover:border-(--accent)/40 hover:bg-white/[0.05] " +
+  "hover:shadow-2xl hover:shadow-black/30 " +
+  "motion-reduce:transition-colors motion-reduce:hover:scale-100";
+
 const primaryButton =
   `group inline-flex items-center justify-center gap-3 rounded-full bg-blue-600 px-7 py-4 ${mono} ` +
   "text-xs font-bold uppercase tracking-[0.13em] text-white shadow-lg " +
@@ -205,7 +216,7 @@ export default function AboutPage() {
                 About Me
               </h1>
               <p className="mt-5 text-base text-(--text-muted) sm:text-lg">
-                Software Engineering student &amp; {ROLE}
+                Software Engineering &amp; {ROLE}
               </p>
             </header>
           </Reveal>
@@ -361,11 +372,9 @@ export default function AboutPage() {
 
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {principles.map(({ title, description, icon: Icon }, index) => (
-              <Reveal key={title} delay={(index % 3) * 100}>
-                <div
-                  className={`${cardClass} group h-full p-7 transition-all duration-300 hover:border-(--accent)/30 hover:bg-white/[0.04]`}
-                >
-                  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 transition-colors group-hover:bg-(--accent)/10">
+              <Reveal key={title} delay={(index % 3) * 100} className="h-full">
+                <div className={principleCardClass}>
+                  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 transition-all duration-300 group-hover:scale-110 group-hover:bg-(--accent)/10 motion-reduce:group-hover:scale-100">
                     <Icon
                       className="h-5 w-5 text-(--text-muted) transition-colors group-hover:text-(--accent)"
                       aria-hidden="true"
@@ -435,9 +444,9 @@ export default function AboutPage() {
               <div
                 className={`${mono} mb-4 flex items-center justify-center gap-4 text-[0.7rem] uppercase tracking-[0.2em] text-orange-500`}
               >
-                <span aria-hidden="true" className="h-px w-8 bg-orange-500 md:w-12" />
-                <span>Journey</span>
-                <span aria-hidden="true" className="h-px w-8 bg-orange-500 md:w-12" />
+                <span aria-hidden="true" className="h-px w-15 bg-orange-500 md:w-18" />
+           <h1>Journey</h1>
+                <span aria-hidden="true" className="h-px w-15 bg-orange-500 md:w-18" />
               </div>
               <h2 id="journey-heading" className={sectionTitle}>
                 How I got <span className={gradientText}>here.</span>
@@ -513,12 +522,10 @@ export default function AboutPage() {
         {/* =================================================
             CALL TO ACTION
         ================================================= */}
-        <section aria-labelledby="cta-heading" className="mt-24 md:mt-32">
+        <section aria-label="Contact and projects" className="mt-24 md:mt-32">
           <Reveal>
             <div className="mx-auto max-w-3xl text-center">
-            
-
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+              <div className="flex flex-wrap items-center justify-center gap-4">
                 <Link
                   href="/#contact"
                   className="group inline-flex items-center gap-3 rounded-full bg-orange-500 px-8 py-4 text-sm font-bold text-white transition-all duration-300 hover:scale-[1.03] motion-reduce:transition-none motion-reduce:hover:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300"

@@ -122,12 +122,12 @@ export default function HeroContent() {
 
   return (
     // self-stretch: this block is as tall as the hero.
-    // No bottom padding here on purpose: the divider and the social links
-    // run all the way down and sit flush with the bottom edge of the hero.
+    // No bottom padding here on purpose: the divider runs all the way down and
+    // the scroll button sits flush with the bottom edge of the hero.
     <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col gap-14 self-stretch pt-28 md:flex-row md:items-center md:gap-10 lg:gap-14">
-      {/* LEFT COLUMN (left of the divider).
-          Typing text + button are centered; the social links sit at the bottom. */}
-      <div className="relative flex flex-1 flex-col justify-center self-stretch">
+      {/* LEFT COLUMN (left of the divider): typing text, then the button with
+          the social links directly underneath it. */}
+      <div className="flex flex-1 flex-col justify-center">
         {/* The gap is the space between the typing line and the button.
             It matches the right column (name -> steps). */}
         <div className="flex flex-col gap-20 md:gap-36 md:pb-24 lg:gap-44">
@@ -146,7 +146,8 @@ export default function HeroContent() {
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-4">
+          {/* Button + social links, stacked. gap-6 is the space between them. */}
+          <div className="flex flex-col items-start gap-6">
             <button
               type="button"
               onClick={() => scrollToSection("projects")}
@@ -158,14 +159,10 @@ export default function HeroContent() {
                 className="transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 motion-reduce:transition-none"
               />
             </button>
+
+            <SocialLinks />
           </div>
         </div>
-
-        {/* Social links, horizontal.
-            Desktop: pinned to the bottom-left of the hero, on the same line as
-            the scroll button at the bottom of the divider.
-            Phone: shown under the button instead. */}
-        <SocialLinks className="mt-12 md:absolute md:bottom-0 md:left-0 md:mt-0" />
       </div>
 
       {/* VERTICAL DIVIDER (desktop): one straight line from the top, through
