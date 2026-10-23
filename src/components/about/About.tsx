@@ -53,7 +53,7 @@ export default function About() {
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -left-60 top-1/4 h-80 w-96
-          rounded-full bg-emerald-500/10 blur-[140px] dark:bg-emerald-500/[0.05]"
+          rounded-full bg-emerald-500/10 blur-[140px] dark:bg-emerald-500/5"
       />
       <div
         aria-hidden="true"
@@ -70,10 +70,7 @@ export default function About() {
               tracking-[0.2em] text-emerald-700 md:text-xl dark:text-emerald-400"
           >
             About Me
-            <span
-              aria-hidden="true"
-              className="h-2 w-2 rounded-full bg-emerald-500"
-            />
+            
           </p>
         </div>
 

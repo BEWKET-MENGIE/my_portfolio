@@ -4,10 +4,10 @@
 import TechDiamond, { type TechItem } from "./TechDiamond";
 
 export type SkillCategoryData = {
-  id: string;
-  number: string;
+  id?: string;
+  number?: string;
   title: string;
-  description: string;
+  description?: string;
   items: TechItem[];
 };
 
@@ -16,7 +16,7 @@ export default function SkillCategory({
 }: {
   category: SkillCategoryData;
 }) {
-  const titleId = `skill-${category.id}-title`;
+  const titleId = `skill-${category.id ?? category.title.toLowerCase().replace(/\s+/g, "-")}-title`;
 
   return (
     <article
@@ -27,25 +27,26 @@ export default function SkillCategory({
         dark:border-neutral-800 dark:bg-white/2 dark:shadow-2xl
         dark:hover:bg-white/4"
     >
-      {/* Top accent line */}
+      {/* Top accent line[cite: 11] */}
       <div
         aria-hidden="true"
         className="absolute left-0 top-0 h-px w-full bg-linear-to-r
           from-transparent via-(--accent)/50 to-transparent"
       />
 
-      {/* Category number */}
-      <span
-        aria-hidden="true"
-        className="absolute right-6 top-6 font-mono text-sm tracking-widest
-          text-neutral-400 dark:text-neutral-500"
-      >
-        {category.number}
-      </span>
+      {/* Category number[cite: 11] */}
+      {category.number && (
+        <span
+          aria-hidden="true"
+          className="absolute right-6 top-6 font-mono text-sm tracking-widest
+            text-neutral-400 dark:text-neutral-500"
+        >
+          {category.number}
+        </span>
+      )}
 
-      {/* Heading & description */}
+      {/* Heading & description[cite: 11] */}
       <div className="mb-8">
-      
         <h3
           id={titleId}
           className="text-2xl font-bold tracking-tight text-neutral-900
@@ -54,12 +55,14 @@ export default function SkillCategory({
           {category.title}
         </h3>
 
-        <p className="mt-3 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
-          {category.description}
-        </p>
+        {category.description && (
+          <p className="mt-3 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
+            {category.description}
+          </p>
+        )}
       </div>
 
-      {/* Technologies */}
+      {/* Technologies[cite: 11] */}
       <ul
         aria-label={`${category.title} technologies`}
         className="grid grid-cols-2 justify-items-center gap-x-4 gap-y-8 sm:grid-cols-3"

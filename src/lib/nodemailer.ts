@@ -1,46 +1,40 @@
-
-
-
-// // src/lib/nodemailer.ts
-// import nodemailer from "nodemailer";
-
-// const emailUser = process.env.EMAIL_SERVER_USER;
-// const emailPass = process.env.EMAIL_SERVER_PASSWORD;
-
-// export const transporter = nodemailer.createTransport({
-//   service: "gmail",
-//   auth: {
-//     user: emailUser,
-//     pass: emailPass,
-//   },
-// });
-
-// export const mailOptions = {
-//   from: process.env.EMAIL_FROM,
-//   to: process.env.EMAIL_SERVER_USER, // Sends the message straight to your email
-// };
-
-
-
-
 import nodemailer from "nodemailer";
 
-const email = process.env.SMTP_USER;
-const pass = process.env.SMTP_PASS;
-
-if (!email || !pass) {
-  console.warn("⚠️ Warning: SMTP_USER or SMTP_PASS environment variables are missing.");
-}
-
 export const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: process.env.EMAIL_SERVER_HOST || "smtp.gmail.com",
+  port: Number(process.env.EMAIL_SERVER_PORT) || 465,
+  secure: true,
   auth: {
-    user: email,
-    pass: pass,
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
-export const mailOptions = {
-  from: email,
-  to: email, // This sends the message to your own email address
-};
+export interface SendEmailOptions {
+  name: string;
+  email: string;
+  message: string;
+}
+
+export async function sendEmail({ name, email, message }: SendEmailOptions) {
+  const mailOptions = {
+    from: `"${name}" <${process.env.EMAIL_USER}>`,
+    replyTo: email,
+    to: process.env.EMAIL_USER,
+    subject: `New Portfolio Message from ${name}`,
+    text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 10px; background-color: #f9f9f9;">
+        <h2 style="color: #10b981; border-bottom: 2px solid #eaeaea; padding-bottom: 10px;">New Contact Form Message</h2>
+        <p style="font-size: 16px;"><strong>Name:</strong> ${name}</p>
+        <p style="font-size: 16px;"><strong>Email:</strong> <a href="mailto:${email}" style="color: #2563eb;">${email}</a></p>
+        <div style="margin-top: 20px; padding: 15px; background: #ffffff; border-left: 4px solid #10b981; border-radius: 4px;">
+          <p style="font-size: 14px; white-space: pre-wrap; margin: 0;">${message}</p>
+        </div>
+        <p style="font-size: 12px; color: #888; margin-top: 30px; text-align: center;">This message was sent from your portfolio contact form.</p>
+      </div>
+    `,
+  };
+
+  return await transporter.sendMail(mailOptions);
+}
