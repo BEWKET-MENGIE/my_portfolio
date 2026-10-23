@@ -1,3 +1,4 @@
+// src/components/projects/ProjectFilter.tsx
 "use client";
 
 interface ProjectFilterProps {
@@ -29,11 +30,11 @@ export default function ProjectFilter({
             className={`rounded-full border px-4 py-2 text-sm font-medium
               transition-colors duration-300
               focus-visible:outline-none focus-visible:ring-2
-              focus-visible:ring-emerald-400
+              focus-visible:ring-(--accent)
               ${
                 selected
-                  ? "border-emerald-500 bg-emerald-500 text-black"
-                  : "border-neutral-200 bg-neutral-100 text-neutral-600 hover:border-emerald-500/50 hover:text-neutral-900 dark:border-white/10 dark:bg-white/[0.04] dark:text-neutral-400 dark:hover:text-white"
+                  ? "border-(--accent) bg-(--accent) text-black"
+                  : "border-neutral-200 bg-neutral-100 text-neutral-600 hover:border-(--accent)/50 hover:text-neutral-900 dark:border-white/10 dark:bg-white/[0.04] dark:text-neutral-400 dark:hover:text-white"
               }`}
           >
             {category}

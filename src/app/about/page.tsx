@@ -44,11 +44,11 @@ const skillGroups = [
     icon: Monitor,
     skills: [
       { name: "HTML & CSS", level: 90 },
-      { name: "JavaScript", level: 85 },
-      { name: "React", level: 85 },
-      { name: "Next.js", level: 80 },
+      { name: "JavaScript", level: 80 },
+      { name: "React", level: 88 },
+      { name: "Next.js", level: 75 },
       { name: "TypeScript", level: 75 },
-      { name: "Tailwind CSS", level: 90 },
+      { name: "Tailwind CSS", level: 85 },
     ],
   },
   {
@@ -57,8 +57,9 @@ const skillGroups = [
     skills: [
       { name: "Node.js", level: 75 },
       { name: "NestJS", level: 65 },
-      { name: "REST APIs", level: 75 },
+      { name: "REST APIs", level: 70 },
       { name: "PostgreSQL", level: 70 },
+      { name: "MySQL", level: 75 },
       { name: "Prisma", level: 65 },
     ],
   },
@@ -162,10 +163,6 @@ const gradientText =
 const cardClass =
   "rounded-3xl border border-(--border) bg-white/[0.025]";
 
-/* Principle cards: zoom in when the mouse is over them and zoom back out when it
-   leaves. The easing curve overshoots slightly, so it feels like a soft "pop".
-   `relative` + `hover:z-10` keep the zoomed card above its neighbours.
-   Visitors with reduced motion get the color change only, with no zoom. */
 const principleCardClass =
   `${cardClass} group relative h-full p-7 ` +
   "transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] will-change-transform " +
@@ -205,7 +202,7 @@ export default function AboutPage() {
       <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-20 pt-28 sm:px-8 md:pt-36 lg:px-10">
         {/* =================================================
             INTRO
-        ================================================= */}
+        ================================================- */}
         <section aria-labelledby="about-heading">
           <Reveal>
             <header className="mx-auto max-w-3xl text-center">
@@ -308,7 +305,7 @@ export default function AboutPage() {
 
         {/* =================================================
             SKILLS BY PERCENT
-        ================================================= */}
+        ================================================ */}
         <section aria-labelledby="skills-heading" className="mt-24 md:mt-32">
           <Reveal>
             <div className="mx-auto max-w-3xl text-center">
@@ -316,7 +313,7 @@ export default function AboutPage() {
                 Technical <span className={gradientText}>skills.</span>
               </h2>
               <p className="mt-5 leading-8 text-(--text-muted)">
-                How comfortable I feel with the tools I use most, and I&rsquo;m
+                How comfortable I feel with the tools I use most, and I&rsquo;s
                 still improving every one of them.
               </p>
             </div>
@@ -359,7 +356,7 @@ export default function AboutPage() {
 
         {/* =================================================
             PRINCIPLES
-        ================================================= */}
+        ================================================ */}
         <section aria-labelledby="principles-heading" className="mt-24 md:mt-32">
           <Reveal>
             <h2
@@ -394,7 +391,7 @@ export default function AboutPage() {
 
         {/* =================================================
             CURRENT FOCUS
-        ================================================= */}
+        ================================================ */}
         <section aria-labelledby="focus-heading" className="mt-24 md:mt-32">
           <Reveal>
             <div className="rounded-[2rem] border border-(--border) bg-linear-to-br from-white/[0.04] to-transparent p-8 sm:p-12 lg:p-16">
@@ -433,7 +430,7 @@ export default function AboutPage() {
 
         {/* =================================================
             JOURNEY
-        ================================================= */}
+        ================================================ */}
         <section
           id="journey"
           aria-labelledby="journey-heading"
@@ -445,7 +442,7 @@ export default function AboutPage() {
                 className={`${mono} mb-4 flex items-center justify-center gap-4 text-[0.7rem] uppercase tracking-[0.2em] text-orange-500`}
               >
                 <span aria-hidden="true" className="h-px w-15 bg-orange-500 md:w-18" />
-           <h1>Journey</h1>
+                <h1>Journey</h1>
                 <span aria-hidden="true" className="h-px w-15 bg-orange-500 md:w-18" />
               </div>
               <h2 id="journey-heading" className={sectionTitle}>
@@ -464,9 +461,6 @@ export default function AboutPage() {
                   key={`${title}-${index}`}
                   className="group relative pb-14 pl-16 last:pb-0 md:pl-20"
                 >
-                  {/* Vertical line: runs from this icon's centre to the next one's.
-                      It is positioned on the <li> (not inside Reveal), so it sits
-                      exactly under the icon centre (left 19px + half of 2px = 20px). */}
                   {!isLast && (
                     <span
                       aria-hidden="true"
@@ -474,9 +468,6 @@ export default function AboutPage() {
                     />
                   )}
 
-                  {/* Icon marker: centred ON the line (40px wide, so centre = 20px).
-                      Also kept outside Reveal: Reveal uses a transform, which would
-                      otherwise move this absolute icon away from the line. */}
                   <span className="absolute left-0 top-0 h-10 w-10">
                     {isFirst && (
                       <span
@@ -495,7 +486,6 @@ export default function AboutPage() {
                     </span>
                   </span>
 
-                  {/* Text */}
                   <Reveal delay={index * 80}>
                     <div className="flex flex-col gap-2 transition-transform duration-300 group-hover:translate-x-2 motion-reduce:transition-none">
                       <p
@@ -521,7 +511,7 @@ export default function AboutPage() {
 
         {/* =================================================
             CALL TO ACTION
-        ================================================= */}
+        ================================================ */}
         <section aria-label="Contact and projects" className="mt-24 md:mt-32">
           <Reveal>
             <div className="mx-auto max-w-3xl text-center">

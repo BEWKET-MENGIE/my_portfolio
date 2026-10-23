@@ -1,18 +1,16 @@
+// src/types/index.ts
+
 export interface Project {
-  id: number;
-  slug: string;
+  id: string;
   title: string;
-  category: string;
   description: string;
-  longDescription: string;
-  tags: string[];
+  category: string;
+  image?: string;
   linear: string;
-  demo: string;
-  source: string;
-  features: string[];
-  challenges: string[];
-  solutions: string[];
+  tags: string[];
+  githubUrl?: string;
   featured?: boolean;
+  highlights: string[];
 }
 
 export interface Service {
@@ -25,4 +23,30 @@ export interface Service {
   longDescription?: string;
   features?: string[];
   process?: { title: string; text: string }[];
+}
+
+export interface SkillItem {
+  name: string;
+  category?: string;
+  level?: number;
+  icon?: string;
+}
+
+export interface SkillCategory {
+  title: string;
+  skills: SkillItem[];
+}
+
+export interface Profile {
+  name: string;
+  role: string;
+  title?: string;
+  description?: string;
+  url?: string;
+  email: string;
+  location: string;
+  phone: string;
+  education: string;
+  image: string;
+  cv: string;
 }

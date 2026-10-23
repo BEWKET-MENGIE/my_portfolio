@@ -18,17 +18,15 @@ interface FormValues {
   name: string;
   email: string;
   message: string;
-  website: string; // honeypot: real people never see or fill this
+  hp_confirm: string;
 }
 
-// Change this if your API route lives at a different path.
 const CONTACT_ENDPOINT = "/api/contact";
-
 const MESSAGE_MIN = 10;
 const MESSAGE_MAX = 2000;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const initialValues: FormValues = { name: "", email: "", message: "", website: "" };
+const initialValues: FormValues = { name: "", email: "", message: "", hp_confirm: "" };
 
 function validate(values: FormValues): FormErrors {
   const errors: FormErrors = {};
@@ -72,7 +70,6 @@ export default function ContactForm() {
 
   const successRef = useRef<HTMLHeadingElement>(null);
 
-  // Move focus to the confirmation so screen-reader users hear it.
   useEffect(() => {
     if (status === "success") successRef.current?.focus();
   }, [status]);
@@ -84,7 +81,6 @@ export default function ContactForm() {
     const next = { ...values, [name]: value };
 
     setValues(next);
-    // After the first submit attempt, keep errors in sync while typing.
     if (attempted) setErrors(validate(next));
   };
 
@@ -115,7 +111,7 @@ export default function ContactForm() {
           name: values.name.trim(),
           email: values.email.trim(),
           message: values.message.trim(),
-          website: values.website,
+          hp_confirm: values.hp_confirm,
         }),
       });
 
@@ -141,10 +137,9 @@ export default function ContactForm() {
     }
   };
 
-  /* ---------- Success state ---------- */
   if (status === "success") {
     return (
-      <div role="status" className="flex flex-col items-center py-8 text-center">
+      <div role="status" className="flex h-full flex-col items-center justify-center py-8 text-center">
         <span
           className="flex h-14 w-14 items-center justify-center rounded-full
             bg-emerald-100 text-emerald-600 dark:bg-emerald-500/10
@@ -183,168 +178,167 @@ export default function ContactForm() {
     );
   }
 
-  /* ---------- Form ---------- */
   const isSubmitting = status === "submitting";
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
-      <div>
-        <h3 className="text-xl font-bold tracking-tight text-neutral-900 dark:text-white">
-          Send a message
-        </h3>
-        <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-          All fields are required.
-        </p>
-      </div>
-
-      {/* Honeypot: hidden from people and assistive tech, bots tend to fill it */}
-      <div
-        aria-hidden="true"
-        className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
-      >
-        <label htmlFor="contact-website">Website</label>
-        <input
-          id="contact-website"
-          name="website"
-          type="text"
-          tabIndex={-1}
-          autoComplete="off"
-          value={values.website}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        {/* Name */}
+    <form onSubmit={handleSubmit} noValidate className="flex h-full flex-col justify-between gap-5">
+      <div className="flex flex-col gap-5">
         <div>
-          <label htmlFor="contact-name" className={labelClass}>
-            Name
-          </label>
-          <input
-            id="contact-name"
-            name="name"
-            type="text"
-            autoComplete="name"
-            placeholder="Your full name"
-            value={values.name}
-            onChange={handleChange}
-            aria-invalid={Boolean(errors.name)}
-            aria-describedby={errors.name ? "contact-name-error" : undefined}
-            className={`${fieldBase} ${errors.name ? fieldError : fieldOk}`}
-          />
-          {errors.name && (
-            <p id="contact-name-error" className={errorClass}>
-              {errors.name}
-            </p>
-          )}
-        </div>
-
-        {/* Email */}
-        <div>
-          <label htmlFor="contact-email" className={labelClass}>
-            Email
-          </label>
-          <input
-            id="contact-email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            placeholder="you@example.com"
-            value={values.email}
-            onChange={handleChange}
-            aria-invalid={Boolean(errors.email)}
-            aria-describedby={errors.email ? "contact-email-error" : undefined}
-            className={`${fieldBase} ${errors.email ? fieldError : fieldOk}`}
-          />
-          {errors.email && (
-            <p id="contact-email-error" className={errorClass}>
-              {errors.email}
-            </p>
-          )}
-        </div>
-      </div>
-
-      {/* Message */}
-      <div>
-        <label htmlFor="contact-message" className={labelClass}>
-          Message
-        </label>
-        <textarea
-          id="contact-message"
-          name="message"
-          rows={6}
-          maxLength={MESSAGE_MAX}
-          placeholder="Tell me about your project, timeline or question..."
-          value={values.message}
-          onChange={handleChange}
-          aria-invalid={Boolean(errors.message)}
-          aria-describedby={errors.message ? "contact-message-error" : undefined}
-          className={`${fieldBase} resize-y ${errors.message ? fieldError : fieldOk}`}
-        />
-        <div className="mt-1.5 flex items-start justify-between gap-4">
-          {errors.message ? (
-            <p id="contact-message-error" className={`${errorClass} mt-0`}>
-              {errors.message}
-            </p>
-          ) : (
-            <span />
-          )}
-          <span className="shrink-0 text-xs text-neutral-500 dark:text-neutral-500">
-            {values.message.length}/{MESSAGE_MAX}
-          </span>
-        </div>
-      </div>
-
-      {/* Server / network error */}
-      {status === "error" && (
-        <div
-          role="alert"
-          className="flex items-start gap-3 rounded-xl border border-red-500/30
-            bg-red-500/10 p-4 text-sm text-red-700 dark:text-red-300"
-        >
-          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-          <p>
-            {errorMessage} You can also email me directly at{" "}
-            <a
-              href={`mailto:${SITE_CONFIG.email}`}
-              className="font-semibold underline underline-offset-2"
-            >
-              {SITE_CONFIG.email}
-            </a>
-            .
+          <h3 className="text-xl font-bold tracking-tight text-neutral-900 dark:text-white">
+            Send a message
+          </h3>
+          <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+            All fields are required.
           </p>
         </div>
-      )}
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-xl
-          bg-emerald-500 px-6 py-3.5 text-sm font-bold text-black
-          transition-all duration-300 hover:bg-emerald-400
-          hover:shadow-[0_0_30px_rgba(16,185,129,0.3)]
-          focus-visible:outline-none focus-visible:ring-2
-          focus-visible:ring-emerald-400 focus-visible:ring-offset-2
-          focus-visible:ring-offset-white active:scale-[0.99]
-          disabled:cursor-not-allowed disabled:opacity-60
-          dark:focus-visible:ring-offset-[#030719]"
-      >
-        {isSubmitting ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-            Sending...
-          </>
-        ) : (
-          <>
-            Send Message
-            <Send className="h-4 w-4" aria-hidden="true" />
-          </>
+        {/* Honeypot field */}
+        <div
+          aria-hidden="true"
+          className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
+        >
+          <label htmlFor="contact-hp">Confirm</label>
+          <input
+            id="contact-hp"
+            name="hp_confirm"
+            type="text"
+            tabIndex={-1}
+            autoComplete="new-password"
+            value={values.hp_confirm}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="contact-name" className={labelClass}>
+              Name
+            </label>
+            <input
+              id="contact-name"
+              name="name"
+              type="text"
+              autoComplete="name"
+              placeholder="Your full name"
+              value={values.name}
+              onChange={handleChange}
+              aria-invalid={Boolean(errors.name)}
+              aria-describedby={errors.name ? "contact-name-error" : undefined}
+              className={`${fieldBase} ${errors.name ? fieldError : fieldOk}`}
+            />
+            {errors.name && (
+              <p id="contact-name-error" className={errorClass}>
+                {errors.name}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="contact-email" className={labelClass}>
+              Email
+            </label>
+            <input
+              id="contact-email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              placeholder="you@example.com"
+              value={values.email}
+              onChange={handleChange}
+              aria-invalid={Boolean(errors.email)}
+              aria-describedby={errors.email ? "contact-email-error" : undefined}
+              className={`${fieldBase} ${errors.email ? fieldError : fieldOk}`}
+            />
+            {errors.email && (
+              <p id="contact-email-error" className={errorClass}>
+                {errors.email}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div>
+          <label htmlFor="contact-message" className={labelClass}>
+            Message
+          </label>
+          <textarea
+            id="contact-message"
+            name="message"
+            rows={5}
+            maxLength={MESSAGE_MAX}
+            placeholder="Tell me about your project, timeline or question..."
+            value={values.message}
+            onChange={handleChange}
+            aria-invalid={Boolean(errors.message)}
+            aria-describedby={errors.message ? "contact-message-error" : undefined}
+            className={`${fieldBase} resize-y ${errors.message ? fieldError : fieldOk}`}
+          />
+          <div className="mt-1 flex items-start justify-between gap-4">
+            {errors.message ? (
+              <p id="contact-message-error" className={`${errorClass} mt-0`}>
+                {errors.message}
+              </p>
+            ) : (
+              <span />
+            )}
+            <span className="shrink-0 text-xs text-neutral-500 dark:text-neutral-500">
+              {values.message.length}/{MESSAGE_MAX}
+            </span>
+          </div>
+        </div>
+
+        {status === "error" && (
+          <div
+            role="alert"
+            className="flex items-start gap-3 rounded-xl border border-red-500/30
+              bg-red-500/10 p-4 text-sm text-red-700 dark:text-red-300"
+          >
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+            <p>
+              {errorMessage} You can also email me directly at{" "}
+              <a
+                href={`mailto:${SITE_CONFIG.email}`}
+                className="font-semibold underline underline-offset-2"
+              >
+                {SITE_CONFIG.email}
+              </a>
+              .
+            </p>
+          </div>
         )}
-      </button>
+      </div>
 
-      <p className="text-center text-xs text-neutral-500">
-        Your details are only used to reply to your message.
-      </p>
+      <div className="flex flex-col gap-3 mt-2">
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl
+            bg-emerald-500 px-6 py-3.5 text-sm font-bold text-black
+            transition-all duration-300 hover:bg-emerald-400
+            hover:shadow-[0_0_30px_rgba(16,185,129,0.3)]
+            focus-visible:outline-none focus-visible:ring-2
+            focus-visible:ring-emerald-400 focus-visible:ring-offset-2
+            focus-visible:ring-offset-white active:scale-[0.99]
+            disabled:cursor-not-allowed disabled:opacity-60
+            dark:focus-visible:ring-offset-[#030719]"
+        >
+          {isSubmitting ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+              Sending...
+            </>
+          ) : (
+            <>
+              Send Message
+              <Send className="h-4 w-4" aria-hidden="true" />
+            </>
+          )}
+        </button>
+
+        <p className="text-center text-xs text-neutral-500">
+          Your details are only used to reply to your message.
+        </p>
+      </div>
     </form>
   );
 }

@@ -1,14 +1,16 @@
 // src/data/profile.ts
-// One place for the details that appear on BOTH the home About section
-// and the full /about page. Change it here and both update.
 
 export const PROFILE = {
   name: "Bewket Mengie",
   role: "Full Stack Developer",
+  title: "Full Stack Developer",
+  description: "Fourth-year Software Engineering student and Full Stack Developer building robust web applications.",
+  url: "https://bewketmengie.com",
+  email: "mengiebewket@gmail.com",
+  phone: "+251918410399",
+  location: "Injibara University, Injibara, Ethiopia",
   education: "Injibara University",
-  // Files live in the `public` folder: public/images/about/about.jpg
   image: "/images/about/about.jpg",
-  // public/cv.pdf
   cv: "/cv.pdf",
 } as const;
 

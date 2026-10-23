@@ -17,7 +17,6 @@ const categories: SkillCategoryData[] = [
       { name: "CSS3" },
       { name: "JavaScript" },
       { name: "Vue.js" },
-      { name: "Jest / RTL" },
     ],
   },
   {
@@ -25,12 +24,10 @@ const categories: SkillCategoryData[] = [
     items: [
       { name: "Node.js" },
       { name: "Express" },
-      { name: "Python" },
       { name: "FastAPI" },
       { name: "PostgreSQL" },
       { name: "MySQL" },
       { name: "MongoDB" },
-      { name: "GraphQL" },
     ],
   },
   {
@@ -41,9 +38,6 @@ const categories: SkillCategoryData[] = [
       { name: "Git" },
       { name: "GitHub" },
       { name: "CI/CD" },
-      { name: "Kubernetes" },
-      { name: "Terraform" },
-      { name: "Linux / Bash" },
     ],
   },
 ];
@@ -52,7 +46,7 @@ export default function Skills() {
   const [visible, setVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
-  /* Scroll reveal (instant when the user prefers reduced motion) */
+  /* Scroll reveal (instant when the user prefers reduced motion)[cite: 10] */
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -93,7 +87,7 @@ export default function Skills() {
         text-neutral-900 transition-colors duration-300
         md:px-10 md:py-16 dark:bg-[#04091a] dark:text-white"
     >
-      {/* Ambient background glows */}
+      {/* Ambient background glows[cite: 10] */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-1/2 top-1/2 h-200 w-200
@@ -107,7 +101,7 @@ export default function Skills() {
       />
 
       <div className="relative z-10 mx-auto w-full max-w-7xl">
-        {/* Section header: centered */}
+        {/* Section header: centered[cite: 10] */}
         <div className={`mb-10 text-center md:mb-12 ${reveal("delay-0")}`}>
           <div
             className="mb-4 inline-flex items-center gap-2 rounded-full border
@@ -136,7 +130,7 @@ export default function Skills() {
           </h2>
         </div>
 
-        {/* Category cards */}
+        {/* Category cards[cite: 10] */}
         <div
           className={`grid grid-cols-1 gap-8 lg:grid-cols-3 ${reveal("delay-200")}`}
         >

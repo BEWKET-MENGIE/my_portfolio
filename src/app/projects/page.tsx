@@ -45,17 +45,12 @@ export default function ProjectsPage() {
             All projects.
           </h1>
 
-         
-
           <p
             className="mt-6 inline-flex items-center gap-2 rounded-full border
               border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-xs
               font-semibold text-emerald-700 dark:text-emerald-300"
           >
-            <span
-              aria-hidden="true"
-              className="h-1.5 w-1.5 rounded-full bg-emerald-500"
-            />
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
             {count} {count === 1 ? "project" : "projects"}
           </p>
         </header>
@@ -66,11 +61,10 @@ export default function ProjectsPage() {
         </div>
 
         {/* Closing call to action */}
-     
-
+        <div className="mt-16 flex justify-center">
           <Link
             href="/#contact"
-            className="mt-6 inline-flex items-center gap-2 rounded-full
+            className="inline-flex items-center gap-2 rounded-full
               bg-emerald-500 px-6 py-3 text-sm font-bold text-black
               transition-colors hover:bg-emerald-400
               focus-visible:outline-none focus-visible:ring-2
@@ -79,7 +73,7 @@ export default function ProjectsPage() {
             Get in touch
             <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
           </Link>
-     
+        </div>
       </div>
     </main>
   );

@@ -8,7 +8,6 @@ export default function Contact() {
   const [visible, setVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
-  /* Scroll reveal (instant when the user prefers reduced motion) */
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -69,27 +68,27 @@ export default function Contact() {
             className="text-3xl font-extrabold leading-tight tracking-tight
               sm:text-4xl lg:text-5xl"
           >
-            Get in touch.
+            Contact Me
           </h2>
         </div>
 
-        {/* Info + form */}
-        <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-5 lg:gap-14">
+        {/* Info + form (50/50 Equal Width & Equal Height Grid) */}
+        <div className="mt-12 grid grid-cols-1 items-stretch gap-8 lg:grid-cols-2 lg:gap-10">
           <div
-            className={`lg:col-span-2 ${reveal("150ms").className}`}
+            className={`h-full ${reveal("150ms").className}`}
             style={reveal("150ms").style}
           >
             <ContactInfo />
           </div>
 
           <div
-            className={`lg:col-span-3 ${reveal("300ms").className}`}
+            className={`h-full ${reveal("300ms").className}`}
             style={reveal("300ms").style}
           >
             <div
-              className="rounded-2xl border border-neutral-200 bg-white p-6
+              className="h-full rounded-2xl border border-neutral-200 bg-white p-6
                 shadow-sm sm:p-8 dark:border-white/10 dark:bg-white/[0.02]
-                dark:shadow-none"
+                dark:shadow-none flex flex-col justify-between"
             >
               <ContactForm />
             </div>
