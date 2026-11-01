@@ -32,6 +32,7 @@ interface ProjectCardProps {
   project: Project;
   index: number;
   visible: boolean;
+  prioritizeImage?: boolean;
   active: boolean;
   setActive: () => void;
 }
@@ -40,6 +41,7 @@ export default function ProjectCard({
   project,
   index,
   visible,
+  prioritizeImage = false,
   active,
   setActive,
 }: ProjectCardProps) {
@@ -135,6 +137,8 @@ export default function ProjectCard({
               alt={`Screenshot of ${project.title}`}
               fill
               sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+              loading={prioritizeImage ? "eager" : "lazy"}
+              fetchPriority={prioritizeImage ? "high" : "auto"}
               className="object-cover transition-transform duration-500
                 group-hover:scale-105 motion-reduce:transition-none"
             />

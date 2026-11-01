@@ -1,7 +1,7 @@
 // src/components/services/Services.tsx
 "use client";
 
-import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
 import ServiceCard from "./ServiceCard";
 import ServiceModal from "./ServiceModal";
 import { services } from "@/data/services";
@@ -16,43 +16,15 @@ const tabs: { id: ActiveTab; label: string }[] = [
 ];
 
 export default function Services() {
-  const [isVisible, setIsVisible] = useState(false);
+  const isVisible = true;
   const [activeTab, setActiveTab] = useState<ActiveTab>("services");
   // The service whose details pop-up is open (null = closed).
   const [selectedService, setSelectedService] = useState<Service | null>(null);
 
-  const sectionRef = useRef<HTMLElement>(null);
   const tabRefs = useRef<Record<ActiveTab, HTMLButtonElement | null>>({
     services: null,
     experience: null,
   });
-
-  /* Scroll reveal (instant when the user prefers reduced motion) */
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    if (
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      !("IntersectionObserver" in window)
-    ) {
-      setIsVisible(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.12 },
-    );
-
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
 
   // Arrow keys / Home / End move between tabs (WAI-ARIA tabs pattern).
   const handleTabKeyDown = (
@@ -76,7 +48,6 @@ export default function Services() {
 
   return (
     <section
-      ref={sectionRef}
       id="services"
       aria-labelledby="services-heading"
       className="relative overflow-hidden bg-neutral-50 px-5 py-12

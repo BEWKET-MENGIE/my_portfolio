@@ -1,7 +1,4 @@
 // src/components/skills/Skills.tsx
-"use client";
-
-import { useEffect, useRef, useState } from "react";
 import { Code2 } from "lucide-react";
 import SkillCategory, { type SkillCategoryData } from "./SkillCategory";
 
@@ -43,51 +40,15 @@ const categories: SkillCategoryData[] = [
 ];
 
 export default function Skills() {
-  const [visible, setVisible] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
-
-  /* Scroll reveal (instant when the user prefers reduced motion)[cite: 10] */
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    if (
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      !("IntersectionObserver" in window)
-    ) {
-      setVisible(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
-
-  const reveal = (delay: string) =>
-    `transition-all duration-1000 motion-reduce:transition-none ${delay} ${
-      visible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
-    }`;
-
   return (
     <section
-      ref={sectionRef}
       id="skills"
       aria-labelledby="skills-heading"
       className="relative overflow-hidden bg-neutral-100 px-5 py-12
         text-neutral-900 transition-colors duration-300
         md:px-10 md:py-16 dark:bg-[#04091a] dark:text-white"
     >
-      {/* Ambient background glows[cite: 10] */}
+      {/* Ambient background glows */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-1/2 top-1/2 h-200 w-200
@@ -101,8 +62,8 @@ export default function Skills() {
       />
 
       <div className="relative z-10 mx-auto w-full max-w-7xl">
-        {/* Section header: centered[cite: 10] */}
-        <div className={`mb-10 text-center md:mb-12 ${reveal("delay-0")}`}>
+        {/* Section header */}
+        <div className="mb-10 text-center md:mb-12">
           <div
             className="mb-4 inline-flex items-center gap-2 rounded-full border
               border-(--accent)/30 bg-(--accent)/5 px-4 py-2 backdrop-blur-md"
@@ -130,9 +91,9 @@ export default function Skills() {
           </h2>
         </div>
 
-        {/* Category cards[cite: 10] */}
+        {/* Category cards */}
         <div
-          className={`grid grid-cols-1 gap-8 lg:grid-cols-3 ${reveal("delay-200")}`}
+          className="grid grid-cols-1 gap-8 lg:grid-cols-3"
         >
           {categories.map((category) => (
             <SkillCategory key={category.title} category={category} />

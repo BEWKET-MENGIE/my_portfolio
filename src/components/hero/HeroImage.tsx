@@ -1,11 +1,14 @@
 // src/components/hero/HeroImage.tsx
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const css = `
 .ho-scene{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;isolation:isolate;
   background: transparent;}
+.ho-scene:not([data-active="true"]) .ho-mesh-orbit,
+.ho-scene:not([data-active="true"]) .ho-plane,
+.ho-scene:not([data-active="true"]) .ho-path{animation-play-state:paused}
 
 .ho-core-stage{position:absolute;z-index:3;left:50%;top:48%;width:clamp(135px,17vw,230px);aspect-ratio:1;transform:translate(-50%,-50%);display:grid;place-items:center}
 .ho-core-shadow{position:absolute;inset:12%;border-radius:50%;background:rgba(6,182,212,.12);filter:blur(27px)}
@@ -16,15 +19,15 @@ const css = `
 .ho-face-mid{fill:rgba(8,145,178,.15)}
 .ho-edges{stroke:rgba(56,189,248,.8);stroke-width:.8}
 
-.ho-mesh-orbit{position:absolute;z-index:4;left:50%;top:48%;width:clamp(190px,25vw,330px);aspect-ratio:1;transform:translate(-50%,-50%);animation:ho-mesh-turn 32s linear infinite;will-change:transform}
+.ho-mesh-orbit{position:absolute;z-index:4;left:50%;top:48%;width:clamp(190px,25vw,330px);aspect-ratio:1;transform:translate(-50%,-50%)}
 .ho-mesh{width:100%;height:100%;overflow:visible;stroke:rgba(6,182,212,.45);stroke-width:.7}
 .ho-mesh line{vector-effect:non-scaling-stroke}
 .ho-mesh polygon{stroke:rgba(34,211,238,.7);stroke-width:.95;vector-effect:non-scaling-stroke}
 
-.ho-plane{position:absolute;z-index:2;left:50%;top:48%;width:clamp(430px,55vw,760px);height:clamp(190px,27vw,360px);transform:translate(-50%,-50%);border-radius:50%;will-change:transform}
+.ho-plane{position:absolute;z-index:2;left:50%;top:48%;width:clamp(430px,55vw,760px);height:clamp(190px,27vw,360px);transform:translate(-50%,-50%);border-radius:50%}
 .ho-plane-1{animation:ho-orbit-1 29s linear infinite}
-.ho-plane-2{width:clamp(540px,72vw,980px);height:clamp(240px,36vw,470px);animation:ho-orbit-2 43s linear infinite reverse}
-.ho-plane-3{width:clamp(650px,88vw,1180px);height:clamp(300px,43vw,560px);animation:ho-orbit-3 57s linear infinite}
+.ho-plane-2{width:clamp(540px,72vw,980px);height:clamp(240px,36vw,470px)}
+.ho-plane-3{width:clamp(650px,88vw,1180px);height:clamp(300px,43vw,560px)}
 .ho-track{position:absolute;inset:0;border:1px solid rgba(6,182,212,.25);border-radius:50%;box-shadow:inset 0 0 20px rgba(6,182,212,.04)}
 .ho-plane-2 .ho-track{border-color:rgba(59,130,246,.25)}
 .ho-plane-3 .ho-track{border-color:rgba(14,165,233,.2)}
@@ -34,15 +37,11 @@ const css = `
 .ho-sat-gold{top:47%;left:auto;right:-6px;width:11px;height:11px;color:#38bdf8;background:#0284c7}
 
 .ho-field{position:absolute;z-index:2;left:50%;top:48%;width:clamp(430px,55vw,760px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%}
-.ho-path{position:absolute;inset:0;display:block;border-radius:50%;transform:rotate(var(--start,0deg));animation:ho-satellite 24s linear infinite;will-change:transform}
+.ho-path{position:absolute;inset:0;display:block;border-radius:50%;transform:rotate(var(--start,0deg))}
 .ho-particle{position:absolute;top:0;left:50%;display:block;background:#22d3ee;transform:translateX(-50%) rotate(45deg);opacity:.85;box-shadow:0 0 11px rgba(34,211,238,.3)}
 .ho-path:nth-child(even) .ho-particle{background:#3b82f6}
 
-@keyframes ho-mesh-turn{from{transform:translate(-50%,-50%) rotate(0deg) rotateX(8deg)}to{transform:translate(-50%,-50%) rotate(360deg) rotateX(8deg)}}
 @keyframes ho-orbit-1{from{transform:translate(-50%,-50%) rotate(-20deg) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(-20deg) rotate(360deg)}}
-@keyframes ho-orbit-2{from{transform:translate(-50%,-50%) rotate(28deg) rotate(0deg) scaleY(.92)}to{transform:translate(-50%,-50%) rotate(28deg) rotate(360deg) scaleY(.92)}}
-@keyframes ho-orbit-3{from{transform:translate(-50%,-50%) rotate(-8deg) rotate(0deg) scaleY(.82)}to{transform:translate(-50%,-50%) rotate(-8deg) rotate(360deg) scaleY(.82)}}
-@keyframes ho-satellite{from{transform:rotate(var(--start,0deg))}to{transform:rotate(calc(var(--start,0deg) + 360deg))}}
 
 @media (max-width:768px){
   .ho-core-stage,.ho-mesh-orbit,.ho-field,.ho-plane{left:50%}
@@ -55,7 +54,7 @@ const css = `
 }
 
 @media (prefers-reduced-motion:reduce){
-  .ho-mesh-orbit,.ho-plane-1,.ho-plane-2,.ho-plane-3,.ho-path{animation-duration:90s}
+  .ho-plane-1{animation:none}
 }
 `;
 
@@ -83,8 +82,47 @@ const satellites = [
 ];
 
 export default function HeroImage() {
+  const sceneRef = useRef<HTMLDivElement>(null);
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    const scene = sceneRef.current;
+    if (!scene) return;
+
+    let isIntersecting = false;
+    const updateActivity = () => {
+      setIsActive(isIntersecting && document.visibilityState === "visible");
+    };
+
+    if (!("IntersectionObserver" in window)) {
+      isIntersecting = true;
+      updateActivity();
+    } else {
+      const observer = new IntersectionObserver(([entry]) => {
+        isIntersecting = entry.isIntersecting;
+        updateActivity();
+      });
+      observer.observe(scene);
+      document.addEventListener("visibilitychange", updateActivity);
+
+      return () => {
+        observer.disconnect();
+        document.removeEventListener("visibilitychange", updateActivity);
+      };
+    }
+
+    document.addEventListener("visibilitychange", updateActivity);
+    return () => document.removeEventListener("visibilitychange", updateActivity);
+  }, []);
+
   return (
-    <div className="ho-scene" data-hero-scene aria-hidden="true">
+    <div
+      ref={sceneRef}
+      className="ho-scene"
+      data-hero-scene
+      data-active={isActive}
+      aria-hidden="true"
+    >
       <style dangerouslySetInnerHTML={{ __html: css }} />
 
       {/* The solid geometric core stays still. */}
@@ -102,7 +140,7 @@ export default function HeroImage() {
         </svg>
       </div>
 
-      {/* Polygon mesh rotating around the core. */}
+      {/* Polygon mesh around the core. */}
       <div className="ho-mesh-orbit">
         <svg viewBox="0 0 200 200" className="ho-mesh" fill="none">
           {meshLines.map(([x1, y1, x2, y2], index) => (
@@ -113,7 +151,7 @@ export default function HeroImage() {
         </svg>
       </div>
 
-      {/* Three orbital planes at different speeds and directions. */}
+      {/* One moving orbital plane, with two static layers for depth. */}
       <div className="ho-plane ho-plane-1">
         <span className="ho-track" />
         <span className="ho-sat ho-sat-amber" />

@@ -1,9 +1,17 @@
 // src/components/experience/Experience.tsx
 // SINGLE-FILE VERSION: data, pop-up and cards all live in this one file,
-// so there is nothing else to import. Replace your Experience.tsx with this.
+// so there is nothing else to import.
 "use client";
 
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -17,6 +25,7 @@ import {
   GraduationCap,
   MapPin,
   Users,
+  Wrench,
   X,
 } from "lucide-react";
 
@@ -30,134 +39,92 @@ export type ExperienceItem = {
   company: string;
   period: string;
   type: string;
-  location: string;
+  /** Optional: leave out for entries that are not tied to a place. */
+  location?: string;
   description: string;
   highlights: string[];
   skills: string[];
   project?: string;
   team?: string;
-  /** Optional: shows a "View project" button in the pop-up. */
+  /** Optional: shows a "View project" button in the pop-up (opens a new tab). */
   link?: string;
+  /** Optional: shows a "View projects" button in the pop-up (opens this page on your site). */
+  projectsHref?: string;
   current?: boolean;
 };
 
+/* ---------------------------------------------------------------
+   Written from the details you gave me: you are a Software Engineering
+   student at Injibara University, and these are your projects.
+   There is NO freelance or remote work here, and no made-up years.
+   EDIT any wording, and add your real years to `period` when you want to.
+---------------------------------------------------------------- */
 export const experienceData: ExperienceItem[] = [
   {
     id: "exp-1",
-    role: "Full-Stack Developer & Senior Undergraduate",
-    company: "University Software Engineering Program",
-    period: "2022 - Present (Expected Graduation 2026)",
-    type: "Academic & Leadership",
-    location: "Campus / Remote",
+    role: "Software Engineering Student",
+    company: "Injibara University, Ethiopia",
+    period: "Currently studying", // add your real years here, for example "YYYY - Present"
+    type: "Education",
+    location: "Injibara, Ethiopia",
     description:
-      "Advancing through a rigorous 4th-year Software Engineering curriculum, balancing advanced computer science theory with end-to-end production-grade software development, system analysis, and team architecture design.",
+      "Studying Software Engineering at Injibara University while building full-stack projects alongside my coursework.",
     highlights: [
-      "Serving as lead developer for major 4th-year capstone and graduation software engineering projects.",
-      "Architecting scalable full-stack applications integrating modern frontend frameworks with robust microservices and relational databases.",
-      "Applying advanced software engineering patterns, object-oriented design, test-driven development, and clean architecture principles.",
-      "Collaborating closely with multidisciplinary student engineering teams using Agile/Scrum methodologies, Git workflows, and CI/CD pipelines.",
+      "Learning software engineering fundamentals, from programming and databases to system design.",
+      "Applying what I learn by building complete projects, which you can see in my Projects section.",
+      "Using Git and GitHub to keep every project under version control.",
     ],
-    skills: [
-      "Software Architecture",
-      "System Design",
-      "Next.js",
-      "TypeScript",
-      "Node.js",
-      "PostgreSQL",
-      "Algorithms",
-      "Agile / Scrum",
-    ],
-    project: "Final Year Capstone Project",
-    team: "Lead Student Architect",
+    skills: ["Software Engineering", "Problem Solving", "Git", "GitHub"],
+    project: "Software Engineering degree",
     current: true,
   },
   {
     id: "exp-2",
-    role: "Full-Stack Developer",
-    company: "Freelance / Project-Based",
-    period: "2025 - Present",
-    type: "Freelance",
-    location: "Remote",
+    role: "Full-Stack Projects",
+    company: "Personal portfolio projects",
+    period: "Completed projects",
+    type: "Projects",
     description:
-      "Developing modern full-stack web applications for real-world business and academic requirements, covering the complete development lifecycle from requirements analysis and system design to implementation, testing, and deployment.",
+      "Full-stack applications I built to practice frontend, backend, databases and authentication.",
     highlights: [
-      "Built responsive and accessible interfaces using Next.js, React, TypeScript, and Tailwind CSS.",
-      "Developed RESTful backend APIs and business logic using NestJS and Node.js.",
-      "Designed relational databases using PostgreSQL and Prisma ORM.",
-      "Implemented authentication, authorization, validation, and role-based access control.",
-      "Applied reusable architecture and component-based development to improve maintainability.",
+      "Full-Stack Amazon Clone: a React frontend, Node/Express backend, Firebase authentication, Firestore and Stripe payments.",
+      "Evangadi Forum: a Q&A forum with threaded answers, secure JWT authentication and a MySQL database.",
+      "StaffCore Employee Management: an employee management system with registration workflows and status tracking.",
     ],
-    skills: [
-      "Next.js",
-      "React",
-      "TypeScript",
-      "NestJS",
-      "Node.js",
-      "Prisma",
-      "PostgreSQL",
-      "Tailwind CSS",
-    ],
-    project: "Full-Stack Web Applications",
-    team: "Independent",
-    current: true,
+    skills: ["React", "Node.js", "Express", "Firebase", "Stripe", "MySQL", "JWT", "Java", "JavaFX"],
+    project: "Amazon Clone, Evangadi Forum, StaffCore",
+    projectsHref: "/projects",
   },
   {
     id: "exp-3",
-    role: "Full-Stack Developer",
-    company: "Management System Projects",
-    period: "2024 - 2025",
-    type: "Project-Based",
-    location: "Remote",
+    role: "Frontend Projects",
+    company: "Personal portfolio projects",
+    period: "Completed projects",
+    type: "Projects",
     description:
-      "Designed and developed management systems as practical software engineering projects, applying real-world development practices across frontend, backend, database, authentication, and system architecture.",
+      "Responsive interface projects that recreate well-known websites and apps, built to practice React, API data and clean layouts.",
     highlights: [
-      "Developed responsive dashboards and management interfaces with reusable React and Next.js components.",
-      "Created backend APIs for users, authentication, records, and business workflows.",
-      "Designed normalized database schemas and relationships for structured application data.",
-      "Implemented form validation, error handling, and role-based application workflows.",
-      "Used Git and GitHub for source control, version management, and project organization.",
+      "Netflix Clone: a responsive streaming UI with dynamic movie categories, TMDB data fetched with Axios, and Material UI styling.",
+      "Apple Website Clone: a responsive recreation of the Apple website, focused on clean layouts and typography.",
     ],
-    skills: [
-      "Next.js",
-      "React",
-      "TypeScript",
-      "Node.js",
-      "Express",
-      "PostgreSQL",
-      "MySQL",
-      "Git",
-      "GitHub",
-    ],
-    project: "Management System Applications",
-    team: "Individual / Academic",
+    skills: ["React", "Vite", "Axios", "Material UI", "HTML5", "CSS3", "JavaScript"],
+    project: "Netflix Clone, Apple Website Clone",
+    projectsHref: "/projects",
   },
   {
     id: "exp-4",
-    role: "Frontend Developer",
-    company: "Personal & Open Source Projects",
-    period: "2023 - 2024",
-    type: "Development",
-    location: "Remote",
-    description:
-      "Focused on building modern, responsive, and user-friendly web interfaces while developing a strong foundation in frontend engineering, UI implementation, and reusable component architecture.",
+    role: "Projects in Progress",
+    company: "Personal portfolio projects",
+    period: "In progress",
+    type: "In Progress",
+    description: "Two projects I am working on right now. They are not finished yet.",
     highlights: [
-      "Converted design concepts and UI requirements into responsive React interfaces.",
-      "Created reusable components to improve consistency and development speed.",
-      "Implemented responsive layouts for desktop, tablet, and mobile devices.",
-      "Improved interface usability through clear navigation and consistent visual patterns.",
-      "Used Git and GitHub to manage source code and development history.",
+      "Job Application Tracker: an app for keeping track of job applications and where each one stands.",
+      "School Management System: a system for managing school records such as students, teachers and classes.",
     ],
-    skills: [
-      "React",
-      "JavaScript",
-      "HTML",
-      "CSS",
-      "Tailwind CSS",
-      "Git",
-      "GitHub",
-    ],
-    project: "Frontend Applications",
-    team: "Individual",
+    skills: [], // add the tools you choose for these two projects
+    project: "Job Application Tracker, School Management System",
+    projectsHref: "/projects",
   },
 ];
 
@@ -175,6 +142,16 @@ interface ModalProps {
 }
 
 const EXIT_MS = 250;
+const ModalCloseContext = createContext<() => void>(() => {});
+
+function ModalContent({
+  children,
+}: {
+  children: (api: { close: () => void }) => ReactNode;
+}) {
+  const close = useContext(ModalCloseContext);
+  return children({ close });
+}
 
 /* A pop-up built on the browser's own <dialog>. For free it gives us:
    focus kept inside, the page behind made inert, and Esc to close.
@@ -217,19 +194,18 @@ function Modal({ onClose, labelledBy, children }: ModalProps) {
   };
 
   return (
-    <dialog
-      ref={dialogRef}
-      aria-labelledby={labelledBy}
-      // Esc: run our animated close instead of the instant native one.
-      onCancel={(event) => {
-        event.preventDefault();
-        close();
-      }}
-      // A click on the dark backdrop lands on the <dialog> itself.
-      onClick={(event) => {
-        if (event.target === event.currentTarget) close();
-      }}
-      className={`m-auto max-h-[88vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden
+    <ModalCloseContext.Provider value={close}>
+      <dialog
+        ref={dialogRef}
+        aria-labelledby={labelledBy}
+        onCancel={(event) => {
+          event.preventDefault();
+          close();
+        }}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) close();
+        }}
+        className={`m-auto max-h-[88vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden
         rounded-3xl border border-neutral-200 bg-white p-0 text-neutral-900
         shadow-2xl transition-all duration-300 ease-out
         open:flex open:flex-col
@@ -242,9 +218,10 @@ function Modal({ onClose, labelledBy, children }: ModalProps) {
             ? "translate-y-0 scale-100 opacity-100 backdrop:opacity-100"
             : "translate-y-4 scale-95 opacity-0 backdrop:opacity-0"
         }`}
-    >
-      {children({ close })}
-    </dialog>
+      >
+        <ModalContent>{children}</ModalContent>
+      </dialog>
+    </ModalCloseContext.Provider>
   );
 }
 
@@ -299,10 +276,7 @@ function ExperienceModal({ item, onClose }: ExperienceModalProps) {
               )}
             </div>
 
-            <h2
-              id={titleId}
-              className="text-2xl font-bold tracking-tight sm:text-3xl"
-            >
+            <h2 id={titleId} className="text-2xl font-bold tracking-tight sm:text-3xl">
               {item.role}
             </h2>
 
@@ -316,13 +290,21 @@ function ExperienceModal({ item, onClose }: ExperienceModalProps) {
 
             <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs text-neutral-600 dark:text-neutral-400">
               <li className="flex items-center gap-1.5">
-                <CalendarDays className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+                <CalendarDays
+                  className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400"
+                  aria-hidden="true"
+                />
                 {item.period}
               </li>
-              <li className="flex items-center gap-1.5">
-                <MapPin className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
-                {item.location}
-              </li>
+              {item.location && (
+                <li className="flex items-center gap-1.5">
+                  <MapPin
+                    className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400"
+                    aria-hidden="true"
+                  />
+                  {item.location}
+                </li>
+              )}
             </ul>
           </div>
 
@@ -349,7 +331,10 @@ function ExperienceModal({ item, onClose }: ExperienceModalProps) {
                   {item.team && (
                     <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4 dark:border-white/10 dark:bg-white/[0.03]">
                       <p className="mb-1 flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                        <Users className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+                        <Users
+                          className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400"
+                          aria-hidden="true"
+                        />
                         Role context
                       </p>
                       <p className="text-sm font-semibold">{item.team}</p>
@@ -377,19 +362,21 @@ function ExperienceModal({ item, onClose }: ExperienceModalProps) {
               </ul>
             </section>
 
-            <section>
-              <SectionTitle>Skills &amp; technologies</SectionTitle>
-              <ul className="flex flex-wrap gap-2">
-                {item.skills.map((skill) => (
-                  <li
-                    key={skill}
-                    className="rounded-md border border-neutral-200 bg-neutral-100 px-3 py-1.5 text-xs text-neutral-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-neutral-300"
-                  >
-                    {skill}
-                  </li>
-                ))}
-              </ul>
-            </section>
+            {item.skills.length > 0 && (
+              <section>
+                <SectionTitle>Skills &amp; technologies</SectionTitle>
+                <ul className="flex flex-wrap gap-2">
+                  {item.skills.map((skill) => (
+                    <li
+                      key={skill}
+                      className="rounded-md border border-neutral-200 bg-neutral-100 px-3 py-1.5 text-xs text-neutral-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-neutral-300"
+                    >
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
           </div>
 
           {/* Footer */}
@@ -423,6 +410,21 @@ function ExperienceModal({ item, onClose }: ExperienceModalProps) {
               </a>
             )}
 
+            {item.projectsHref && (
+              <Link
+                href={item.projectsHref}
+                onClick={close}
+                className="inline-flex items-center justify-center gap-2 rounded-full border
+                  border-neutral-300 px-6 py-3 text-sm font-semibold text-neutral-700
+                  transition-colors hover:border-emerald-500 hover:text-emerald-600
+                  focus-visible:outline-none focus-visible:ring-2
+                  focus-visible:ring-emerald-400 dark:border-white/15
+                  dark:text-neutral-300 dark:hover:text-emerald-400"
+              >
+                View projects
+              </Link>
+            )}
+
             <Link
               href="/#contact"
               onClick={close}
@@ -448,16 +450,9 @@ const MAX_SKILLS_ON_CARD = 4;
 
 // Badge colors for each work type (light and dark mode).
 const workTypeStyles: Record<string, string> = {
-  "Academic & Leadership":
-    "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
-  Freelance:
-    "border-cyan-500/30 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300",
-  "Project-Based":
-    "border-blue-500/30 bg-blue-500/10 text-blue-700 dark:text-blue-300",
-  Development:
-    "border-teal-500/30 bg-teal-500/10 text-teal-700 dark:text-teal-300",
-  Internship:
-    "border-purple-500/30 bg-purple-500/10 text-purple-700 dark:text-purple-300",
+  Education: "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
+  Projects: "border-cyan-500/30 bg-cyan-500/10 text-cyan-700 dark:text-cyan-300",
+  "In Progress": "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-300",
 };
 
 const defaultTypeStyle =
@@ -480,14 +475,19 @@ export default function Experience() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-30 motion-reduce:animate-none" />
             <Cog className="relative h-4 w-4 text-emerald-600 dark:text-emerald-400" />
           </span>
-          Open to graduate engineering roles, internships &amp; remote opportunities
+          Open to internships &amp; junior roles
         </p>
       </div>
 
       {/* Compact cards */}
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         {experienceData.map((item) => {
-          const Icon = item.type === "Academic & Leadership" ? GraduationCap : Code2;
+          const Icon =
+            item.type === "Education"
+              ? GraduationCap
+              : item.type === "In Progress"
+                ? Wrench
+                : Code2;
           const visibleSkills = item.skills.slice(0, MAX_SKILLS_ON_CARD);
           const hiddenCount = item.skills.length - visibleSkills.length;
 
@@ -569,26 +569,30 @@ export default function Experience() {
 
               {/* Top skills + open button */}
               <div className="mt-4 flex items-end justify-between gap-3">
-                <ul
-                  aria-label={`Main skills for ${item.role}`}
-                  className="flex flex-wrap gap-1.5"
-                >
-                  {visibleSkills.map((skill) => (
-                    <li
-                      key={skill}
-                      className="rounded-md border border-neutral-200 bg-neutral-100 px-2 py-0.5
+                {item.skills.length > 0 ? (
+                  <ul
+                    aria-label={`Main skills for ${item.role}`}
+                    className="flex flex-wrap gap-1.5"
+                  >
+                    {visibleSkills.map((skill) => (
+                      <li
+                        key={skill}
+                        className="rounded-md border border-neutral-200 bg-neutral-100 px-2 py-0.5
                         text-xs text-neutral-700 dark:border-white/10
                         dark:bg-white/[0.04] dark:text-neutral-300"
-                    >
-                      {skill}
-                    </li>
-                  ))}
-                  {hiddenCount > 0 && (
-                    <li className="rounded-md px-2 py-0.5 text-xs font-medium text-emerald-700 dark:text-emerald-400">
-                      +{hiddenCount} more
-                    </li>
-                  )}
-                </ul>
+                      >
+                        {skill}
+                      </li>
+                    ))}
+                    {hiddenCount > 0 && (
+                      <li className="rounded-md px-2 py-0.5 text-xs font-medium text-emerald-700 dark:text-emerald-400">
+                        +{hiddenCount} more
+                      </li>
+                    )}
+                  </ul>
+                ) : (
+                  <span aria-hidden="true" />
+                )}
 
                 {/* A real button. Its ::after stretches over the whole card, so a
                     click anywhere opens the pop-up while keyboard users get one
@@ -622,11 +626,7 @@ export default function Experience() {
 
       {/* Details pop-up (mounted only while an experience is selected) */}
       {selected && (
-        <ExperienceModal
-          key={selected.id}
-          item={selected}
-          onClose={() => setSelected(null)}
-        />
+        <ExperienceModal key={selected.id} item={selected} onClose={() => setSelected(null)} />
       )}
     </div>
   );
