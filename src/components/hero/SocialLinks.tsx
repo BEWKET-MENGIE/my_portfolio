@@ -1,21 +1,19 @@
 // src/components/hero/SocialLinks.tsx
 "use client";
 
-import { Mail } from "lucide-react";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { BriefcaseBusiness, Code2, Mail } from "lucide-react";
 
 const links = [
   {
     label: "GitHub",
     href: "https://github.com/BEWKET-MENGIE",
-    Icon: FaGithub,
+    Icon: Code2,
     external: true,
   },
   {
     label: "LinkedIn",
-    // TODO: replace with your real LinkedIn profile URL.
-    href: "https://linkedin.com/in/yourusername",
-    Icon: FaLinkedin,
+    href: "https://www.linkedin.com/",
+    Icon: BriefcaseBusiness,
     external: true,
   },
   {

@@ -81,14 +81,14 @@ export default function AboutContent() {
               clean code, and modern engineering practices. From polished
               frontend experiences to robust backend systems, I build software
               with a focus on performance, scalability, usability, and
-              maintainability[cite: 5].
+              maintainability.
             </p>
 
             <p className="max-w-2xl text-base leading-[1.8] text-neutral-600 md:text-lg dark:text-neutral-300">
               I believe great software begins with understanding the
               problem&mdash;not just writing the code. That&rsquo;s why I approach
               each project from requirements analysis to architecture,
-              implementation, testing, deployment, and continuous improvement[cite: 5].
+              implementation, testing, deployment, and continuous improvement.
             </p>
           </div>
 

@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from "react";
 import { ArrowUpRight, Code2 } from "lucide-react";
 import SocialLinks from "./SocialLinks";
+import { useReducedMotionPreference } from "@/lib/useReducedMotionPreference";
 
 const processSteps = [
   "Understand",
@@ -56,24 +57,11 @@ export default function HeroContent() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [loopNum, setLoopNum] = useState(0);
   const [currentStep, setCurrentStep] = useState(0);
-  const [reduceMotion, setReduceMotion] = useState(false);
-
-  // Detect the OS "reduce motion" setting.
-  useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduceMotion(query.matches);
-
-    const onChange = (event: MediaQueryListEvent) =>
-      setReduceMotion(event.matches);
-
-    query.addEventListener("change", onChange);
-    return () => query.removeEventListener("change", onChange);
-  }, []);
+  const reduceMotion = useReducedMotionPreference();
 
   // Typing effect
   useEffect(() => {
     if (reduceMotion) {
-      setDisplayText(phrases[0]);
       return;
     }
 
@@ -136,7 +124,7 @@ export default function HeroContent() {
               {/* Screen readers get the full list once; the typing is visual only. */}
               <span className="sr-only">{phrases.join(", ")}</span>
               <span aria-hidden="true" className="inline-block min-w-[26ch]">
-                {displayText}
+                {reduceMotion ? phrases[0] : displayText}
                 <span
                   className={`ml-1 inline-block h-[1em] w-0.5 bg-(--accent) align-middle ${
                     reduceMotion ? "" : "animate-pulse"

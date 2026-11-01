@@ -2,11 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import ThemeToggle from "@/components/theme/ThemeToggle";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FiMenu, FiX, FiSun, FiMoon, FiArrowUpRight } from "react-icons/fi";
+import { ArrowUpRight, Menu, Moon, Sun, X } from "lucide-react";
 import { useTheme } from "next-themes";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 
 type NavItem = {
   label: string;
@@ -26,17 +26,11 @@ export default function Navbar() {
   const pathname = usePathname();
   const { theme, setTheme, resolvedTheme } = useTheme();
   
-  const [mounted, setMounted] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeId, setActiveId] = useState("home");
 
   const isHomePage = pathname === "/";
-
-  // Prevent hydration mismatch for theme-dependent icons
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   /* Scroll detection */
   useEffect(() => {
@@ -54,10 +48,7 @@ export default function Navbar() {
 
   /* Detect active section */
   useEffect(() => {
-    if (!isHomePage) {
-      setActiveId("");
-      return;
-    }
+    if (!isHomePage) return;
 
     const sections = Array.from(document.querySelectorAll<HTMLElement>("section[id]"));
     if (!sections.length) return;
@@ -98,19 +89,20 @@ export default function Navbar() {
   const closeMenu = () => setIsMenuOpen(false);
 
   const handleNavigation = (item: NavItem) => {
-    setActiveId(item.href.replace("#", ""));
+    if (isHomePage) setActiveId(item.href.replace("#", ""));
     closeMenu();
   };
 
-  const isActive = (item: NavItem) => activeId === item.href.replace("#", "");
+  const isActive = (item: NavItem) =>
+    isHomePage && activeId === item.href.replace("#", "");
 
   /* Correctly toggle theme using next-themes setTheme */
   const toggleTheme = () => {
-    const currentTheme = resolvedTheme || theme;
+    const currentTheme = resolvedTheme || theme || "dark";
     setTheme(currentTheme === "dark" ? "light" : "dark");
   };
 
-  const isDark = (resolvedTheme || theme) === "dark";
+  const isDark = (resolvedTheme || theme || "dark") === "dark";
 
   return (
     <>
@@ -125,7 +117,7 @@ export default function Navbar() {
           <div className="flex h-20 items-center justify-between">
             {/* LOGO */}
             <Link
-              href="#home"
+              href={isHomePage ? "#home" : "/#home"}
               onClick={closeMenu}
               className="group flex items-center gap-4"
               aria-label="Bewket Mengie Home"
@@ -156,7 +148,7 @@ export default function Navbar() {
                 return (
                   <Link
                     key={item.label}
-                    href={item.href}
+                    href={isHomePage ? item.href : `/${item.href}`}
                     onClick={() => handleNavigation(item)}
                     className={`group relative flex items-center gap-1.5 px-4 py-2.5 font-modern text-[14.5px] font-bold tracking-wide transition-all duration-300 ${
                       active ? "text-white" : "text-white/55 hover:text-white"
@@ -181,20 +173,13 @@ export default function Navbar() {
                 aria-label="Toggle theme"
                 className="group flex h-10 w-10 items-center justify-center rounded-full border border-white/8 bg-white/2.5 text-white/60 backdrop-blur-md transition-all duration-300 hover:border-(--accent)] hover:text-(--accent-light)]"
               >
-                {mounted && isDark ? <FiSun size={20} /> : <FiMoon size={20} />}
+                {isDark ? <Sun size={20} /> : <Moon size={20} />}
               </button>
             </div>
 
             {/* MOBILE CONTROLS */}
             <div className="flex lg:hidden items-center gap-2">
-              <button
-                type="button"
-                onClick={toggleTheme}
-                aria-label="Toggle theme"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/8 bg-white/[0.035] text-white/65 backdrop-blur-md"
-              >
-                {mounted && isDark ? <FiSun size={16} /> : <FiMoon size={16} />}
-              </button>
+              <ThemeToggle />
 
               <button
                 type="button"
@@ -202,7 +187,7 @@ export default function Navbar() {
                 aria-label="Toggle menu"
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-white/8 bg-white/[0.035] text-white backdrop-blur-md"
               >
-                {isMenuOpen ? <FiX size={19} /> : <FiMenu size={19} />}
+                {isMenuOpen ? <X size={19} /> : <Menu size={19} />}
               </button>
             </div>
           </div>
@@ -240,7 +225,7 @@ export default function Navbar() {
               return (
                 <Link
                   key={item.label}
-                  href={item.href}
+                  href={isHomePage ? item.href : `/${item.href}`}
                   onClick={() => handleNavigation(item)}
                   className={`group flex items-center justify-between rounded-2xl border px-4 py-4 transition-all duration-300 ${
                     active
@@ -254,8 +239,7 @@ export default function Navbar() {
                     </span>
                     <span className="font-modern text-base font-semibold">{item.label}</span>
                   </div>
-                  <FiArrowUpRight size={17} />
-                  <ThemeToggle />
+                  <ArrowUpRight size={17} />
                 </Link>
               );
             })}

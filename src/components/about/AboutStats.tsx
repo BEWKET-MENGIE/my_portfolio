@@ -3,22 +3,11 @@
 
 import React, { useEffect, useState } from "react";
 import { PRINCIPLES } from "@/data/profile";
+import { useReducedMotionPreference } from "@/lib/useReducedMotionPreference";
 
 export default function AboutStats() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [reduceMotion, setReduceMotion] = useState(false);
-
-  // Detect the OS "reduce motion" setting.
-  useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduceMotion(query.matches);
-
-    const onChange = (event: MediaQueryListEvent) =>
-      setReduceMotion(event.matches);
-
-    query.addEventListener("change", onChange);
-    return () => query.removeEventListener("change", onChange);
-  }, []);
+  const reduceMotion = useReducedMotionPreference();
 
   // Highlight one principle at a time (skipped with reduced motion).
   useEffect(() => {

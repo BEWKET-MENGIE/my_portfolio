@@ -1,5 +1,18 @@
 import nodemailer from "nodemailer";
 
+function escapeHtml(value: string) {
+  return value.replace(/[&<>"']/g, (character) => {
+    const entities: Record<string, string> = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    };
+    return entities[character];
+  });
+}
+
 export const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_SERVER_HOST || "smtp.gmail.com",
   port: Number(process.env.EMAIL_SERVER_PORT) || 465,
@@ -17,8 +30,11 @@ export interface SendEmailOptions {
 }
 
 export async function sendEmail({ name, email, message }: SendEmailOptions) {
+  const safeName = escapeHtml(name);
+  const safeEmail = escapeHtml(email);
+  const safeMessage = escapeHtml(message);
   const mailOptions = {
-    from: `"${name}" <${process.env.EMAIL_USER}>`,
+    from: { name, address: process.env.EMAIL_USER ?? "" },
     replyTo: email,
     to: process.env.EMAIL_USER,
     subject: `New Portfolio Message from ${name}`,
@@ -26,10 +42,10 @@ export async function sendEmail({ name, email, message }: SendEmailOptions) {
     html: `
       <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 10px; background-color: #f9f9f9;">
         <h2 style="color: #10b981; border-bottom: 2px solid #eaeaea; padding-bottom: 10px;">New Contact Form Message</h2>
-        <p style="font-size: 16px;"><strong>Name:</strong> ${name}</p>
-        <p style="font-size: 16px;"><strong>Email:</strong> <a href="mailto:${email}" style="color: #2563eb;">${email}</a></p>
+        <p style="font-size: 16px;"><strong>Name:</strong> ${safeName}</p>
+        <p style="font-size: 16px;"><strong>Email:</strong> <a href="mailto:${safeEmail}" style="color: #2563eb;">${safeEmail}</a></p>
         <div style="margin-top: 20px; padding: 15px; background: #ffffff; border-left: 4px solid #10b981; border-radius: 4px;">
-          <p style="font-size: 14px; white-space: pre-wrap; margin: 0;">${message}</p>
+          <p style="font-size: 14px; white-space: pre-wrap; margin: 0;">${safeMessage}</p>
         </div>
         <p style="font-size: 12px; color: #888; margin-top: 30px; text-align: center;">This message was sent from your portfolio contact form.</p>
       </div>

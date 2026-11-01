@@ -2,15 +2,13 @@
    globals.css  (Tailwind CSS v4 + Next.js)
 
    Order matters:
-   1. Google Fonts @import  - CSS only allows @import BEFORE any other rule
-   2. Tailwind              - @import "tailwindcss"
-   3. Dark-mode switch      - the `dark:` classes follow the .dark class on <html>
-   4. @theme                - fonts that become Tailwind utilities
-   5. @layer base           - variables, page defaults, accessibility
-   6. @layer components     - reusable classes (.glass, .premium-card ...)
+   1. Tailwind              - @import "tailwindcss"
+   2. Dark-mode switch      - the `dark:` classes follow the .dark class on <html>
+   3. @theme                - fonts that become Tailwind utilities
+   4. @layer base           - variables, page defaults, accessibility
+   5. @layer components     - reusable classes (.glass, .premium-card ...)
 ========================================================= */
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -116,13 +114,11 @@
     overflow-x: clip;
 
     background-color: var(--background);
-    background-image:
-      linear-gradient(rgba(2, 6, 23, 0.3), rgba(2, 6, 23, 0.3)),
-      url("/images/portfolio-bg.png");
+    background-image: linear-gradient(rgba(2, 6, 23, 0.3), rgba(2, 6, 23, 0.3));
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-attachment: scroll;
 
     color: var(--text);
     font-family: var(--font-body);

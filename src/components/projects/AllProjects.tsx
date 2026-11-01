@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { projects } from "@/data/projects";
 import ProjectCard from "@/components/projects/ProjectCard";
 import ProjectFilter from "@/components/projects/ProjectFilter";
@@ -10,14 +10,8 @@ const categories = [ALL, ...Array.from(new Set(projects.map((p) => p.category)))
 
 export default function AllProjects() {
   const [filter, setFilter] = useState(ALL);
-  const [visible, setVisible] = useState(false);
+  const visible = true;
   const [activeProject, setActiveProject] = useState<number | null>(null);
-
-  // Flip to visible right after the first paint so the cards fade in.
-  useEffect(() => {
-    const frame = requestAnimationFrame(() => setVisible(true));
-    return () => cancelAnimationFrame(frame);
-  }, []);
 
   const filteredProjects = useMemo(
     () =>
@@ -50,6 +44,7 @@ export default function AllProjects() {
               project={project}
               index={index}
               visible={visible}
+              prioritizeImage={index === 0}
               active={activeProject === project.id}
               setActive={() =>
                 setActiveProject(activeProject === project.id ? null : project.id)

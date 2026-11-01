@@ -1,5 +1,4 @@
 // src/components/skills/SkillCategory.tsx
-"use client";
 
 import TechDiamond, { type TechItem } from "./TechDiamond";
 
@@ -27,14 +26,14 @@ export default function SkillCategory({
         dark:border-neutral-800 dark:bg-white/2 dark:shadow-2xl
         dark:hover:bg-white/4"
     >
-      {/* Top accent line[cite: 11] */}
+      {/* Top accent line */}
       <div
         aria-hidden="true"
         className="absolute left-0 top-0 h-px w-full bg-linear-to-r
           from-transparent via-(--accent)/50 to-transparent"
       />
 
-      {/* Category number[cite: 11] */}
+      {/* Category number */}
       {category.number && (
         <span
           aria-hidden="true"
@@ -45,7 +44,7 @@ export default function SkillCategory({
         </span>
       )}
 
-      {/* Heading & description[cite: 11] */}
+      {/* Heading and description */}
       <div className="mb-8">
         <h3
           id={titleId}
@@ -62,7 +61,7 @@ export default function SkillCategory({
         )}
       </div>
 
-      {/* Technologies[cite: 11] */}
+      {/* Technologies */}
       <ul
         aria-label={`${category.title} technologies`}
         className="grid grid-cols-2 justify-items-center gap-x-4 gap-y-8 sm:grid-cols-3"

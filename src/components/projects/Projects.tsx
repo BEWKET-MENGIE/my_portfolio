@@ -1,7 +1,7 @@
 // src/components/projects/Projects.tsx
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { projects } from "@/data/projects";
 import ProjectCard from "./ProjectCard";
@@ -15,37 +15,8 @@ const shownProjects = projects.slice(0, MAX_PROJECTS);
 const hasMore = projects.length > MAX_PROJECTS;
 
 export default function Projects() {
-  const [visible, setVisible] = useState(false);
+  const visible = true;
   const [activeProject, setActiveProject] = useState<number | null>(null);
-
-  const sectionRef = useRef<HTMLElement>(null);
-
-  /* Scroll reveal (instant when the user prefers reduced motion) */
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    if (
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      !("IntersectionObserver" in window)
-    ) {
-      setVisible(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    observer.observe(section);
-    return () => observer.disconnect();
-  }, []);
 
   const reveal = (delay = "0ms") => ({
     className: `transition-all duration-1000 motion-reduce:transition-none ${
@@ -56,7 +27,6 @@ export default function Projects() {
 
   return (
     <section
-      ref={sectionRef}
       id="projects"
       aria-labelledby="projects-heading"
       className="relative overflow-hidden bg-white px-5 py-12 text-neutral-900

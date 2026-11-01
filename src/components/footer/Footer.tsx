@@ -1,23 +1,23 @@
 // src/components/footer/Footer.tsx
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
-  FaGithub,
-  FaLinkedin,
-  FaInstagram,
-  FaFacebook,
-  FaTelegram,
-} from "react-icons/fa";
-import { Mail, ArrowUp } from "lucide-react";
+  ArrowUp,
+  BriefcaseBusiness,
+  Camera,
+  Code2,
+  Mail,
+  Send,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 
 type SocialLink = {
   label: string;
   href: string;
-  icon: React.ComponentType<{
-    className?: string;
-    style?: React.CSSProperties;
-  }>;
+  icon: LucideIcon;
   color: string;
 };
 
@@ -36,42 +36,40 @@ const socialLinks: SocialLink[] = [
   {
     label: "GitHub",
     href: "https://github.com/BEWKET-MENGIE",
-    icon: FaGithub,
+    icon: Code2,
     color: "#ffffff",
   },
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/",
-    icon: FaLinkedin,
+    icon: BriefcaseBusiness,
     color: "#0A66C2",
   },
   {
     label: "Instagram",
     href: "https://www.instagram.com/bewket.sr",
-    icon: FaInstagram,
+    icon: Camera,
     color: "#E4405F",
   },
   {
     label: "Facebook",
     href: "https://www.facebook.com/",
-    icon: FaFacebook,
+    icon: Users,
     color: "#1877F2",
   },
   {
     label: "Telegram",
     href: "https://t.me/BEWKET1500671",
-    icon: FaTelegram,
+    icon: Send,
     color: "#26A5E4",
   },
 ];
 
 export default function Footer() {
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const [year, setYear] = useState(2026);
+  const year = 2026;
 
   useEffect(() => {
-    setYear(new Date().getFullYear());
-
     const handleScroll = () => {
       setShowBackToTop(window.scrollY > 500);
     };
@@ -102,8 +100,8 @@ export default function Footer() {
       <div className="relative z-10 mx-auto max-w-7xl px-6 py-10 md:px-10 lg:px-16">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
           {/* BRANDING / LOGO */}
-          <a
-            href="#home"
+          <Link
+            href="/#home"
             className="group flex items-center gap-3.5 self-center lg:self-auto"
             aria-label="Bewket Mengie Home"
           >
@@ -120,15 +118,15 @@ export default function Footer() {
                 Full Stack Developer
               </p>
             </div>
-          </a>
+          </Link>
 
           {/* NAVIGATION LINKS */}
           <nav aria-label="Footer navigation">
             <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
               {navItems.map((item) => (
                 <li key={item.label}>
-                  <a
-                    href={item.href}
+                  <Link
+                    href={`/${item.href}`}
                     className="
                       group relative
                       text-sm
@@ -158,7 +156,7 @@ export default function Footer() {
                         group-focus-visible:w-full
                       "
                     />
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

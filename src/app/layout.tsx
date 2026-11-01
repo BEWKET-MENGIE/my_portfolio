@@ -1,7 +1,6 @@
 // src/app/layout.tsx
 import "./globals.css";
 import ThemeProvider from "@/components/theme/ThemeProvider";
-import Preloader from "@/components/ui/Preloader";
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/footer/Footer";
 
@@ -25,7 +24,6 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ThemeProvider>
-          <Preloader />
           <Navbar />
           <div className="relative flex min-h-screen flex-col">{children}</div>
           <Footer />

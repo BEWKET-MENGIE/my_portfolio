@@ -1,7 +1,14 @@
 // src/components/ui/Modal.tsx
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 
 interface ModalProps {
   /** Called after the closing animation finishes. Unmount the modal here. */
@@ -13,6 +20,16 @@ interface ModalProps {
 }
 
 const EXIT_MS = 250;
+const ModalCloseContext = createContext<() => void>(() => {});
+
+function ModalContent({
+  children,
+}: {
+  children: (api: { close: () => void }) => ReactNode;
+}) {
+  const close = useContext(ModalCloseContext);
+  return children({ close });
+}
 
 /* A pop-up built on the browser's own <dialog>. For free it gives us:
    focus kept inside, the page behind made inert, and Esc to close.
@@ -55,19 +72,18 @@ export default function Modal({ onClose, labelledBy, children }: ModalProps) {
   };
 
   return (
-    <dialog
-      ref={dialogRef}
-      aria-labelledby={labelledBy}
-      // Esc: run our animated close instead of the instant native one.
-      onCancel={(event) => {
-        event.preventDefault();
-        close();
-      }}
-      // A click on the dark backdrop lands on the <dialog> itself.
-      onClick={(event) => {
-        if (event.target === event.currentTarget) close();
-      }}
-      className={`m-auto max-h-[88vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden
+    <ModalCloseContext.Provider value={close}>
+      <dialog
+        ref={dialogRef}
+        aria-labelledby={labelledBy}
+        onCancel={(event) => {
+          event.preventDefault();
+          close();
+        }}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) close();
+        }}
+        className={`m-auto max-h-[88vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden
         rounded-3xl border border-neutral-200 bg-white p-0 text-neutral-900
         shadow-2xl transition-all duration-300 ease-out
         open:flex open:flex-col
@@ -80,8 +96,9 @@ export default function Modal({ onClose, labelledBy, children }: ModalProps) {
             ? "translate-y-0 scale-100 opacity-100 backdrop:opacity-100"
             : "translate-y-4 scale-95 opacity-0 backdrop:opacity-0"
         }`}
-    >
-      {children({ close })}
-    </dialog>
+      >
+        <ModalContent>{children}</ModalContent>
+      </dialog>
+    </ModalCloseContext.Provider>
   );
 }

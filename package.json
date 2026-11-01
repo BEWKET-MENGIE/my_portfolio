@@ -1,18 +1,14 @@
 {
-  "name": "@BEWKET-MENGIE/news-portfolio",
+  "name": "bewket-portfolio",
   "version": "0.1.0",
-  "private": false,
-  "main": "index.js",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/BEWKET-MENGIE/my_portfolio.git"
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next build",
     "start": "next start",
     "lint": "eslint"
   },
@@ -25,7 +21,6 @@
     "nodemailer": "^10.1.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "react-icons": "^5.7.0",
     "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
@@ -34,8 +29,9 @@
     "@types/nodemailer": "^8.0.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^7.0.3",
     "eslint": "^9",
-    "eslint-config-next": "16.4.0",
+    "eslint-config-next": "16.4.3",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
