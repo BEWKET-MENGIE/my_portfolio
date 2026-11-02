@@ -26,6 +26,7 @@ import { PROFILE } from "@/data/profile";
 export const metadata: Metadata = {
   title: `About | ${PROFILE.name}`,
   description: `${PROFILE.name} is a Software Engineering student and Full Stack Developer. Learn about my skills, principles, current focus and journey.`,
+  alternates: { canonical: "/about" },
 };
 
 /* ---------------------------------------------------------------
@@ -160,8 +161,7 @@ const sectionTitle = `${display} text-4xl font-bold tracking-[-0.03em] text-(--t
 const gradientText =
   "bg-linear-to-r from-blue-500 to-orange-500 bg-clip-text text-transparent";
 
-const cardClass =
-  "rounded-3xl border border-(--border) bg-white/[0.025]";
+const cardClass = "rounded-3xl border border-(--border) bg-white/[0.025]";
 
 const principleCardClass =
   `${cardClass} group relative h-full p-7 ` +
@@ -220,7 +220,10 @@ export default function AboutPage() {
 
           <div className="mt-12 grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
             {/* Portrait */}
-            <Reveal delay={100} className="mx-auto w-full max-w-md lg:max-w-none">
+            <Reveal
+              delay={100}
+              className="mx-auto w-full max-w-md lg:max-w-none"
+            >
               <div className="relative">
                 <div
                   aria-hidden="true"
@@ -327,7 +330,9 @@ export default function AboutPage() {
                     <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500">
                       <Icon className="h-5 w-5" aria-hidden="true" />
                     </span>
-                    <h3 className={`${display} text-xl font-bold text-(--text)`}>
+                    <h3
+                      className={`${display} text-xl font-bold text-(--text)`}
+                    >
                       {title}
                     </h3>
                   </div>
@@ -357,7 +362,10 @@ export default function AboutPage() {
         {/* =================================================
             PRINCIPLES
         ================================================ */}
-        <section aria-labelledby="principles-heading" className="mt-24 md:mt-32">
+        <section
+          aria-labelledby="principles-heading"
+          className="mt-24 md:mt-32"
+        >
           <Reveal>
             <h2
               id="principles-heading"
@@ -377,7 +385,9 @@ export default function AboutPage() {
                       aria-hidden="true"
                     />
                   </div>
-                  <h3 className={`${display} mb-3 text-xl font-bold text-(--text)`}>
+                  <h3
+                    className={`${display} mb-3 text-xl font-bold text-(--text)`}
+                  >
                     {title}
                   </h3>
                   <p className="text-sm leading-relaxed text-(--text-muted)">
@@ -441,9 +451,15 @@ export default function AboutPage() {
               <div
                 className={`${mono} mb-4 flex items-center justify-center gap-4 text-[0.7rem] uppercase tracking-[0.2em] text-orange-500`}
               >
-                <span aria-hidden="true" className="h-px w-15 bg-orange-500 md:w-18" />
+                <span
+                  aria-hidden="true"
+                  className="h-px w-15 bg-orange-500 md:w-18"
+                />
                 <h1>Journey</h1>
-                <span aria-hidden="true" className="h-px w-15 bg-orange-500 md:w-18" />
+                <span
+                  aria-hidden="true"
+                  className="h-px w-15 bg-orange-500 md:w-18"
+                />
               </div>
               <h2 id="journey-heading" className={sectionTitle}>
                 How I got <span className={gradientText}>here.</span>
@@ -481,7 +497,11 @@ export default function AboutPage() {
                           isFirst ? "bg-orange-500" : "bg-blue-500"
                         }`}
                       >
-                        <Icon className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
+                        <Icon
+                          className="h-4 w-4"
+                          strokeWidth={2.5}
+                          aria-hidden="true"
+                        />
                       </span>
                     </span>
                   </span>
