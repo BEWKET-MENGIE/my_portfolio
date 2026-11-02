@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import { sendEmail } from "@/lib/nodemailer";
-
 type ContactBody = {
   name?: unknown;
   email?: unknown;
@@ -56,22 +54,26 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Please check your contact details and try again." }, { status: 400 });
   }
 
+  const backendUrl = process.env.BACKEND_API_URL ?? "http://localhost:4000/api";
   try {
-    await sendEmail({
-      name: normalizedName,
-      email: normalizedEmail,
-      message: normalizedMessage,
+    const response = await fetch(`${backendUrl}/contacts`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: normalizedName,
+        email: normalizedEmail,
+        message: normalizedMessage,
+        hp_confirm: "",
+      }),
+      cache: "no-store",
     });
-
-    return NextResponse.json(
-      { success: true, message: "Message sent successfully!" },
-      { status: 200 },
-    );
+    const result: unknown = await response.json();
+    return NextResponse.json(result, { status: response.status });
   } catch (error) {
-    console.error("Contact message delivery failed:", error);
+    console.error("Contact message could not reach the portfolio API:", error);
     return NextResponse.json(
-      { error: "Failed to send message. Please try again later." },
-      { status: 500 },
+      { error: "Messages are temporarily unavailable. Please try again later." },
+      { status: 503 },
     );
   }
 }
