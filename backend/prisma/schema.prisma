@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ViewCounter {
+  id        Int      @id @default(1)
+  total     BigInt   @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String   @db.VarChar(100)
+  email     String   @db.VarChar(254)
+  message   String   @db.VarChar(5000)
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isRead, createdAt])
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique @db.VarChar(254)
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Visitor {
+  id              String         @id @default(uuid())
+  visitorId       String         @unique @db.VarChar(36)
+  firstSeen       DateTime       @default(now())
+  lastSeen        DateTime       @default(now())
+  country         String?        @db.VarChar(100)
+  city            String?        @db.VarChar(100)
+  deviceType      String?        @db.VarChar(40)
+  browser         String?        @db.VarChar(100)
+  operatingSystem String?        @db.VarChar(100)
+  pageViews       PageView[]
+  events          VisitorEvent[]
+
+  @@index([firstSeen])
+  @@index([country])
+}
+
+model PageView {
+  id        String   @id @default(uuid())
+  visitorId String
+  visitor   Visitor  @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+  page      String   @db.VarChar(300)
+  referrer  String?  @db.VarChar(255)
+  source    String   @default("Direct") @db.VarChar(255)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([page, createdAt])
+  @@index([visitorId, createdAt])
+  @@index([source, createdAt])
+}
+
+model VisitorEvent {
+  id        String   @id @default(uuid())
+  visitorId String
+  visitor   Visitor  @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+  eventName String   @db.VarChar(100)
+  page      String?  @db.VarChar(300)
+  createdAt DateTime @default(now())
+
+  @@index([eventName, createdAt])
+  @@index([createdAt])
+}
