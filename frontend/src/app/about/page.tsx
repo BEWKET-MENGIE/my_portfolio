@@ -24,7 +24,7 @@ import SkillMeter from "@/components/about/SkillMeter";
 import { PROFILE } from "@/data/profile";
 
 export const metadata: Metadata = {
-  title: `About | ${PROFILE.name}`,
+  title: "About",
   description: `${PROFILE.name} is a Software Engineering student and Full Stack Developer. Learn about my skills, principles, current focus and journey.`,
   alternates: { canonical: "/about" },
 };

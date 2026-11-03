@@ -1,52 +1,48 @@
 // src/app/layout.tsx
 import "./globals.css";
 import type { Metadata } from "next";
-import { PROFILE } from "@/data/profile";
+import { siteConfig } from "@/lib/site";
+import PersonSchema from "@/components/seo/PersonSchema";
+import WebsiteSchema from "@/components/seo/WebsiteSchema";
 import ThemeProvider from "@/components/theme/ThemeProvider";
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/footer/Footer";
 import ViewCounter from "@/components/ui/ViewCounter";
 
-const personStructuredData = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: PROFILE.name,
-  url: PROFILE.url,
-  image: new URL(PROFILE.image, PROFILE.url).toString(),
-  jobTitle: PROFILE.role,
-  description: PROFILE.description,
-  email: PROFILE.email,
-  affiliation: {
-    "@type": "EducationalOrganization",
-    name: PROFILE.education,
-  },
-};
-
 export const metadata: Metadata = {
-  metadataBase: new URL(PROFILE.url),
-  title: `${PROFILE.name} | ${PROFILE.role} | Portfolio`,
-  description: PROFILE.description,
+  metadataBase: new URL(siteConfig.url),
+  title: {
+    default: siteConfig.title,
+    template: "%s | Bewket Mengie",
+  },
+  description: siteConfig.description,
+  applicationName: "Bewket Mengie Portfolio",
+  authors: [{ name: siteConfig.author, url: siteConfig.url }],
+  creator: siteConfig.author,
+  publisher: siteConfig.author,
+  keywords: [...siteConfig.keywords],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
-    url: PROFILE.url,
-    siteName: PROFILE.name,
-    title: `${PROFILE.name} | ${PROFILE.role}`,
-    description: PROFILE.description,
+    locale: "en_US",
+    url: siteConfig.url,
+    siteName: `${siteConfig.name} Portfolio`,
+    title: siteConfig.title,
+    description: siteConfig.description,
     images: [
       {
-        url: PROFILE.image,
-        width: 848,
-        height: 1272,
-        alt: `${PROFILE.name}, ${PROFILE.role}`,
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: `${siteConfig.name} - ${siteConfig.jobTitle}`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${PROFILE.name} | ${PROFILE.role}`,
-    description: PROFILE.description,
-    images: [PROFILE.image],
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: ["/opengraph-image"],
   },
   robots: {
     index: true,
@@ -75,15 +71,8 @@ export default function RootLayout({
         className="bg-(--dark,#09090b) text-(--text,#f3f4f6) antialiased transition-colors duration-300"
         suppressHydrationWarning
       >
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(personStructuredData).replace(
-              /</g,
-              "\\u003c",
-            ),
-          }}
-        />
+        <PersonSchema />
+        <WebsiteSchema />
         <ThemeProvider>
           <Navbar />
           <ViewCounter />

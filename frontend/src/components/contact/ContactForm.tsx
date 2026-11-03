@@ -44,7 +44,7 @@ export default function ContactForm() {
       form.reset();
       setSubmission({
         status: "success",
-        message: result.message || "Message sent successfully!",
+        message: "Your message was sent successfully!",
       });
     } catch (error) {
       setSubmission({
@@ -58,7 +58,7 @@ export default function ContactForm() {
   }
 
   return (
-    <form className="flex h-full flex-col gap-5" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <div>
         <h3 className="text-xl font-bold tracking-tight text-neutral-900 dark:text-white">
           Send a message
@@ -72,7 +72,7 @@ export default function ContactForm() {
         Name
         <Input
           autoComplete="name"
-          className="border-neutral-300 bg-white text-neutral-900 placeholder:text-neutral-500 dark:border-neutral-700 dark:bg-white/[0.02] dark:text-white"
+          className="!h-10 border-neutral-300 bg-white text-neutral-900 placeholder:text-neutral-500 dark:border-neutral-700 dark:bg-white/[0.02] dark:text-white"
           maxLength={100}
           name="name"
           placeholder="Your name"
@@ -84,7 +84,7 @@ export default function ContactForm() {
         Email
         <Input
           autoComplete="email"
-          className="border-neutral-300 bg-white text-neutral-900 placeholder:text-neutral-500 dark:border-neutral-700 dark:bg-white/[0.02] dark:text-white"
+          className="!h-10 border-neutral-300 bg-white text-neutral-900 placeholder:text-neutral-500 dark:border-neutral-700 dark:bg-white/[0.02] dark:text-white"
           maxLength={254}
           name="email"
           placeholder="you@example.com"
@@ -93,15 +93,15 @@ export default function ContactForm() {
         />
       </label>
 
-      <label className="flex flex-1 flex-col gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-200">
+      <label className="flex flex-col gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-200">
         Message
         <Textarea
-          className="min-h-36 flex-1 border-neutral-300 bg-white text-neutral-900 placeholder:text-neutral-500 dark:border-neutral-700 dark:bg-white/[0.02] dark:text-white"
+          className="min-h-28 border-neutral-300 bg-white text-neutral-900 placeholder:text-neutral-500 dark:border-neutral-700 dark:bg-white/[0.02] dark:text-white"
           maxLength={5000}
           name="message"
           placeholder="How can I help?"
           required
-          rows={5}
+          rows={4}
         />
       </label>
 
@@ -119,11 +119,21 @@ export default function ContactForm() {
       </label>
 
       <button
-        className="inline-flex min-h-12 items-center justify-center rounded-xl bg-emerald-500 px-6 py-3 text-sm font-bold text-black transition-colors hover:bg-emerald-400 disabled:cursor-wait disabled:opacity-60"
+        className="group relative inline-flex min-h-11 overflow-hidden rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-bold text-white transition-shadow hover:shadow-lg hover:shadow-cyan-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:cursor-wait disabled:opacity-60 dark:focus-visible:ring-offset-slate-950 motion-reduce:transition-none"
         disabled={submission.status === "sending"}
         type="submit"
       >
-        {submission.status === "sending" ? "Sending..." : "Send message"}
+        <span
+          aria-hidden="true"
+          className="absolute inset-y-0 left-0 w-1/2 -translate-x-full bg-linear-to-r from-emerald-500 to-cyan-400 transition-transform duration-500 ease-out group-hover:translate-x-0 motion-reduce:transition-none"
+        />
+        <span
+          aria-hidden="true"
+          className="absolute inset-y-0 right-0 w-1/2 translate-x-full bg-linear-to-l from-blue-500 to-cyan-400 transition-transform duration-500 ease-out group-hover:translate-x-0 motion-reduce:transition-none"
+        />
+        <span className="relative z-10">
+          {submission.status === "sending" ? "Sending..." : "Send message"}
+        </span>
       </button>
 
       {submission.message && (
@@ -131,9 +141,9 @@ export default function ContactForm() {
           aria-live="polite"
           className={
             submission.status === "error"
-              ? "text-sm text-red-600 dark:text-red-400"
+              ? "rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-700 dark:text-red-300"
               : submission.status === "success"
-                ? "text-sm text-emerald-700 dark:text-emerald-400"
+                ? "rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-800 dark:text-emerald-300"
                 : "text-sm text-neutral-600 dark:text-neutral-400"
           }
           role={submission.status === "error" ? "alert" : "status"}
