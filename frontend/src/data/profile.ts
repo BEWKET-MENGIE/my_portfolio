@@ -4,7 +4,8 @@ export const PROFILE = {
   name: "Bewket Mengie",
   role: "Full Stack Developer",
   title: "Full Stack Developer",
-  description: "Fourth-year Software Engineering student and Full Stack Developer building robust web applications.",
+  description:
+    "Bewket Mengie is a Software Engineering student and Full Stack Developer building modern web applications with Next.js, React, TypeScript, NestJS, Prisma, and PostgreSQL.",
   url: "https://bewketmengie.com",
   email: "mengiebewket@gmail.com",
   phone: "+251918410399",

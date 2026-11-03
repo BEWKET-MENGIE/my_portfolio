@@ -6,6 +6,18 @@ type ContactBody = {
   hp_confirm?: unknown;
 };
 
+function normalizeApiBaseUrl(value: string | undefined) {
+  const baseUrl = (value ?? "http://127.0.0.1:4000/api").trim();
+
+  if (!baseUrl) {
+    return "http://127.0.0.1:4000/api";
+  }
+
+  return baseUrl
+    .replace(/^https?:\/\/localhost(?=[:/]|$)/i, "http://127.0.0.1")
+    .replace(/^https?:\/\/\[::1\](?=[:/]|$)/i, "http://127.0.0.1");
+}
+
 function isContactBody(value: unknown): value is ContactBody {
   return typeof value === "object" && value !== null;
 }
@@ -54,9 +66,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Please check your contact details and try again." }, { status: 400 });
   }
 
-  const backendUrl = process.env.BACKEND_API_URL ?? "http://localhost:4000/api";
+  const backendUrl = normalizeApiBaseUrl(
+    process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL,
+  );
   try {
-    const response = await fetch(`${backendUrl}/contacts`, {
+    const response = await fetch(`${backendUrl.replace(/\/$/, "")}/contacts`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

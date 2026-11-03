@@ -6,7 +6,7 @@ import AllProjects from "@/components/projects/AllProjects";
 import { projects } from "@/data/projects";
 
 export const metadata: Metadata = {
-  title: "All Projects | Bewket Mengie",
+  title: "Projects",
   description: "A full list of projects built by Bewket Mengie.",
   alternates: { canonical: "/projects" },
 };

@@ -2,7 +2,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ArrowUpRight, Code2 } from "lucide-react";
+import Link from "next/link";
+import { Code2, Eye } from "lucide-react";
 import SocialLinks from "./SocialLinks";
 import { useReducedMotionPreference } from "@/lib/useReducedMotionPreference";
 
@@ -112,18 +113,17 @@ export default function HeroContent() {
     // self-stretch: this block is as tall as the hero.
     // No bottom padding here on purpose: the divider runs all the way down and
     // the scroll button sits flush with the bottom edge of the hero.
-    <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col gap-14 self-stretch pt-28 md:flex-row md:items-center md:gap-10 lg:gap-14">
-      {/* LEFT COLUMN (left of the divider): typing text, then the button with
-          the social links directly underneath it. */}
-      <div className="flex flex-1 flex-col justify-center">
+    <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col gap-7 self-stretch px-1 pb-20 pt-24 md:flex-row md:items-center md:gap-10 md:px-0 md:pb-0 md:pt-28 lg:gap-14">
+      {/* LEFT COLUMN (left of the divider): intro, work link, and bottom-left socials. */}
+      <div className="relative flex flex-none flex-col justify-center pb-0 md:flex-1 md:self-stretch">
         {/* The gap is the space between the typing line and the button.
             It matches the right column (name -> steps). */}
-        <div className="flex flex-col gap-20 md:gap-36 md:pb-24 lg:gap-44">
-          <div className="flex min-h-12 items-center gap-3">
-            <p className="font-mono text-[0.95rem] uppercase tracking-[0.18em] text-(--accent-light) drop-shadow-[0_0_10px_rgba(6,182,212,0.35)] sm:text-base">
+        <div className="flex flex-col gap-7 md:gap-36 md:pb-24 lg:gap-44">
+          <div className="flex min-h-10 items-center gap-3">
+            <p className="font-mono text-sm uppercase tracking-[0.12em] text-(--accent-light) drop-shadow-[0_0_10px_rgba(6,182,212,0.35)] sm:text-base sm:tracking-[0.18em]">
               {/* Screen readers get the full list once; the typing is visual only. */}
               <span className="sr-only">{phrases.join(", ")}</span>
-              <span aria-hidden="true" className="inline-block min-w-[26ch]">
+              <span aria-hidden="true" className="inline-block min-w-0 max-w-full sm:min-w-[26ch]">
                 {reduceMotion ? phrases[0] : displayText}
                 <span
                   className={`ml-1 inline-block h-[1em] w-0.5 bg-(--accent) align-middle ${
@@ -134,23 +134,17 @@ export default function HeroContent() {
             </p>
           </div>
 
-          {/* Button + social links, stacked. gap-6 is the space between them. */}
-          <div className="flex flex-col items-start gap-6">
-            <button
-              type="button"
-              onClick={() => scrollToSection("projects")}
+          <div>
+            <Link
+              href="#projects"
               className="group inline-flex items-center gap-2 rounded-[80px] border border-(--accent)/40 bg-(--accent)/10 px-6 py-3.5 text-sm font-bold text-(--accent-light) transition-all duration-300 hover:-translate-y-1 hover:bg-(--accent) hover:text-black hover:shadow-[0_0_35px_rgba(6,182,212,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent) active:scale-[0.98] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
             >
+              <Eye size={18} aria-hidden="true" />
               View My Work
-              <ArrowUpRight
-                size={18}
-                className="transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 motion-reduce:transition-none"
-              />
-            </button>
-
-            <SocialLinks />
+            </Link>
           </div>
         </div>
+        <SocialLinks className="mt-1 md:absolute md:bottom-0 md:left-0" />
       </div>
 
       {/* VERTICAL DIVIDER (desktop): one straight line from the top, through
@@ -176,10 +170,9 @@ export default function HeroContent() {
         <ScrollIndicator onClick={() => scrollToSection("about")} className="mb-0 mt-3" />
       </div>
 
-      {/* RIGHT COLUMN: name, then development process.
-          gap-20 (mobile) -> md:gap-36 -> lg:gap-44 sets the space between them. */}
-      <div className="flex flex-[1.5] flex-col justify-center gap-20 pb-28 md:gap-36 md:pb-24 lg:gap-44">
-        <h1 className="text-[clamp(3rem,7vw,4.5rem)] font-bold leading-[0.95] tracking-[-0.055em] text-white drop-shadow-[0_0_25px_rgba(0,0,0,0.35)]">
+      {/* RIGHT COLUMN: name, then development process. Desktop uses wider spacing. */}
+      <div className="flex flex-none flex-col justify-center gap-7 pb-0 md:flex-[1.5] md:gap-36 md:pb-24 lg:gap-44">
+        <h1 className="text-[clamp(2.35rem,10vw,4.5rem)] font-bold leading-[0.98] tracking-[-0.055em] text-white drop-shadow-[0_0_25px_rgba(0,0,0,0.35)] sm:text-[clamp(3rem,7vw,4.5rem)]">
           Hello, I&apos;m
           <br />
           <span className="text-(--accent-light)">Bewket Mengie.</span>
@@ -187,12 +180,12 @@ export default function HeroContent() {
 
         <ol
           aria-label="Development process"
-          className="flex flex-wrap items-center gap-x-3 gap-y-5"
+          className="flex flex-wrap items-center gap-x-2 gap-y-3 sm:gap-x-3 sm:gap-y-5"
         >
           {processSteps.map((step, index) => (
             <li key={step} className="flex items-center gap-x-3">
               <span
-                className={`text-[0.99rem] uppercase tracking-widest transition-all duration-500 motion-reduce:transition-none ${
+                className={`text-xs uppercase tracking-[0.12em] transition-all duration-500 motion-reduce:transition-none sm:text-[0.99rem] sm:tracking-widest ${
                   index === currentStep
                     ? "scale-110 font-bold text-(--accent-light) drop-shadow-[0_0_10px_rgba(6,182,212,0.4)]"
                     : "text-(--text-muted) opacity-80"
@@ -203,7 +196,7 @@ export default function HeroContent() {
               {index < processSteps.length - 1 && (
                 <span
                   aria-hidden="true"
-                  className={`text-base transition-colors duration-500 ${
+                  className={`text-sm transition-colors duration-500 sm:text-base ${
                     index < currentStep
                       ? "text-(--accent)"
                       : "text-(--text-muted) opacity-30"

@@ -1,17 +1,21 @@
 import type { MetadataRoute } from "next";
-import { PROFILE } from "@/data/profile";
+import { siteConfig } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: PROFILE.url,
+      url: siteConfig.url,
       changeFrequency: "weekly",
       priority: 1,
-      images: [new URL(PROFILE.image, PROFILE.url).toString()],
+      images: [new URL(siteConfig.image, siteConfig.url).toString()],
     },
-    { url: new URL("/about", PROFILE.url).toString(), changeFrequency: "monthly", priority: 0.8 },
     {
-      url: new URL("/projects", PROFILE.url).toString(),
+      url: new URL("/about", siteConfig.url).toString(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: new URL("/projects", siteConfig.url).toString(),
       changeFrequency: "monthly",
       priority: 0.8,
     },

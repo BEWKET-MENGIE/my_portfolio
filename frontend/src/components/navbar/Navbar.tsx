@@ -122,7 +122,7 @@ export default function Navbar() {
               className="group flex items-center gap-4"
               aria-label="Bewket Mengie Home"
             >
-              <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border border-white/10 transition-all duration-300 group-hover:border-(--accent) group-hover:shadow-[0_0_25px_rgba(var(--accent-rgb),0.2)]">
+              <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full border border-white/10 transition-all duration-300 group-hover:border-(--accent) group-hover:shadow-[0_0_25px_rgba(var(--accent-rgb),0.2)] sm:h-12 sm:w-12">
                 <Image
                   src="/logo.jpg"
                   alt="Bewket Mengie"
@@ -133,8 +133,8 @@ export default function Navbar() {
                 />
               </div>
 
-              <div className="hidden sm:block">
-                <div className="font-modern text-[18px] font-extrabold tracking-[-0.02em] text-white transition-colors duration-300 group-hover:text-(--accent-light)">
+              <div className="hidden min-[340px]:block">
+                <div className="font-modern text-[13px] font-extrabold tracking-[-0.02em] text-white transition-colors duration-300 group-hover:text-(--accent-light) sm:text-[18px]">
                   Bewket Mengie
                 </div>
               </div>
@@ -203,7 +203,7 @@ export default function Navbar() {
       />
 
       <aside
-        className={`fixed top-20 right-0 z-50 h-[calc(100vh-80px)] w-full max-w-120px] border-l border-white/8 bg-[#050a12]/97 shadow-[-20px_0_60px_rgba(0,0,0,0.35)] backdrop-blur-2xl transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:hidden ${
+        className={`fixed top-20 right-0 z-50 h-[calc(100dvh-5rem)] w-full max-w-sm border-l border-white/8 bg-[#050a12]/97 shadow-[-20px_0_60px_rgba(0,0,0,0.35)] backdrop-blur-2xl transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:hidden ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
