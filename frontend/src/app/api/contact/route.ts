@@ -1,22 +1,11 @@
 import { NextResponse } from "next/server";
+import { getBackendApiUrl } from "@/lib/backendApi";
 type ContactBody = {
   name?: unknown;
   email?: unknown;
   message?: unknown;
   hp_confirm?: unknown;
 };
-
-function normalizeApiBaseUrl(value: string | undefined) {
-  const baseUrl = (value ?? "http://127.0.0.1:4000/api").trim();
-
-  if (!baseUrl) {
-    return "http://127.0.0.1:4000/api";
-  }
-
-  return baseUrl
-    .replace(/^https?:\/\/localhost(?=[:/]|$)/i, "http://127.0.0.1")
-    .replace(/^https?:\/\/\[::1\](?=[:/]|$)/i, "http://127.0.0.1");
-}
 
 function isContactBody(value: unknown): value is ContactBody {
   return typeof value === "object" && value !== null;
@@ -66,11 +55,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Please check your contact details and try again." }, { status: 400 });
   }
 
-  const backendUrl = normalizeApiBaseUrl(
-    process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL,
-  );
   try {
-    const response = await fetch(`${backendUrl.replace(/\/$/, "")}/contacts`, {
+    const response = await fetch(`${getBackendApiUrl()}/contacts`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -81,7 +67,21 @@ export async function POST(request: Request) {
       }),
       cache: "no-store",
     });
-    const result: unknown = await response.json();
+    const responseText = await response.text();
+    let result: unknown;
+
+    try {
+      result = JSON.parse(responseText);
+    } catch {
+      console.error(
+        `Contact API returned a non-JSON response (status ${response.status}).`,
+      );
+      return NextResponse.json(
+        { error: "The message service returned an invalid response. Please try again later." },
+        { status: 502 },
+      );
+    }
+
     return NextResponse.json(result, { status: response.status });
   } catch (error) {
     console.error("Contact message could not reach the portfolio API:", error);
