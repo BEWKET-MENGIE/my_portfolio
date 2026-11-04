@@ -29,6 +29,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeId, setActiveId] = useState("home");
+  const [isThemeReady, setIsThemeReady] = useState(false);
 
   const isHomePage = pathname === "/";
 
@@ -39,6 +40,7 @@ export default function Navbar() {
     };
 
     handleScroll();
+    setIsThemeReady(true);
     window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
@@ -98,18 +100,20 @@ export default function Navbar() {
 
   /* Correctly toggle theme using next-themes setTheme */
   const toggleTheme = () => {
+    if (!isThemeReady) return;
     const currentTheme = resolvedTheme || theme || "dark";
     setTheme(currentTheme === "dark" ? "light" : "dark");
   };
 
-  const isDark = (resolvedTheme || theme || "dark") === "dark";
+  const isDark =
+    !isThemeReady || (resolvedTheme || theme || "dark") === "dark";
 
   return (
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
-            ? "bg-[rgba(4,10,20,0.88)] backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.25)]"
+            ? "bg-white/90 shadow-[0_10px_40px_rgba(0,0,0,0.12)] backdrop-blur-xl dark:bg-[rgba(4,10,20,0.88)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.25)]"
             : "bg-transparent"
         }`}
       >
@@ -134,7 +138,7 @@ export default function Navbar() {
               </div>
 
               <div className="hidden min-[340px]:block">
-                <div className="font-modern text-[13px] font-extrabold tracking-[-0.02em] text-white transition-colors duration-300 group-hover:text-(--accent-light) sm:text-[18px]">
+                <div className="font-modern text-[13px] font-extrabold tracking-[-0.02em] text-neutral-900 transition-colors duration-300 group-hover:text-(--accent-dark) dark:text-white dark:group-hover:text-(--accent-light) sm:text-[18px]">
                   Bewket Mengie
                 </div>
               </div>
@@ -151,7 +155,9 @@ export default function Navbar() {
                     href={isHomePage ? item.href : `/${item.href}`}
                     onClick={() => handleNavigation(item)}
                     className={`group relative flex items-center gap-1.5 px-4 py-2.5 font-modern text-[14.5px] font-bold tracking-wide transition-all duration-300 ${
-                      active ? "text-white" : "text-white/55 hover:text-white"
+                      active
+                        ? "text-neutral-900 dark:text-white"
+                        : "text-neutral-600 hover:text-neutral-900 dark:text-white/55 dark:hover:text-white"
                     }`}
                   >
                     <span className="relative z-20">{item.label}</span>
@@ -170,8 +176,10 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={toggleTheme}
-                aria-label="Toggle theme"
-                className="group flex h-10 w-10 items-center justify-center rounded-full border border-white/8 bg-white/2.5 text-white/60 backdrop-blur-md transition-all duration-300 hover:border-(--accent)] hover:text-(--accent-light)]"
+                disabled={!isThemeReady}
+                aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+                title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+                className="group flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 bg-white/80 text-neutral-700 backdrop-blur-md transition-all duration-300 hover:border-cyan-600 hover:text-cyan-700 dark:border-white/10 dark:bg-neutral-900/70 dark:text-neutral-300 dark:hover:border-cyan-400 dark:hover:text-cyan-300"
               >
                 {isDark ? <Sun size={20} /> : <Moon size={20} />}
               </button>
@@ -185,7 +193,7 @@ export default function Navbar() {
                 type="button"
                 onClick={() => setIsMenuOpen((prev) => !prev)}
                 aria-label="Toggle menu"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/8 bg-white/[0.035] text-white backdrop-blur-md"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 bg-white/80 text-neutral-700 backdrop-blur-md dark:border-white/10 dark:bg-white/[0.035] dark:text-white"
               >
                 {isMenuOpen ? <X size={19} /> : <Menu size={19} />}
               </button>
@@ -203,7 +211,7 @@ export default function Navbar() {
       />
 
       <aside
-        className={`fixed top-20 right-0 z-50 h-[calc(100dvh-5rem)] w-full max-w-sm border-l border-white/8 bg-[#050a12]/97 shadow-[-20px_0_60px_rgba(0,0,0,0.35)] backdrop-blur-2xl transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:hidden ${
+        className={`fixed top-20 right-0 z-50 h-[calc(100dvh-5rem)] w-full max-w-sm border-l border-neutral-200 bg-white/97 text-neutral-900 shadow-[-20px_0_60px_rgba(0,0,0,0.16)] backdrop-blur-2xl transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] dark:border-white/8 dark:bg-[#050a12]/97 dark:text-white dark:shadow-[-20px_0_60px_rgba(0,0,0,0.35)] lg:hidden ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -213,7 +221,7 @@ export default function Navbar() {
               <p className="font-modern text-[12px] font-bold uppercase tracking-[0.22em] text-(--accent-light)">
                 Navigation
               </p>
-              <p className="mt-1 font-modern text-sm text-white/40">Explore my portfolio</p>
+              <p className="mt-1 font-modern text-sm text-neutral-500 dark:text-white/40">Explore my portfolio</p>
             </div>
             <span className="h-2 w-2 rounded-full bg-(--accent)" />
           </div>
@@ -229,12 +237,12 @@ export default function Navbar() {
                   onClick={() => handleNavigation(item)}
                   className={`group flex items-center justify-between rounded-2xl border px-4 py-4 transition-all duration-300 ${
                     active
-                      ? "border-[rgba(var(--accent-rgb),0.25)] bg-[rgba(var(--accent-rgb),0.07)] text-white"
-                      : "border-transparent bg-white/2.5 text-white/65 hover:border-white/8 hover:text-white"
+                      ? "border-cyan-600/25 bg-cyan-500/10 text-neutral-900 dark:text-white"
+                      : "border-transparent bg-neutral-100 text-neutral-700 hover:border-neutral-300 hover:text-neutral-900 dark:bg-white/2.5 dark:text-white/65 dark:hover:border-white/8 dark:hover:text-white"
                   }`}
                 >
                   <div className="flex items-center gap-4">
-                    <span className="w-5 font-modern text-xs font-semibold tracking-wider text-white/20">
+                    <span className="w-5 font-modern text-xs font-semibold tracking-wider text-neutral-400 dark:text-white/20">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <span className="font-modern text-base font-semibold">{item.label}</span>

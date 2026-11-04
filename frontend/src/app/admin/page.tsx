@@ -1,7 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { Eye, LogOut, Mail, RefreshCw, Trash2 } from "lucide-react";
+import {
+  Eye,
+  LogOut,
+  Mail,
+  RefreshCw,
+  Trash2,
+  UserPlus,
+} from "lucide-react";
 
 type ContactMessage = {
   id: string;
@@ -13,15 +20,28 @@ type ContactMessage = {
 };
 
 type Inbox = { messages: ContactMessage[]; unreadCount: number };
-type AuthResponse = { accessToken?: string; email?: string; message?: string };
+type AuthResponse = {
+  accessToken?: string;
+  email?: string;
+  message?: string | string[];
+  success?: boolean;
+};
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
 const tokenKey = "portfolio-admin-token";
+
+function getErrorMessage(result: AuthResponse, fallback: string) {
+  if (typeof result.message === "string") return result.message;
+  return result.message?.join(" ") || fallback;
+}
 
 export default function AdminPage() {
   const [token, setToken] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [createEmail, setCreateEmail] = useState("");
+  const [createPassword, setCreatePassword] = useState("");
+  const [accountNotice, setAccountNotice] = useState("");
   const [inbox, setInbox] = useState<Inbox | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -59,7 +79,9 @@ export default function AdminPage() {
       });
       const result: AuthResponse = await response.json();
       if (!response.ok || !result.accessToken) {
-        throw new Error(result.message || "Login failed. Check your credentials.");
+        throw new Error(
+          getErrorMessage(result, "Login failed. Check your credentials."),
+        );
       }
       window.sessionStorage.setItem(tokenKey, result.accessToken);
       setToken(result.accessToken);
@@ -67,6 +89,46 @@ export default function AdminPage() {
       await loadInbox(result.accessToken);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Could not log in.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleCreateAdmin(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setBusy(true);
+    setError("");
+    setAccountNotice("");
+
+    try {
+      const response = await fetch(`${apiUrl}/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          email: createEmail,
+          password: createPassword,
+        }),
+      });
+      const result: AuthResponse = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          getErrorMessage(result, "Could not create the admin account."),
+        );
+      }
+
+      setAccountNotice(`Admin account created for ${result.email}.`);
+      setCreateEmail("");
+      setCreatePassword("");
+    } catch (cause) {
+      setError(
+        cause instanceof Error
+          ? cause.message
+          : "Could not create the admin account.",
+      );
     } finally {
       setBusy(false);
     }
@@ -112,6 +174,12 @@ export default function AdminPage() {
           </label>
           {error && <p role="alert" className="mt-4 text-sm text-red-600">{error}</p>}
           <button disabled={busy} className="mt-6 w-full rounded-lg bg-emerald-500 px-4 py-3 font-bold text-black disabled:opacity-60">{busy ? "Signing in..." : "Sign in"}</button>
+          <p className="mt-5 text-sm text-neutral-600 dark:text-neutral-400">
+            First admin account? Set <code>ADMIN_EMAIL</code> and{" "}
+            <code>ADMIN_PASSWORD</code> in <code>backend/.env</code>, then run{" "}
+            <code>npm run prisma:seed --prefix backend</code> from the repository
+            root.
+          </p>
         </form>
       </main>
     );
@@ -130,6 +198,60 @@ export default function AdminPage() {
             <button onClick={logout} className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 px-4 py-2 dark:border-white/20"><LogOut size={16} /> Sign out</button>
           </div>
         </header>
+
+        <section className="mt-8 rounded-xl border border-neutral-200 bg-white p-5 dark:border-white/10 dark:bg-white/[0.04]">
+          <div className="flex items-center gap-3">
+            <UserPlus aria-hidden="true" className="text-emerald-500" />
+            <div>
+              <h2 className="font-bold">Create admin account</h2>
+              <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+                Only signed-in admins can create another admin account.
+              </p>
+            </div>
+          </div>
+          <form
+            className="mt-5 grid gap-4 sm:grid-cols-2"
+            onSubmit={handleCreateAdmin}
+          >
+            <label className="block text-sm font-medium">
+              Email
+              <input
+                autoComplete="email"
+                className="mt-2 w-full rounded-lg border border-neutral-300 bg-transparent px-3 py-2 dark:border-white/20"
+                maxLength={254}
+                onChange={(event) => setCreateEmail(event.target.value)}
+                required
+                type="email"
+                value={createEmail}
+              />
+            </label>
+            <label className="block text-sm font-medium">
+              Password
+              <input
+                autoComplete="new-password"
+                className="mt-2 w-full rounded-lg border border-neutral-300 bg-transparent px-3 py-2 dark:border-white/20"
+                maxLength={128}
+                minLength={12}
+                onChange={(event) => setCreatePassword(event.target.value)}
+                required
+                type="password"
+                value={createPassword}
+              />
+            </label>
+            <button
+              className="rounded-lg bg-emerald-500 px-4 py-3 font-bold text-black disabled:opacity-60 sm:col-span-2"
+              disabled={busy}
+              type="submit"
+            >
+              {busy ? "Creating account..." : "Create account"}
+            </button>
+          </form>
+          {accountNotice && (
+            <p className="mt-4 text-sm text-emerald-700 dark:text-emerald-300" role="status">
+              {accountNotice}
+            </p>
+          )}
+        </section>
 
         <section className="mt-8 grid gap-4 sm:grid-cols-2">
           <div className="rounded-xl border border-neutral-200 bg-white p-5 dark:border-white/10 dark:bg-white/[0.04]">
