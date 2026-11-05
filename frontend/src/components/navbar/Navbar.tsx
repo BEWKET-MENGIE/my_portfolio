@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { ArrowUpRight, Menu, Moon, Sun, X } from "lucide-react";
 import { useTheme } from "next-themes";
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import { useHydrated } from "@/lib/useHydrated";
 
 type NavItem = {
   label: string;
@@ -17,6 +18,7 @@ const navItems: NavItem[] = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
+  { label: "Experience", href: "#experience" },
   { label: "Skills", href: "#skills" },
   { label: "Projects", href: "#projects" },
   { label: "Contact", href: "#contact" },
@@ -29,7 +31,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeId, setActiveId] = useState("home");
-  const [isThemeReady, setIsThemeReady] = useState(false);
+  const isThemeReady = useHydrated();
 
   const isHomePage = pathname === "/";
 
@@ -40,7 +42,6 @@ export default function Navbar() {
     };
 
     handleScroll();
-    setIsThemeReady(true);
     window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
@@ -91,12 +92,17 @@ export default function Navbar() {
   const closeMenu = () => setIsMenuOpen(false);
 
   const handleNavigation = (item: NavItem) => {
-    if (isHomePage) setActiveId(item.href.replace("#", ""));
+    if (isHomePage && item.href.startsWith("#")) {
+      setActiveId(item.href.replace("#", ""));
+    }
     closeMenu();
   };
 
   const isActive = (item: NavItem) =>
     isHomePage && activeId === item.href.replace("#", "");
+
+  const getItemHref = (item: NavItem) =>
+    item.href.startsWith("/") || isHomePage ? item.href : `/${item.href}`;
 
   /* Correctly toggle theme using next-themes setTheme */
   const toggleTheme = () => {
@@ -152,7 +158,7 @@ export default function Navbar() {
                 return (
                   <Link
                     key={item.label}
-                    href={isHomePage ? item.href : `/${item.href}`}
+                    href={getItemHref(item)}
                     onClick={() => handleNavigation(item)}
                     className={`group relative flex items-center gap-1.5 px-4 py-2.5 font-modern text-[14.5px] font-bold tracking-wide transition-all duration-300 ${
                       active
@@ -233,7 +239,7 @@ export default function Navbar() {
               return (
                 <Link
                   key={item.label}
-                  href={isHomePage ? item.href : `/${item.href}`}
+                  href={getItemHref(item)}
                   onClick={() => handleNavigation(item)}
                   className={`group flex items-center justify-between rounded-2xl border px-4 py-4 transition-all duration-300 ${
                     active

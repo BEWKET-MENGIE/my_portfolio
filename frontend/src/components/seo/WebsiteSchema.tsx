@@ -1,25 +1,25 @@
+// src/components/seo/WebsiteSchema.tsx
 import { siteConfig } from "@/lib/site";
 
 export default function WebsiteSchema() {
-  const website = {
+  const data = {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": siteConfig.websiteId,
     name: `${siteConfig.name} Portfolio`,
-    alternateName: `${siteConfig.shortName} Portfolio`,
+    alternateName: [siteConfig.name, `${siteConfig.shortName} Portfolio`],
     url: siteConfig.url,
     description: siteConfig.description,
-    author: {
-      "@type": "Person",
-      name: siteConfig.author,
-      url: siteConfig.url,
-    },
+    inLanguage: "en",
+    publisher: { "@id": siteConfig.personId },
+    author: { "@id": siteConfig.personId },
   };
 
   return (
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify(website).replace(/</g, "\\u003c"),
+        __html: JSON.stringify(data).replace(/</g, "\\u003c"),
       }}
     />
   );

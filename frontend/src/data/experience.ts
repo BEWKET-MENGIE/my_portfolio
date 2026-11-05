@@ -1,138 +1,105 @@
-// src/data/experience.ts
-
 export type ExperienceItem = {
   id: string;
   role: string;
   company: string;
   period: string;
   type: string;
-  location: string;
+  location?: string;
   description: string;
   highlights: string[];
   skills: string[];
   project?: string;
   team?: string;
-  /** Optional: shows a "View project" button in the pop-up. */
   link?: string;
+  projectsHref?: string;
   current?: boolean;
 };
 
 export const experienceData: ExperienceItem[] = [
   {
-    id: "exp-1",
-    role: "Full-Stack Developer & Senior Undergraduate",
-    company: "University Software Engineering Program",
-    period: "2022 - Present (Expected Graduation 2026)",
-    type: "Academic & Leadership",
-    location: "Campus / Remote",
+    id: "education",
+    role: "Software Engineering Student",
+    company: "Injibara University, Ethiopia",
+    period: "Currently studying",
+    type: "Education",
+    location: "Injibara, Ethiopia",
     description:
-      "Advancing through a rigorous 4th-year Software Engineering curriculum, balancing advanced computer science theory with end-to-end production-grade software development, system analysis, and team architecture design.",
+      "Studying Software Engineering at Injibara University while building full-stack projects alongside my coursework.",
     highlights: [
-      "Serving as lead developer for major 4th-year capstone and graduation software engineering projects.",
-      "Architecting scalable full-stack applications integrating modern frontend frameworks with robust microservices and relational databases.",
-      "Applying advanced software engineering patterns, object-oriented design, test-driven development, and clean architecture principles.",
-      "Collaborating closely with multidisciplinary student engineering teams using Agile/Scrum methodologies, Git workflows, and CI/CD pipelines.",
+      "Learning software engineering fundamentals, from programming and databases to system design.",
+      "Applying coursework by building complete applications and documenting the work in my project portfolio.",
+      "Using Git and GitHub to manage source code and track changes.",
     ],
-    skills: [
-      "Software Architecture",
-      "System Design",
-      "Next.js",
-      "TypeScript",
-      "Node.js",
-      "PostgreSQL",
-      "Algorithms",
-      "Agile / Scrum",
-    ],
-    project: "Final Year Capstone Project",
-    team: "Lead Student Architect",
+    skills: ["Software Engineering", "Problem Solving", "Git", "GitHub"],
+    project: "Software Engineering studies",
     current: true,
   },
   {
-    id: "exp-2",
-    role: "Full-Stack Developer",
-    company: "Freelance / Project-Based",
-    period: "2025 - Present",
-    type: "Freelance",
-    location: "Remote",
+    id: "full-stack-projects",
+    role: "Full-Stack Project Work",
+    company: "Independent learning projects",
+    period: "Completed projects",
+    type: "Project work",
     description:
-      "Developing modern full-stack web applications for real-world business and academic requirements, covering the complete development lifecycle from requirements analysis and system design to implementation, testing, and deployment.",
+      "End-to-end applications built to explore how frontend interfaces, server-side logic, data, and authentication work together.",
     highlights: [
-      "Built responsive and accessible interfaces using Next.js, React, TypeScript, and Tailwind CSS.",
-      "Developed RESTful backend APIs and business logic using NestJS and Node.js.",
-      "Designed relational databases using PostgreSQL and Prisma ORM.",
-      "Implemented authentication, authorization, validation, and role-based access control.",
-      "Applied reusable architecture and component-based development to improve maintainability.",
+      "Full-Stack Amazon Clone: built a React storefront with a Node and Express backend, Firebase authentication, Firestore, and Stripe integration.",
+      "Evangadi Forum: developed a question-and-answer experience with threaded answers, JWT authentication, and a MySQL database.",
+      "StaffCore Employee Management: created employee registration workflows and status tracking.",
     ],
     skills: [
-      "Next.js",
       "React",
-      "TypeScript",
-      "NestJS",
-      "Node.js",
-      "Prisma",
-      "PostgreSQL",
-      "Tailwind CSS",
-    ],
-    project: "Full-Stack Web Applications",
-    team: "Independent",
-    current: true,
-  },
-  {
-    id: "exp-3",
-    role: "Full-Stack Developer",
-    company: "Management System Projects",
-    period: "2024 - 2025",
-    type: "Project-Based",
-    location: "Remote",
-    description:
-      "Designed and developed management systems as practical software engineering projects, applying real-world development practices across frontend, backend, database, authentication, and system architecture.",
-    highlights: [
-      "Developed responsive dashboards and management interfaces with reusable React and Next.js components.",
-      "Created backend APIs for users, authentication, records, and business workflows.",
-      "Designed normalized database schemas and relationships for structured application data.",
-      "Implemented form validation, error handling, and role-based application workflows.",
-      "Used Git and GitHub for source control, version management, and project organization.",
-    ],
-    skills: [
-      "Next.js",
-      "React",
-      "TypeScript",
       "Node.js",
       "Express",
-      "PostgreSQL",
+      "Firebase",
+      "Stripe",
       "MySQL",
-      "Git",
-      "GitHub",
+      "JWT",
+      "Java",
+      "JavaFX",
     ],
-    project: "Management System Applications",
-    team: "Individual / Academic",
+    project: "Amazon Clone, Evangadi Forum, StaffCore",
+    projectsHref: "/projects",
   },
   {
-    id: "exp-4",
-    role: "Frontend Developer",
-    company: "Personal & Open Source Projects",
-    period: "2023 - 2024",
-    type: "Development",
-    location: "Remote",
+    id: "frontend-projects",
+    role: "Frontend Project Work",
+    company: "Independent learning projects",
+    period: "Completed projects",
+    type: "Project work",
     description:
-      "Focused on building modern, responsive, and user-friendly web interfaces while developing a strong foundation in frontend engineering, UI implementation, and reusable component architecture.",
+      "Responsive web interfaces built to develop frontend skills in layout, API integration, visual hierarchy, and reusable UI.",
     highlights: [
-      "Converted design concepts and UI requirements into responsive React interfaces.",
-      "Created reusable components to improve consistency and development speed.",
-      "Implemented responsive layouts for desktop, tablet, and mobile devices.",
-      "Improved interface usability through clear navigation and consistent visual patterns.",
-      "Used Git and GitHub to manage source code and development history.",
+      "Netflix Clone: built a responsive streaming interface with movie categories, TMDB data fetched using Axios, and Material UI styling.",
+      "Apple Website Clone: recreated responsive product pages with a focus on clear layouts and typography.",
     ],
     skills: [
       "React",
+      "Vite",
+      "Axios",
+      "Material UI",
+      "HTML5",
+      "CSS3",
       "JavaScript",
-      "HTML",
-      "CSS",
-      "Tailwind CSS",
-      "Git",
-      "GitHub",
     ],
-    project: "Frontend Applications",
-    team: "Individual",
+    project: "Netflix Clone, Apple Website Clone",
+    projectsHref: "/projects",
+  },
+  {
+    id: "current-builds",
+    role: "Current Builds",
+    company: "Independent learning projects",
+    period: "In progress",
+    type: "In progress",
+    description:
+      "Continuing to learn by designing and building tools around real organizational needs.",
+    highlights: [
+      "Job Application Tracker: exploring a clear way to organize applications and follow their progress.",
+      "School Management System: developing a concept for managing school records such as students, teachers, and classes.",
+    ],
+    skills: [],
+    project: "Job Application Tracker, School Management System",
+    projectsHref: "/projects",
+    current: true,
   },
 ];

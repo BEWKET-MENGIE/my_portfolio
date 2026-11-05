@@ -1,56 +1,47 @@
+// src/components/ui/SocialLinks.tsx  (use your existing path if different)
 import type { CSSProperties } from "react";
-import { siteConfig } from "@/lib/site";
+import { siteConfig, type SocialKey } from "@/lib/site";
 
-type SocialIconProps = {
-  size?: number;
-  className?: string;
-  style?: CSSProperties;
-};
+type IconProps = { size?: number; className?: string; style?: CSSProperties };
 
-function GithubIcon({
-  size = 24,
-  className,
-  style,
-}: SocialIconProps) {
+const stroke = {
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 2,
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+} as const;
+
+function GithubIcon({ size = 24, className, style }: IconProps) {
   return (
-    <svg
-      aria-hidden="true"
-      className={className}
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      style={style}
-    >
+    <svg aria-hidden="true" className={className} width={size} height={size} viewBox="0 0 24 24" {...stroke} style={style}>
       <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
       <path d="M9 18c-4.51 2-5-2-7-2" />
     </svg>
   );
 }
 
-function InstagramIcon({
-  size = 24,
-  className,
-  style,
-}: SocialIconProps) {
+function LinkedinIcon({ size = 24, className, style }: IconProps) {
   return (
-    <svg
-      aria-hidden="true"
-      className={className}
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      style={style}
-    >
+    <svg aria-hidden="true" className={className} width={size} height={size} viewBox="0 0 24 24" {...stroke} style={style}>
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect width="4" height="12" x="2" y="9" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  );
+}
+
+function XIcon({ size = 24, className, style }: IconProps) {
+  return (
+    <svg aria-hidden="true" className={className} width={size} height={size} viewBox="0 0 24 24" fill="currentColor" style={style}>
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
+
+function InstagramIcon({ size = 24, className, style }: IconProps) {
+  return (
+    <svg aria-hidden="true" className={className} width={size} height={size} viewBox="0 0 24 24" {...stroke} style={style}>
       <rect x="3" y="3" width="18" height="18" rx="5" />
       <circle cx="12" cy="12" r="4" />
       <circle cx="17.5" cy="6.5" r="0.75" fill="currentColor" stroke="none" />
@@ -58,40 +49,17 @@ function InstagramIcon({
   );
 }
 
-function FacebookIcon({
-  size = 24,
-  className,
-  style,
-}: SocialIconProps) {
+function FacebookIcon({ size = 24, className, style }: IconProps) {
   return (
-    <svg
-      aria-hidden="true"
-      className={className}
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      style={style}
-    >
+    <svg aria-hidden="true" className={className} width={size} height={size} viewBox="0 0 24 24" fill="currentColor" style={style}>
       <path d="M24 12a12 12 0 1 0-13.875 11.85v-8.38H7.078V12h3.047V9.356c0-3.007 1.792-4.669 4.532-4.669 1.313 0 2.686.235 2.686.235v2.953h-1.513c-1.49 0-1.955.925-1.955 1.874V12h3.328l-.532 3.47h-2.796v8.38A12 12 0 0 0 24 12Z" />
     </svg>
   );
 }
 
-function TelegramIcon({
-  size = 24,
-  className,
-  style,
-}: SocialIconProps) {
+function TelegramIcon({ size = 24, className, style }: IconProps) {
   return (
-    <svg
-      aria-hidden="true"
-      className={className}
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      style={style}
-    >
+    <svg aria-hidden="true" className={className} width={size} height={size} viewBox="0 0 24 24" style={style}>
       <circle cx="12" cy="12" r="12" fill="currentColor" />
       <path
         fill="white"
@@ -101,28 +69,32 @@ function TelegramIcon({
   );
 }
 
-const profiles = [
+const profiles: {
+  key: SocialKey;
+  label: string;
+  icon: (p: IconProps) => React.JSX.Element;
+  color: string;
+}[] = [
   { key: "github", label: "GitHub", icon: GithubIcon, color: "#f8fafc" },
+  { key: "linkedin", label: "LinkedIn", icon: LinkedinIcon, color: "#0a66c2" },
+  { key: "x", label: "X (Twitter)", icon: XIcon, color: "#f8fafc" },
+  { key: "facebook", label: "Facebook", icon: FacebookIcon, color: "#1877f2" },
   { key: "instagram", label: "Instagram", icon: InstagramIcon, color: "#e4405f" },
   { key: "telegram", label: "Telegram", icon: TelegramIcon, color: "#26a5e4" },
-  { key: "facebook", label: "Facebook", icon: FacebookIcon, color: "#1877f2" },
-] as const;
+];
 
 type SocialLinksProps = {
   className?: string;
   variant?: "hero" | "footer";
 };
 
-export default function SocialLinks({
-  className = "",
-  variant = "hero",
-}: SocialLinksProps) {
+export default function SocialLinks({ className = "", variant = "hero" }: SocialLinksProps) {
   const isFooter = variant === "footer";
 
   return (
     <nav
       aria-label="Social links"
-      className={`${isFooter ? "flex flex-wrap justify-center gap-2" : "flex flex-row items-center gap-3"} ${className}`}
+      className={`${isFooter ? "flex flex-wrap justify-center gap-2" : "flex flex-row flex-wrap items-center gap-3"} ${className}`}
     >
       {profiles
         .filter(({ key }) => Boolean(siteConfig.socialLinks[key]?.trim()))
@@ -131,8 +103,9 @@ export default function SocialLinks({
             key={key}
             href={siteConfig.socialLinks[key]}
             target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Visit my ${label}`}
+            // rel="me" tells search engines this profile belongs to the site owner
+            rel="me noopener noreferrer"
+            aria-label={`${siteConfig.name} on ${label}`}
             title={label}
             className={
               isFooter
@@ -141,7 +114,6 @@ export default function SocialLinks({
             }
           >
             <Icon
-              aria-hidden="true"
               size={isFooter ? 16 : 18}
               className="transition-transform duration-300 group-hover:scale-110 motion-reduce:transition-none"
               style={isFooter ? { color } : undefined}

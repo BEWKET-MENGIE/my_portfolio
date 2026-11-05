@@ -9,6 +9,11 @@ import {
   Trash2,
   UserPlus,
 } from "lucide-react";
+import {
+  clearAdminToken,
+  saveAdminToken,
+  useAdminToken,
+} from "@/lib/adminSession";
 
 type ContactMessage = {
   id: string;
@@ -28,7 +33,6 @@ type AuthResponse = {
 };
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
-const tokenKey = "portfolio-admin-token";
 
 function getErrorMessage(result: AuthResponse, fallback: string) {
   if (typeof result.message === "string") return result.message;
@@ -36,7 +40,7 @@ function getErrorMessage(result: AuthResponse, fallback: string) {
 }
 
 export default function AdminPage() {
-  const [token, setToken] = useState("");
+  const token = useAdminToken();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [createEmail, setCreateEmail] = useState("");
@@ -53,19 +57,30 @@ export default function AdminPage() {
     });
     const result: Inbox & { message?: string } = await response.json();
     if (!response.ok) throw new Error(result.message || "Could not load messages.");
-    setInbox(result);
+    return result;
   }, []);
 
   useEffect(() => {
-    const savedToken = window.sessionStorage.getItem(tokenKey);
-    if (!savedToken) return;
-    setToken(savedToken);
-    void loadInbox(savedToken).catch((cause: unknown) => {
-      window.sessionStorage.removeItem(tokenKey);
-      setToken("");
-      setError(cause instanceof Error ? cause.message : "Admin session expired.");
-    });
-  }, [loadInbox]);
+    if (!token) return;
+    const sessionToken = token;
+    let active = true;
+
+    async function restoreInbox() {
+      try {
+        const result = await loadInbox(sessionToken);
+        if (active) setInbox(result);
+      } catch (cause: unknown) {
+        if (!active) return;
+        clearAdminToken();
+        setError(cause instanceof Error ? cause.message : "Admin session expired.");
+      }
+    }
+
+    void restoreInbox();
+    return () => {
+      active = false;
+    };
+  }, [loadInbox, token]);
 
   async function handleLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -83,10 +98,8 @@ export default function AdminPage() {
           getErrorMessage(result, "Login failed. Check your credentials."),
         );
       }
-      window.sessionStorage.setItem(tokenKey, result.accessToken);
-      setToken(result.accessToken);
+      saveAdminToken(result.accessToken);
       setPassword("");
-      await loadInbox(result.accessToken);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Could not log in.");
     } finally {
@@ -144,7 +157,7 @@ export default function AdminPage() {
         { method: action === "read" ? "PATCH" : "DELETE", headers: { Authorization: `Bearer ${token}` } },
       );
       if (!response.ok) throw new Error("Could not update this message.");
-      await loadInbox(token);
+      setInbox(await loadInbox(token));
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Could not update this message.");
     } finally {
@@ -153,9 +166,25 @@ export default function AdminPage() {
   }
 
   function logout() {
-    window.sessionStorage.removeItem(tokenKey);
-    setToken("");
+    clearAdminToken();
     setInbox(null);
+  }
+
+  async function refreshInbox() {
+    if (!token) return;
+    setBusy(true);
+    setError("");
+    try {
+      setInbox(await loadInbox(token));
+    } catch (cause: unknown) {
+      setError(cause instanceof Error ? cause.message : "Could not load messages.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  if (token === undefined) {
+    return <main className="min-h-screen bg-neutral-100 px-5 pt-32 dark:bg-[#030719]" />;
   }
 
   if (!token) {
@@ -194,7 +223,7 @@ export default function AdminPage() {
             <h1 className="mt-2 text-3xl font-bold">Contact inbox</h1>
           </div>
           <div className="flex gap-2">
-            <button onClick={() => void loadInbox(token)} className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 px-4 py-2 dark:border-white/20"><RefreshCw size={16} /> Refresh</button>
+            <button onClick={() => void refreshInbox()} disabled={busy} className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 px-4 py-2 dark:border-white/20"><RefreshCw size={16} /> Refresh</button>
             <button onClick={logout} className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 px-4 py-2 dark:border-white/20"><LogOut size={16} /> Sign out</button>
           </div>
         </header>

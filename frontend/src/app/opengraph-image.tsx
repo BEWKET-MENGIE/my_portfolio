@@ -1,107 +1,156 @@
+// src/app/opengraph-image.tsx
+
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
+import sharp from "sharp";
 import { siteConfig } from "@/lib/site";
 
 export const alt = `${siteConfig.name} - ${siteConfig.jobTitle}`;
-export const size = { width: 1200, height: 630 };
+
+export const size = {
+  width: 1200,
+  height: 630,
+};
+
 export const contentType = "image/png";
 
+async function loadPortrait(): Promise<string | null> {
+  try {
+    const imagePath = join(
+      process.cwd(),
+      "public",
+      "images",
+      "bewket-mengie.jpg",
+    );
+
+    const image = await readFile(imagePath);
+    const compatibleImage = await sharp(image)
+      .jpeg({ quality: 85, progressive: false })
+      .toBuffer();
+
+    return `data:image/jpeg;base64,${compatibleImage.toString("base64")}`;
+  } catch (error) {
+    console.error("Profile image loading error:", error);
+    return null;
+  }
+}
+
 export default async function OpenGraphImage() {
-  const imagePath = join(
-    process.cwd(),
-    "public",
-    siteConfig.image.replace(/^\/+/, ""),
-  );
-  const portrait = await readFile(imagePath);
-  const portraitData = `data:image/jpeg;base64,${portrait.toString("base64")}`;
+  const portrait = await loadPortrait();
 
   return new ImageResponse(
     <div
       style={{
+        display: "flex",
         width: "100%",
         height: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "64px 72px",
         backgroundColor: "#07111f",
-        color: "#f8fafc",
-        fontFamily: "Arial, sans-serif",
+        padding: "55px 65px",
+        color: "#ffffff",
       }}
     >
+      {/* LEFT CONTENT */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          maxWidth: 700,
+          width: "680px",
         }}
       >
         <div
           style={{
+            display: "flex",
             color: "#34d399",
-            fontSize: 22,
-            fontWeight: 700,
-            letterSpacing: 2,
-            textTransform: "uppercase",
+            fontSize: "21px",
+            letterSpacing: "2px",
           }}
         >
-          Software Engineering · Ethiopia
+          SOFTWARE ENGINEERING · ETHIOPIA
         </div>
+
         <div
           style={{
-            marginTop: 24,
-            fontSize: 64,
+            display: "flex",
+            fontSize: "62px",
             fontWeight: 700,
-            lineHeight: 1.05,
+            marginTop: "25px",
           }}
         >
           {siteConfig.name}
         </div>
+
         <div
           style={{
-            marginTop: 18,
+            display: "flex",
+            fontSize: "34px",
             color: "#cbd5e1",
-            fontSize: 34,
+            marginTop: "15px",
           }}
         >
           {siteConfig.jobTitle}
         </div>
+
         <div
           style={{
-            marginTop: 34,
+            display: "flex",
+            fontSize: "20px",
             color: "#94a3b8",
-            fontSize: 21,
+            marginTop: "30px",
           }}
         >
           Next.js · React · TypeScript · NestJS · PostgreSQL
         </div>
+
         <div
           style={{
-            marginTop: 38,
+            display: "flex",
+            fontSize: "19px",
             color: "#34d399",
-            fontSize: 19,
-            fontWeight: 600,
+            marginTop: "35px",
           }}
         >
-          {siteConfig.url.replace(/^https?:\/\//, "")}
+          bewketmengie.com
         </div>
       </div>
-      <img
-        src={portraitData}
-        alt={siteConfig.name}
-        width={330}
-        height={490}
-        style={{
-          width: 330,
-          height: 490,
-          borderRadius: 20,
-          objectFit: "cover",
-          objectPosition: "center top",
-          border: "2px solid #34d399",
-        }}
-      />
+
+      {/* RIGHT PROFILE IMAGE */}
+      {portrait ? (
+        <img
+          src={portrait}
+          alt={siteConfig.imageAlt}
+          width="330"
+          height="490"
+          style={{
+            width: "330px",
+            height: "490px",
+            marginLeft: "45px",
+            objectFit: "cover",
+            border: "3px solid #34d399",
+            borderRadius: "20px",
+          }}
+        />
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            width: "330px",
+            height: "490px",
+            marginLeft: "45px",
+            justifyContent: "center",
+            alignItems: "center",
+            color: "#34d399",
+            fontSize: "50px",
+            fontWeight: 700,
+            border: "3px solid #34d399",
+            borderRadius: "20px",
+            backgroundColor: "#0f1b2d",
+          }}
+        >
+          BM
+        </div>
+      )}
     </div>,
     size,
   );

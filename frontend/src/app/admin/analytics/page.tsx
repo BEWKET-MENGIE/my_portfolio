@@ -21,6 +21,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { clearAdminToken, useAdminToken } from "@/lib/adminSession";
 
 type Overview = {
   totalViews: number;
@@ -51,28 +52,28 @@ type AnalyticsData = {
 };
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
-const tokenKey = "portfolio-admin-token";
 const periods = [7, 30, 90, 365];
 const numberFormat = new Intl.NumberFormat();
 
 export default function AnalyticsPage() {
-  const [token, setToken] = useState<string | null>(null);
-  const [sessionChecked, setSessionChecked] = useState(false);
+  const token = useAdminToken();
   const [days, setDays] = useState(30);
-  const [data, setData] = useState<AnalyticsData | null>(null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setToken(window.sessionStorage.getItem(tokenKey));
-    setSessionChecked(true);
-  }, []);
+  const [refreshVersion, setRefreshVersion] = useState(0);
+  const [request, setRequest] = useState<{
+    key: string;
+    data: AnalyticsData | null;
+    error: string;
+  } | null>(null);
+  const requestKey = token ? `${token}:${days}:${refreshVersion}` : "";
+  const currentRequest = request?.key === requestKey ? request : null;
+  const data = currentRequest?.data ?? null;
+  const error = currentRequest?.error ?? "";
+  const loading = Boolean(token && !currentRequest);
 
   useEffect(() => {
     if (!token) return;
     const controller = new AbortController();
-    setLoading(true);
-    setError("");
+    const key = `${token}:${days}:${refreshVersion}`;
 
     async function load() {
       try {
@@ -98,31 +99,31 @@ export default function AnalyticsPage() {
             get("sources"),
             get("recent"),
           ]);
-        setData({ overview, visitors, pages, devices, browsers, countries, sources, recent });
+        setRequest({
+          key,
+          data: { overview, visitors, pages, devices, browsers, countries, sources, recent },
+          error: "",
+        });
       } catch (cause) {
         if (controller.signal.aborted) return;
         const message = cause instanceof Error ? cause.message : "Could not load analytics.";
-        setError(message);
+        setRequest({ key, data: null, error: message });
         if (message.includes("Unauthorized") || message.includes("session")) {
-          window.sessionStorage.removeItem(tokenKey);
-          setToken(null);
+          clearAdminToken();
         }
-      } finally {
-        if (!controller.signal.aborted) setLoading(false);
       }
     }
 
     void load();
     return () => controller.abort();
-  }, [days, token]);
+  }, [days, refreshVersion, token]);
 
   function signOut() {
-    window.sessionStorage.removeItem(tokenKey);
-    setToken(null);
-    setData(null);
+    clearAdminToken();
+    setRequest(null);
   }
 
-  if (!sessionChecked) {
+  if (token === undefined) {
     return <main className="min-h-screen bg-neutral-100 px-5 pt-32 dark:bg-[#030719]" />;
   }
 
@@ -166,7 +167,7 @@ export default function AnalyticsPage() {
             <select id="period" value={days} onChange={(event) => setDays(Number(event.target.value))} className="border border-neutral-300 bg-white px-3 py-2 text-sm dark:border-white/20 dark:bg-[#0b1728]">
               {periods.map((period) => <option key={period} value={period}>Last {period} days</option>)}
             </select>
-            <button type="button" title="Refresh analytics" onClick={() => setDays((current) => current)} className="border border-neutral-300 p-2 dark:border-white/20"><RefreshCw size={17} className={loading ? "animate-spin" : ""} /></button>
+            <button type="button" title="Refresh analytics" onClick={() => setRefreshVersion((version) => version + 1)} className="border border-neutral-300 p-2 dark:border-white/20"><RefreshCw size={17} className={loading ? "animate-spin" : ""} /></button>
             <button type="button" title="Sign out" onClick={signOut} className="border border-neutral-300 p-2 dark:border-white/20"><LogOut size={17} /></button>
           </div>
         </header>
