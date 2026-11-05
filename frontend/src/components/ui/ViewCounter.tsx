@@ -3,25 +3,22 @@
 import { useEffect, useRef, useState } from "react";
 import { Eye } from "lucide-react";
 import { usePathname } from "next/navigation";
+import {
+  saveAnalyticsConsent,
+  useAnalyticsConsent,
+} from "@/lib/analyticsConsent";
 
 type PublicStats = { totalViews: number; uniqueVisitors: number };
-type AnalyticsConsent = "allowed" | "denied" | null;
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
 
 export default function ViewCounter() {
   const pathname = usePathname();
   const [stats, setStats] = useState<PublicStats | null>(null);
-  const [consent, setConsent] = useState<AnalyticsConsent>(null);
+  const consent = useAnalyticsConsent();
   const lastTrackedPath = useRef<string | null>(null);
 
   useEffect(() => {
-    const savedConsent = window.localStorage.getItem(
-      "portfolio-analytics-consent",
-    );
-    if (savedConsent === "allowed" || savedConsent === "denied")
-      setConsent(savedConsent);
-
     void fetch(`${apiUrl}/analytics/public`, { cache: "no-store" })
       .then(async (response) => {
         if (response.ok) setStats((await response.json()) as PublicStats);
@@ -61,9 +58,8 @@ export default function ViewCounter() {
     }
   }, [consent, pathname]);
 
-  function chooseConsent(choice: Exclude<AnalyticsConsent, null>) {
-    window.localStorage.setItem("portfolio-analytics-consent", choice);
-    setConsent(choice);
+  function chooseConsent(choice: "allowed" | "denied") {
+    saveAnalyticsConsent(choice);
   }
 
   return (

@@ -1,23 +1,19 @@
+// src/app/sitemap.ts
+// Only list URLs that really return 200. Your site is a single page, so only
+// "/" is listed. If /about or /projects become real pages, add them below.
 import type { MetadataRoute } from "next";
-import { siteConfig } from "@/lib/site";
+import { siteConfig, abs } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: siteConfig.url,
-      changeFrequency: "weekly",
+      lastModified: new Date(),
+      changeFrequency: "monthly",
       priority: 1,
-      images: [new URL(siteConfig.image, siteConfig.url).toString()],
+      images: [abs(siteConfig.image)], // image sitemap entry for your profile photo
     },
-    {
-      url: new URL("/about", siteConfig.url).toString(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: new URL("/projects", siteConfig.url).toString(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
+    // { url: abs("/about"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    // { url: abs("/projects"), lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
   ];
 }

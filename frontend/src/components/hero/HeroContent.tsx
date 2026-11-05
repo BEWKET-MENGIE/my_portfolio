@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Code2, Eye } from "lucide-react";
+import { ArrowDown, Code2, Eye } from "lucide-react";
 import SocialLinks from "./SocialLinks";
 import { useReducedMotionPreference } from "@/lib/useReducedMotionPreference";
 
@@ -46,8 +46,11 @@ function ScrollIndicator({
       <span className="text-[0.6rem] font-medium uppercase tracking-[0.2em] text-(--accent-light)/70 transition-colors duration-300 group-hover:text-(--accent-light)">
         Scroll
       </span>
-      <div className="flex h-11 w-6 justify-center rounded-full border border-(--accent)/30 bg-(--dark)/50 pt-2 backdrop-blur-md transition-all duration-300 group-hover:border-(--accent) group-hover:bg-(--accent)/10 group-hover:shadow-[0_0_15px_rgba(6,182,212,0.3)]">
-        <span className="h-2.5 w-1 animate-bounce rounded-full bg-(--accent) motion-reduce:animate-none" />
+      <div className="relative flex h-11 w-11 items-center justify-center rounded-full border border-(--accent)/40 bg-linear-to-br from-(--accent)/20 to-blue-500/10 shadow-[0_0_18px_rgba(6,182,212,0.2)] backdrop-blur-md transition-all duration-300 group-hover:scale-110 group-hover:border-(--accent-light) group-hover:shadow-[0_0_24px_rgba(6,182,212,0.4)] motion-reduce:transition-none">
+        <ArrowDown
+          aria-hidden="true"
+          className="h-5 w-5 animate-bounce text-(--accent-light) motion-reduce:animate-none"
+        />
       </div>
     </button>
   );

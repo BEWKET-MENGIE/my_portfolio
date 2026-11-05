@@ -3,7 +3,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowUpToLine, Mail } from "lucide-react";
+import Image from "next/image";
+import { ArrowUp, Mail } from "lucide-react";
+import footerIcon from "@/app/icon.jpg";
 import { siteConfig } from "@/lib/site";
 import SocialLinks from "@/components/seo/SocialLinks";
 
@@ -11,6 +13,7 @@ const navItems = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
+  { label: "Experience", href: "#experience" },
   { label: "Skills", href: "#skills" },
   { label: "Projects", href: "#projects" },
   { label: "Contact", href: "#contact" },
@@ -56,32 +59,21 @@ export default function Footer() {
             className="group flex items-center gap-3.5 self-center lg:self-auto"
             aria-label="Bewket Mengie Home"
           >
-            <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-(--accent)/20 via-blue-500/10 to-transparent border border-(--accent)/30 backdrop-blur-md transition-all duration-300 group-hover:border-(--accent) group-hover:shadow-[0_0_20px_rgba(6,182,212,0.35)] group-hover:scale-105">
-              <span className="font-extrabold text-lg text-(--accent-light) tracking-tight">
-                B
-              </span>
-            </div>
-            <div className="text-left">
-              <div className="font-modern text-base font-bold text-white transition-colors duration-300 group-hover:text-(--accent-light)">
-                Bewket Mengie
-              </div>
-              <p className="text-[0.7rem] uppercase tracking-wider text-(--text-muted)">
-                Full Stack Developer
-              </p>
-            </div>
+            
+     
           </Link>
 
           {/* NAVIGATION LINKS */}
           <nav aria-label="Footer navigation">
-            <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            <ul className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
               {navItems.map((item) => (
                 <li key={item.label}>
                   <Link
-                    href={`/${item.href}`}
+                    href={item.href.startsWith("/") ? item.href : `/${item.href}`}
                     className="
                       group relative
-                      text-sm
-                      font-bold
+                      text-base
+                      font-semibold
                       tracking-wide
                       text-(--text-muted)
                       transition-colors
@@ -144,27 +136,11 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* BOTTOM ROW */}
-        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-(--border) pt-6 text-center sm:flex-row sm:text-left">
+        {/* BOTTOM ROW - CENTERED */}
+        <div className="mt-10 flex flex-col items-center justify-center border-t border-(--border)/40 pt-6 text-center">
           <p className="font-mono text-xs tracking-[0.08em] text-(--text-dim)">
-            © {year}{" "}
-            <span className="text-(--accent-light) font-semibold">
-              Bewket Mengie
-            </span>
-            . All rights reserved.
+            © {year} Bewket Mengie. All rights reserved.
           </p>
-
-          <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.12em] text-(--text-dim)">
-            <span>Designed</span>
-            <span aria-hidden="true" className="text-(--accent)">
-              ✦
-            </span>
-            <span>Developed</span>
-            <span aria-hidden="true" className="text-(--accent)">
-              ✦
-            </span>
-            <span>With passion</span>
-          </div>
         </div>
       </div>
 
@@ -208,9 +184,13 @@ export default function Footer() {
           }
         `}
       >
-        <ArrowUpToLine
+        <span
           aria-hidden="true"
-          className="h-5 w-5 transition-transform duration-300 group-hover:-translate-y-0.5 motion-reduce:transition-none"
+          className="absolute inset-1 rounded-full border border-cyan-200/20 transition-all duration-300 group-hover:scale-110 group-hover:border-cyan-100/40"
+        />
+        <ArrowUp
+          aria-hidden="true"
+          className="relative z-10 h-5 w-5 transition-transform duration-300 group-hover:-translate-y-1 motion-reduce:transition-none"
         />
       </button>
     </footer>

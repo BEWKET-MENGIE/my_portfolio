@@ -1,13 +1,15 @@
+// src/app/robots.ts
 import type { MetadataRoute } from "next";
-import { siteConfig } from "@/lib/site";
+import { siteConfig, abs } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: "/",
+      allow: "/", // keeps images (profile photo) crawlable
       disallow: ["/admin", "/api/"],
     },
-    sitemap: new URL("/sitemap.xml", siteConfig.url).toString(),
+    sitemap: abs("/sitemap.xml"),
+    host: siteConfig.url,
   };
 }
