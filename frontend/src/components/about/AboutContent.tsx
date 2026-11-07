@@ -86,8 +86,8 @@ export default function AboutContent() {
 
             <p className="max-w-2xl text-base leading-[1.8] text-neutral-600 md:text-lg dark:text-neutral-300">
               I believe great software begins with understanding the
-              problem&mdash;not just writing the code. That&rsquo;s why I approach
-              each project from requirements analysis to architecture,
+              problem&mdash;not just writing the code. That&rsquo;s why I
+              approach each project from requirements analysis to architecture,
               implementation, testing, deployment, and continuous improvement.
             </p>
           </div>
@@ -140,7 +140,9 @@ export default function AboutContent() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
           <div className="relative h-[85vh] w-full max-w-4xl rounded-2xl bg-neutral-900 p-4 shadow-2xl border border-white/10">
             <div className="mb-3 flex items-center justify-between px-2">
-              <h3 className="font-mono text-sm uppercase text-white">Curriculum Vitae Preview</h3>
+              <h3 className="font-mono text-sm uppercase text-white">
+                Curriculum Vitae Preview
+              </h3>
               <div className="flex items-center gap-3">
                 <a
                   href={PROFILE.cv}

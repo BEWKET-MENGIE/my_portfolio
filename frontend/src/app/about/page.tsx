@@ -32,8 +32,7 @@ export const metadata: Metadata = {
 /* ---------------------------------------------------------------
    CONTENT (edit the wording and numbers here)
 ---------------------------------------------------------------- */
-const ROLE = "Full Stack Developer";
-const AVAILABILITY = "Open to internships & roles";
+
 const CV_URL = "/cv.pdf"; // file in the public folder
 const FOCUS_IMAGE = "/logo.jpg"; // file in the public folder: your logo or photo
 
@@ -208,13 +207,11 @@ export default function AboutPage() {
             <header className="mx-auto max-w-3xl text-center">
               <h1
                 id="about-heading"
-                className={`${display} ${gradientText} text-[clamp(3rem,6vw,5.5rem)] font-bold leading-none tracking-[-0.03em]`}
+                className={`${display} ${gradientText} text-[clamp(3rem,6vw,5.5rem)] font-bold leading-none p-1. tracking-[-0.03em]`}
               >
                 About Me
               </h1>
-              <p className="mt-5 text-base text-(--text-muted) sm:text-lg">
-                Software Engineering &amp; {ROLE}
-              </p>
+            
             </header>
           </Reveal>
 
@@ -227,7 +224,7 @@ export default function AboutPage() {
               <div className="relative">
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute -inset-4 rounded-[2rem] bg-blue-500 opacity-[0.08] blur-2xl"
+                  className="pointer-events-none absolute -inset-4 rounded-4px bg-blue-500 opacity-[0.08] blur-2xl"
                 />
 
                 <figure className="group relative m-0 aspect-4/5 w-full overflow-hidden rounded-3xl border border-(--border) bg-white/5 shadow-2xl">
@@ -244,13 +241,7 @@ export default function AboutPage() {
                     className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/80 via-black/30 to-transparent"
                   />
 
-                  <figcaption className="absolute bottom-5 left-5 flex items-center gap-2.5 rounded-full border border-white/20 bg-black/40 px-4 py-2 text-xs font-medium uppercase tracking-wider text-white backdrop-blur-md">
-                    <span className="relative flex h-2 w-2" aria-hidden="true">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-400 opacity-60 motion-reduce:animate-none" />
-                      <span className="relative inline-flex h-2 w-2 rounded-full bg-orange-400" />
-                    </span>
-                    {AVAILABILITY}
-                  </figcaption>
+               
                 </figure>
               </div>
             </Reveal>
@@ -258,7 +249,7 @@ export default function AboutPage() {
             {/* Intro copy */}
             <Reveal delay={200} className="flex flex-col justify-center">
               <h2
-                className={`${display} text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.1] tracking-[-0.02em] text-(--text)`}
+                className={`${display} text-[clamp(2rem,2vw,2rem)] font-bold leading-[1.1] tracking-[-0.02em] text-(--text)`}
               >
                 I build digital experiences that turn{" "}
                 <span className="text-orange-500 underline decoration-orange-500/30 underline-offset-8">

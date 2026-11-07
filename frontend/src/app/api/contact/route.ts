@@ -1,5 +1,7 @@
+// src/app/api/contact/route.ts (or your exact path)
 import { NextResponse } from "next/server";
 import { getBackendApiUrl } from "@/lib/backendApi";
+
 type ContactBody = {
   name?: unknown;
   email?: unknown;
@@ -26,6 +28,7 @@ export async function POST(request: Request) {
 
   const { name, email, message, hp_confirm } = body;
 
+  // Honeypot spam check
   if (hp_confirm) {
     return NextResponse.json({ error: "Spam detected." }, { status: 400 });
   }
@@ -56,7 +59,10 @@ export async function POST(request: Request) {
   }
 
   try {
-    const response = await fetch(`${getBackendApiUrl()}/contacts`, {
+    const backendUrl = getBackendApiUrl();
+    const targetUrl = `${backendUrl}/contacts`;
+
+    const response = await fetch(targetUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -67,6 +73,7 @@ export async function POST(request: Request) {
       }),
       cache: "no-store",
     });
+
     const responseText = await response.text();
     let result: unknown;
 
@@ -74,7 +81,8 @@ export async function POST(request: Request) {
       result = JSON.parse(responseText);
     } catch {
       console.error(
-        `Contact API returned a non-JSON response (status ${response.status}).`,
+        `Contact API returned a non-JSON response from ${targetUrl} (status ${response.status}):`,
+        responseText
       );
       return NextResponse.json(
         { error: "The message service returned an invalid response. Please try again later." },
@@ -83,8 +91,10 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(result, { status: response.status });
-  } catch (error) {
-    console.error("Contact message could not reach the portfolio API:", error);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error(`Contact message could not reach the backend API (${getBackendApiUrl()}):`, errorMessage);
+    
     return NextResponse.json(
       { error: "Messages are temporarily unavailable. Please try again later." },
       { status: 503 },
