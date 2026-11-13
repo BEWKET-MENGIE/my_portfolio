@@ -1,4 +1,3 @@
-
 // src/lib/site.ts
 
 import { PROFILE } from "@/data/profile";
@@ -30,7 +29,7 @@ export type SocialKey =
 export const socialLinks: Record<SocialKey, string> = {
   github: "https://github.com/BEWKET-MENGIE",
 
-  linkedin: "", // Add your actual LinkedIn profile URL
+  linkedin: "https://www.linkedin.com/in/bewket-mengie", // Updated with your actual LinkedIn profile URL
 
   x: "", // Add your actual X profile URL
 
@@ -123,10 +122,6 @@ export const siteConfig = {
     "Backend Developer",
   ],
 
-  // ============================================
-  // STRUCTURED DATA IDENTIFIERS
-  // ============================================
-
   get personId() {
     return `${url}/#person`;
   },
@@ -144,25 +139,11 @@ export const siteConfig = {
   },
 };
 
-// ============================================
-// FILTERED PUBLIC SOCIAL PROFILES
-// ============================================
+
 
 export const socialProfiles = Object.values(socialLinks).filter(
   (link) => link.trim().length > 0
 );
-
-// ============================================
-// ABSOLUTE URL HELPER
-// ============================================
-
-/**
- * Converts a relative path or URL into an absolute URL.
- *
- * Example:
- * abs("/images/logo.jpg")
- * -> https://bewketmengie.com/images/logo.jpg
- */
 
 export const abs = (path: string): string => {
   return new URL(path, `${url}/`).toString();
