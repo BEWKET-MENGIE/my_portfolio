@@ -59,8 +59,22 @@ export default function Footer() {
             className="group flex items-center gap-3.5 self-center lg:self-auto"
             aria-label="Bewket Mengie Home"
           >
-            
-     
+            <div className="relative h-10 w-10 overflow-hidden rounded-xl border border-(--border) transition-transform duration-300 group-hover:scale-105">
+              <Image
+                src={footerIcon}
+                alt="Bewket Mengie"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold tracking-tight text-(--text-main)">
+                {siteConfig.name}
+              </span>
+              <span className="text-xs font-medium text-(--text-muted)">
+                Software Engineer
+              </span>
+            </div>
           </Link>
 
           {/* NAVIGATION LINKS */}
@@ -107,6 +121,7 @@ export default function Footer() {
 
           {/* SOCIAL & EMAIL LINKS */}
           <div className="flex flex-wrap justify-center gap-2">
+            {/* Email Link */}
             <a
               href={`mailto:${siteConfig.email}`}
               aria-label="Email me"
@@ -132,6 +147,8 @@ export default function Footer() {
                 className="relative z-10 h-4 w-4 text-(--text-muted) transition-all duration-300 group-hover:scale-110 group-hover:text-(--accent)"
               />
             </a>
+
+            {/* Dynamic Social Links Component (Includes LinkedIn, GitHub, Facebook, Instagram, Telegram) */}
             <SocialLinks variant="footer" />
           </div>
         </div>
