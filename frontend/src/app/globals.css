@@ -4,6 +4,7 @@
    Order matters:
    1. Tailwind              - @import "tailwindcss"
    2. Dark-mode switch      - the `dark:` classes follow the .dark class on <html>
+   2b. Page loader          - .portfolio-loader styles
    3. @theme                - fonts that become Tailwind utilities
    4. @layer base           - variables, page defaults, accessibility
    5. @layer components     - reusable classes (.glass, .premium-card ...)
@@ -226,6 +227,9 @@
    `static` keeps these variables in the CSS even when no class uses
    them yet. They also create the utilities: font-sans (Inter),
    font-body (Inter), font-display (Manrope), font-mono (JetBrains Mono).
+
+   The fonts must be loaded (next/font or @font-face), otherwise the
+   browser falls back to the system fonts after the names listed here.
 ========================================================= */
 
 @theme static {
@@ -270,8 +274,7 @@
     --border: rgba(255, 255, 255, 0.08);
     --border-bright: rgba(255, 255, 255, 0.16);
 
-    /* Used by the About page (bg-(--blue), bg-(--amber)).
-       They were not defined before, so those classes did nothing. */
+    /* Aliases kept for older components that use bg-(--blue) / bg-(--amber). */
     --blue: var(--dark);
     --amber: #f59e0b;
 
@@ -322,11 +325,6 @@
     overflow-x: clip;
 
     background-color: var(--background);
-    background-image: linear-gradient(rgba(2, 6, 23, 0.3), rgba(2, 6, 23, 0.3));
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: scroll;
 
     color: var(--text);
     font-family: var(--font-body);
@@ -339,14 +337,6 @@
       rgba(6, 182, 212, 0.07),
       transparent 35%
     );
-    background-attachment: scroll;
-  }
-
-  @media (max-width: 768px) {
-    body {
-      background-attachment: scroll;
-      background-position: center top;
-    }
   }
 
   button,
