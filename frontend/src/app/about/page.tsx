@@ -20,7 +20,6 @@ import {
   Wrench,
 } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";
-import SkillMeter from "@/components/about/SkillMeter";
 import { PROFILE } from "@/data/profile";
 
 export const metadata: Metadata = {
@@ -30,49 +29,47 @@ export const metadata: Metadata = {
 };
 
 /* ---------------------------------------------------------------
-   CONTENT (edit the wording and numbers here)
+   CONTENT (edit the wording here)
 ---------------------------------------------------------------- */
 
 const CV_URL = "/cv.pdf"; // file in the public folder
 const FOCUS_IMAGE = "/logo.jpg"; // file in the public folder: your logo or photo
 
-/* Skill percentages are PLACEHOLDERS. Set each number (0 to 100) to an
-   honest estimate of how comfortable you are with that tool. */
 const skillGroups = [
   {
     title: "Frontend",
     icon: Monitor,
     skills: [
-      { name: "HTML & CSS", level: 90 },
-      { name: "JavaScript", level: 80 },
-      { name: "React", level: 88 },
-      { name: "Next.js", level: 75 },
-      { name: "TypeScript", level: 75 },
-      { name: "Tailwind CSS", level: 85 },
+      "HTML & CSS",
+      "JavaScript",
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
     ],
   },
   {
     title: "Backend",
     icon: Server,
     skills: [
-      { name: "Node.js", level: 75 },
-      { name: "NestJS", level: 65 },
-      { name: "REST APIs", level: 70 },
-      { name: "PostgreSQL", level: 70 },
-      { name: "MySQL", level: 75 },
-      { name: "Prisma", level: 65 },
+      "Node.js",
+      "NestJS",
+      "REST APIs",
+      "PostgreSQL",
+      "MySQL",
+      "Prisma",
     ],
   },
   {
     title: "Tools & workflow",
     icon: Wrench,
     skills: [
-      { name: "Git & GitHub", level: 85 },
-      { name: "Figma", level: 70 },
-      { name: "Testing", level: 65 },
-      { name: "Debugging", level: 75 },
-      { name: "Docker", level: 55 },
-      { name: "Deployment", level: 65 },
+      "Git & GitHub",
+      "Figma",
+      "Testing",
+      "Debugging",
+      "Docker",
+      "Deployment",
     ],
   },
 ];
@@ -87,7 +84,7 @@ const principles = [
   {
     title: "Built to scale",
     description:
-      "Architecture decisions are made with growth in mind — from a weekend project to a system handling real traffic.",
+      "Architecture decisions are made with growth in mind, from a weekend project to a system handling real traffic.",
     icon: Layers,
   },
   {
@@ -99,7 +96,7 @@ const principles = [
   {
     title: "Performance-minded",
     description:
-      "Fast load times and smooth interactions aren't optional polish — they're part of what makes software genuinely usable.",
+      "Fast load times and smooth interactions aren't optional polish. They're part of what makes software genuinely usable.",
     icon: Gauge,
   },
   {
@@ -116,24 +113,24 @@ const principles = [
   },
 ];
 
-// The first item is highlighted (orange, pulsing).
+// The first item is highlighted (accent color, pulsing).
 const timeline = [
   {
-    year: "2024 — Expected 2027",
+    year: "2024 - Expected 2027",
     title: "B.Sc. in Software Engineering",
     description:
-      "Currently in my fourth year, studying software engineering while building projects alongside coursework — from foundational computer science to full-stack application development.",
+      "Currently in my fourth year, studying software engineering while building projects alongside coursework, from foundational computer science to full-stack application development.",
     icon: GraduationCap,
   },
   {
-    year: "2025 — Now",
+    year: "2025 - Now",
     title: "Full Stack Developer & Personal Projects",
     description:
-      "Designing and building complete products end-to-end — frontend, backend, infrastructure, and everything in between — outside of my coursework.",
+      "Designing and building complete products end-to-end (frontend, backend, infrastructure and everything in between) outside of my coursework.",
     icon: Laptop,
   },
   {
-    year: "2025 — Now",
+    year: "2025 - Now",
     title: "Frontend-focused development",
     description:
       "Built and shipped several production interfaces with React and Next.js, with a growing focus on backend systems and APIs.",
@@ -149,16 +146,16 @@ const timeline = [
 ];
 
 /* ---------------------------------------------------------------
-   Shared styles. Fonts fall back to the normal fonts if Syne or
-   DM Mono are not loaded.
+   Shared styles. Colors match the Hero: --dark, --accent,
+   --accent-light and --text-muted.
 ---------------------------------------------------------------- */
-const display = "font-['Syne',sans-serif]";
-const mono = "font-['DM_Mono',ui-monospace,monospace]";
+const display = "font-display";
+const mono = "font-mono";
 
 const sectionTitle = `${display} text-4xl font-bold tracking-[-0.03em] text-(--text) sm:text-5xl`;
 
 const gradientText =
-  "bg-linear-to-r from-blue-500 to-orange-500 bg-clip-text text-transparent";
+  "bg-linear-to-r from-(--accent-light) to-blue-500 bg-clip-text text-transparent";
 
 const cardClass = "rounded-3xl border border-(--border) bg-white/[0.025]";
 
@@ -170,48 +167,47 @@ const principleCardClass =
   "motion-reduce:transition-colors motion-reduce:hover:scale-100";
 
 const primaryButton =
-  `group inline-flex items-center justify-center gap-3 rounded-full bg-blue-600 px-7 py-4 ${mono} ` +
-  "text-xs font-bold uppercase tracking-[0.13em] text-white shadow-lg " +
-  "transition-all duration-300 hover:-translate-y-1 hover:bg-orange-500 " +
-  "hover:shadow-orange-500/30 motion-reduce:transition-none " +
-  "motion-reduce:hover:translate-y-0 focus-visible:outline-none " +
-  "focus-visible:ring-2 focus-visible:ring-orange-400";
+  `group inline-flex items-center justify-center gap-3 rounded-full bg-(--accent) px-7 py-4 ${mono} ` +
+  "text-xs font-bold uppercase tracking-[0.13em] text-black " +
+  "shadow-[0_0_25px_rgba(6,182,212,0.25)] transition-all duration-300 " +
+  "hover:-translate-y-1 hover:bg-(--accent-light) hover:shadow-[0_0_35px_rgba(6,182,212,0.4)] " +
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-light) " +
+  "motion-reduce:transition-none motion-reduce:hover:translate-y-0";
 
 const secondaryButton =
-  `group inline-flex items-center justify-center gap-3 rounded-full border-2 border-blue-600 bg-blue-900/40 px-7 py-4 ${mono} ` +
-  "text-xs font-bold uppercase tracking-[0.13em] text-white " +
-  "transition-all duration-300 hover:-translate-y-1 hover:border-orange-500 " +
-  "hover:bg-orange-500 motion-reduce:transition-none " +
-  "motion-reduce:hover:translate-y-0 focus-visible:outline-none " +
-  "focus-visible:ring-2 focus-visible:ring-orange-400";
+  `group inline-flex items-center justify-center gap-3 rounded-full border border-(--accent)/40 bg-(--accent)/10 px-7 py-4 ${mono} ` +
+  "text-xs font-bold uppercase tracking-[0.13em] text-(--accent-light) " +
+  "transition-all duration-300 hover:-translate-y-1 hover:bg-(--accent) hover:text-black " +
+  "hover:shadow-[0_0_35px_rgba(6,182,212,0.3)] " +
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent) " +
+  "motion-reduce:transition-none motion-reduce:hover:translate-y-0";
 
 export default function AboutPage() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-(--blue) text-(--text)">
+    <main className="relative min-h-screen overflow-hidden bg-(--dark) text-(--text)">
       {/* Ambient background glows */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -left-40 top-0 h-96 w-96 rounded-full bg-(--amber) opacity-[0.05] blur-[150px]"
+        className="pointer-events-none absolute -left-40 top-0 h-96 w-96 rounded-full bg-(--accent) opacity-[0.06] blur-[150px]"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-40 top-1/3 h-96 w-96 rounded-full bg-(--amber) opacity-[0.04] blur-[150px]"
+        className="pointer-events-none absolute -right-40 top-1/3 h-96 w-96 rounded-full bg-blue-500 opacity-[0.05] blur-[150px]"
       />
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-20 pt-28 sm:px-8 md:pt-36 lg:px-10">
         {/* =================================================
             INTRO
-        ================================================- */}
+        ================================================= */}
         <section aria-labelledby="about-heading">
           <Reveal>
             <header className="mx-auto max-w-3xl text-center">
               <h1
                 id="about-heading"
-                className={`${display} ${gradientText} text-[clamp(3rem,6vw,5.5rem)] font-bold leading-none p-1. tracking-[-0.03em]`}
+                className={`${display} ${gradientText} p-1 text-[clamp(3rem,6vw,5.5rem)] font-bold leading-none tracking-[-0.03em]`}
               >
                 About Me
               </h1>
-            
             </header>
           </Reveal>
 
@@ -224,7 +220,7 @@ export default function AboutPage() {
               <div className="relative">
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute -inset-4 rounded-4px bg-blue-500 opacity-[0.08] blur-2xl"
+                  className="pointer-events-none absolute -inset-4 rounded-3xl bg-(--accent) opacity-[0.08] blur-2xl"
                 />
 
                 <figure className="group relative m-0 aspect-4/5 w-full overflow-hidden rounded-3xl border border-(--border) bg-white/5 shadow-2xl">
@@ -240,8 +236,6 @@ export default function AboutPage() {
                     aria-hidden="true"
                     className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/80 via-black/30 to-transparent"
                   />
-
-               
                 </figure>
               </div>
             </Reveal>
@@ -252,7 +246,7 @@ export default function AboutPage() {
                 className={`${display} text-[clamp(2rem,2vw,2rem)] font-bold leading-[1.1] tracking-[-0.02em] text-(--text)`}
               >
                 I build digital experiences that turn{" "}
-                <span className="text-orange-500 underline decoration-orange-500/30 underline-offset-8">
+                <span className="text-(--accent-light) underline decoration-(--accent)/30 underline-offset-8">
                   ideas into impact.
                 </span>
               </h2>
@@ -263,13 +257,13 @@ export default function AboutPage() {
                   student and Full Stack Developer who enjoys solving complex
                   problems through thoughtful design, clean code, and modern
                   engineering practices. Alongside my coursework, I build real
-                  projects end-to-end &mdash; from polished frontend experiences
-                  to robust backend systems &mdash; with a focus on performance,
+                  projects end-to-end, from polished frontend experiences to
+                  robust backend systems, with a focus on performance,
                   scalability, usability, and long-term maintainability.
                 </p>
                 <p>
                   I believe great software begins with understanding the
-                  problem&mdash;not just writing the code. That&rsquo;s why I
+                  problem, not just writing the code. That&rsquo;s why I
                   approach each project from requirements to architecture,
                   implementation, testing, deployment, and continuous
                   improvement.
@@ -298,8 +292,8 @@ export default function AboutPage() {
         </section>
 
         {/* =================================================
-            SKILLS BY PERCENT
-        ================================================ */}
+            SKILLS (no percentages)
+        ================================================= */}
         <section aria-labelledby="skills-heading" className="mt-24 md:mt-32">
           <Reveal>
             <div className="mx-auto max-w-3xl text-center">
@@ -307,8 +301,8 @@ export default function AboutPage() {
                 Technical <span className={gradientText}>skills.</span>
               </h2>
               <p className="mt-5 leading-8 text-(--text-muted)">
-                How comfortable I feel with the tools I use most, and I&rsquo;s
-                still improving every one of them.
+                The tools I use most to design, build and ship projects, and I
+                am still improving every one of them.
               </p>
             </div>
           </Reveal>
@@ -317,25 +311,22 @@ export default function AboutPage() {
             {skillGroups.map(({ title, icon: Icon, skills }, groupIndex) => (
               <Reveal key={title} delay={groupIndex * 120} className="h-full">
                 <div className={`${cardClass} h-full p-6 md:p-8`}>
-                  <div className="mb-8 flex items-center gap-3">
-                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500">
+                  <div className="mb-6 flex items-center gap-3">
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-(--accent)/10 text-(--accent-light)">
                       <Icon className="h-5 w-5" aria-hidden="true" />
                     </span>
-                    <h3
-                      className={`${display} text-xl font-bold text-(--text)`}
-                    >
+                    <h3 className={`${display} text-xl font-bold text-(--text)`}>
                       {title}
                     </h3>
                   </div>
 
-                  <ul className="space-y-5">
-                    {skills.map((skill, index) => (
-                      <li key={skill.name}>
-                        <SkillMeter
-                          name={skill.name}
-                          level={skill.level}
-                          delay={index * 90}
-                        />
+                  <ul className="flex flex-wrap gap-2.5">
+                    {skills.map((skill) => (
+                      <li
+                        key={skill}
+                        className="rounded-full border border-(--accent)/30 bg-(--accent)/10 px-4 py-2 text-sm font-medium text-(--accent-light) transition-colors duration-300 hover:border-(--accent) hover:bg-(--accent) hover:text-black motion-reduce:transition-none"
+                      >
+                        {skill}
                       </li>
                     ))}
                   </ul>
@@ -343,16 +334,11 @@ export default function AboutPage() {
               </Reveal>
             ))}
           </div>
-
-          <p className="mx-auto mt-8 max-w-xl text-center text-xs leading-6 text-(--text-muted)">
-            Percentages are my own estimates of confidence and experience, not a
-            formal test.
-          </p>
         </section>
 
         {/* =================================================
             PRINCIPLES
-        ================================================ */}
+        ================================================= */}
         <section
           aria-labelledby="principles-heading"
           className="mt-24 md:mt-32"
@@ -372,13 +358,11 @@ export default function AboutPage() {
                 <div className={principleCardClass}>
                   <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 transition-all duration-300 group-hover:scale-110 group-hover:bg-(--accent)/10 motion-reduce:group-hover:scale-100">
                     <Icon
-                      className="h-5 w-5 text-(--text-muted) transition-colors group-hover:text-(--accent)"
+                      className="h-5 w-5 text-(--text-muted) transition-colors group-hover:text-(--accent-light)"
                       aria-hidden="true"
                     />
                   </div>
-                  <h3
-                    className={`${display} mb-3 text-xl font-bold text-(--text)`}
-                  >
+                  <h3 className={`${display} mb-3 text-xl font-bold text-(--text)`}>
                     {title}
                   </h3>
                   <p className="text-sm leading-relaxed text-(--text-muted)">
@@ -392,7 +376,7 @@ export default function AboutPage() {
 
         {/* =================================================
             CURRENT FOCUS
-        ================================================ */}
+        ================================================= */}
         <section aria-labelledby="focus-heading" className="mt-24 md:mt-32">
           <Reveal>
             <div className="rounded-[2rem] border border-(--border) bg-linear-to-br from-white/[0.04] to-transparent p-8 sm:p-12 lg:p-16">
@@ -417,8 +401,8 @@ export default function AboutPage() {
                     What I&rsquo;m focused on.
                   </h2>
                   <p className="mt-4 text-base leading-relaxed text-(--text-muted) sm:text-lg">
-                    Balancing my final year of coursework with hands-on projects
-                    &mdash; deepening my backend and systems-design skills,
+                    Balancing my final year of coursework with hands-on
+                    projects: deepening my backend and systems-design skills,
                     exploring infrastructure and DevOps practices, and actively
                     looking for an internship or junior role where I can keep
                     growing as an engineer.
@@ -431,7 +415,7 @@ export default function AboutPage() {
 
         {/* =================================================
             JOURNEY
-        ================================================ */}
+        ================================================= */}
         <section
           id="journey"
           aria-labelledby="journey-heading"
@@ -440,16 +424,16 @@ export default function AboutPage() {
           <Reveal>
             <div className="mx-auto max-w-3xl text-center">
               <div
-                className={`${mono} mb-4 flex items-center justify-center gap-4 text-[0.7rem] uppercase tracking-[0.2em] text-orange-500`}
+                className={`${mono} mb-4 flex items-center justify-center gap-4 text-[0.7rem] uppercase tracking-[0.2em] text-(--accent-light)`}
               >
                 <span
                   aria-hidden="true"
-                  className="h-px w-15 bg-orange-500 md:w-18"
+                  className="h-px w-15 bg-(--accent) md:w-18"
                 />
-                <h1>Journey</h1>
+                <span>Journey</span>
                 <span
                   aria-hidden="true"
-                  className="h-px w-15 bg-orange-500 md:w-18"
+                  className="h-px w-15 bg-(--accent) md:w-18"
                 />
               </div>
               <h2 id="journey-heading" className={sectionTitle}>
@@ -471,7 +455,7 @@ export default function AboutPage() {
                   {!isLast && (
                     <span
                       aria-hidden="true"
-                      className="absolute left-[19px] top-5 h-full w-0.5 rounded-full bg-blue-500/30"
+                      className="absolute left-[19px] top-5 h-full w-0.5 rounded-full bg-(--accent)/30"
                     />
                   )}
 
@@ -479,13 +463,15 @@ export default function AboutPage() {
                     {isFirst && (
                       <span
                         aria-hidden="true"
-                        className="absolute inset-0 animate-ping rounded-full bg-orange-500/50 motion-reduce:animate-none"
+                        className="absolute inset-0 animate-ping rounded-full bg-(--accent)/50 motion-reduce:animate-none"
                       />
                     )}
-                    <span className="relative flex h-10 w-10 items-center justify-center rounded-full bg-(--blue)">
+                    <span className="relative flex h-10 w-10 items-center justify-center rounded-full bg-(--dark)">
                       <span
-                        className={`flex h-full w-full items-center justify-center rounded-full border-4 border-(--blue) text-white transition-transform duration-300 group-hover:scale-110 motion-reduce:transition-none ${
-                          isFirst ? "bg-orange-500" : "bg-blue-500"
+                        className={`flex h-full w-full items-center justify-center rounded-full border-4 border-(--dark) transition-transform duration-300 group-hover:scale-110 motion-reduce:transition-none ${
+                          isFirst
+                            ? "bg-(--accent) text-black"
+                            : "bg-(--accent)/25 text-(--accent-light)"
                         }`}
                       >
                         <Icon
@@ -500,12 +486,12 @@ export default function AboutPage() {
                   <Reveal delay={index * 80}>
                     <div className="flex flex-col gap-2 transition-transform duration-300 group-hover:translate-x-2 motion-reduce:transition-none">
                       <p
-                        className={`${mono} text-xs font-medium uppercase tracking-[0.15em] text-blue-500`}
+                        className={`${mono} text-xs font-medium uppercase tracking-[0.15em] text-(--accent-light)`}
                       >
                         {year}
                       </p>
                       <h3
-                        className={`${display} text-2xl font-bold text-(--text) transition-colors duration-300 group-hover:text-orange-500`}
+                        className={`${display} text-2xl font-bold text-(--text) transition-colors duration-300 group-hover:text-(--accent-light)`}
                       >
                         {title}
                       </h3>
@@ -522,15 +508,12 @@ export default function AboutPage() {
 
         {/* =================================================
             CALL TO ACTION
-        ================================================ */}
+        ================================================= */}
         <section aria-label="Contact and projects" className="mt-24 md:mt-32">
           <Reveal>
             <div className="mx-auto max-w-3xl text-center">
               <div className="flex flex-wrap items-center justify-center gap-4">
-                <Link
-                  href="/#contact"
-                  className="group inline-flex items-center gap-3 rounded-full bg-orange-500 px-8 py-4 text-sm font-bold text-white transition-all duration-300 hover:scale-[1.03] motion-reduce:transition-none motion-reduce:hover:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-300"
-                >
+                <Link href="/#contact" className={primaryButton}>
                   Contact Me
                   <ArrowRight
                     className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
